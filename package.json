@@ -11,5 +11,6 @@
     "wizardsdev"
   ],
   "author": "Alexey Suprun",
-  "license": "ISC"
+  "license": "GPL v3",
+  "devDependencies": {}
 }
