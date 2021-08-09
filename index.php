@@ -4,7 +4,7 @@
   Plugin Name: WD Sattelites Snippets
   Plugin URI: https://github.com/Mironezes
   Description: Bulk of usefull snippets for our sattelites 
-  Version: 0.2.1
+  Version: 0.2.3
   Author: Alexey
   Author URI: https://github.com/Mironezes
   Text Domain: wdss_domain
@@ -132,8 +132,8 @@ class WD_Sattelites_Snippets {
     }
 
     // Auto Generated Alts for images on attach action
-    add_action('add_attachment', 'auto_generated_image_alts');
-    function auto_generated_image_alts($postID)
+    add_action('add_attachment', 'wd_auto_generated_image_alts');
+    function wd_auto_generated_image_alts($postID)
     {
         if (wp_attachment_is_image($postID))
         {
@@ -266,6 +266,20 @@ class WD_Sattelites_Snippets {
     if( function_exists('wpseo_init') && get_option('wdss_enable_title_clipping', '0') ) {
       add_filter('wpseo_title', 'yoast_trim_title');
       function yoast_trim_title($post_title) {
+        
+        $is_old_post = false;
+        
+        if( get_option('wdss_title_clipping_condition', '0') ) {
+
+          global $post;
+          $post_date = strtotime($post->post_date);
+          
+          if( get_option('wdss_title_clipping_by_date', '0') ) {
+            $post_date_limiter = strtotime(get_option('wdss_title_clipping_by_date', '0'));
+            $is_old_post =  $post_date > $post_date_limiter ? false : true;           
+          }
+        }
+
         $words_limit = get_option('wdss_title_words_limit', '6'); // max title`s words amount 
         $symbols_limit = get_option('wdss_word_chars_limit', '35'); // max title`s symbols amount 
         $ending = ' ' . get_option('wdss_title_ending') . ''; // adds title`s ending
@@ -273,7 +287,7 @@ class WD_Sattelites_Snippets {
         $title_less_than_count = boolval(mb_strlen($post_title) < $symbols_limit);
         $is_already_exists = $title_less_than_count && $ending_exists;
         
-        if ( is_front_page() || is_archive() || is_category() || $is_already_exists )   { // where`s title trimming shouldn`t be implemented
+        if ( is_front_page() || is_archive() || is_category() || $is_already_exists || $is_old_post )   { // where`s title trimming shouldn`t be implemented
             return $post_title;
         }	
         
@@ -430,6 +444,12 @@ class WD_Sattelites_Snippets {
     <input type="text" name="<?= $args['field_name']; ?>" value="<?= esc_attr(get_option($args['field_name']));?>" >  
   <? }
 
+
+  function date_handler_html($args) { ?>
+    <input type="date" name="<?= $args['field_name']; ?>" value="<?= esc_attr(get_option($args['field_name']));?>" >  
+  <? }
+
+
   function number_handler_html($args) { ?>
     <input type="number" name="<?= $args['field_name']; ?>" min="<?= $args['min']; ?>" max="<?= $args['max']; ?>" value="<?= esc_attr(get_option($args['field_name']));?>" >  
   <? }
@@ -454,6 +474,10 @@ class WD_Sattelites_Snippets {
       update_option('wdss_force_lowercase', sanitize_text_field($_POST['wdss_force_lowercase']));  
       
       update_option('wdss_enable_title_clipping', sanitize_text_field($_POST['wdss_enable_title_clipping']));   
+      update_option('wdss_title_clipping_condition', sanitize_text_field($_POST['wdss_title_clipping_condition']));   
+      update_option('wdss_title_clipping_by_date', sanitize_text_field($_POST['wdss_title_clipping_by_date']));         
+      
+
       update_option('wdss_title_words_limit', sanitize_text_field($_POST['wdss_title_words_limit']));  
       update_option('wdss_word_chars_limit', sanitize_text_field($_POST['wdss_word_chars_limit']));  
       update_option('wdss_title_ending', sanitize_text_field($_POST['wdss_title_ending']));  
@@ -634,8 +658,35 @@ class WD_Sattelites_Snippets {
                       ?>    
                   </label>
                 </div>    
-                  
+
                 <div id="wdss-title-clipping-group" class="wdss-setting-group">
+
+                  <div id="wdss-title-clipping-condition-group">
+                    <div id="wdss-title-clipping-condition" class="wdss-setting-item">
+                    <label>
+                          <span>Date Condition for Clipping</span>
+                          <?php 
+                          $this->checkbox_handler_html(['field_name' => 'wdss_title_clipping_condition']); 
+                          if( get_option('wdss_title_clipping_condition') == '' ) update_option( 'wdss_title_clipping_condition', '0' );               
+                          ?>     
+                      </label>
+                    </div> 
+                    
+                    
+                    <div id="wdss-title-clipping-by-date" class="wdss-setting-item wdss-setting-group">
+                    <label>
+                          <span>-- Cut titles since</span>
+                          <?php 
+                          $this->date_handler_html(['field_name' => 'wdss_title_clipping_by_date']); 
+                          if( get_option('wdss_title_clipping_by_date') == '' ) update_option( 'wdss_title_clipping_by_date', '0' );               
+                          ?>  
+
+                      </label>
+                    </div> 
+
+                  </div>
+
+
                   <div id="wdss-words-limit" class="wdss-setting-item">
                   <label>
                         <span>Words Limit (default 6)</span>

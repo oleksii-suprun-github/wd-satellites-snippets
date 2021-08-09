@@ -28,6 +28,7 @@
 }
 
 #wdss-settings-page .notice {
+  display: block !important;
   margin-left: 0;
   margin-right: 0;
   margin-bottom: 25px;
@@ -48,7 +49,7 @@
   flex-direction: row;
 }
 
-.wdss-setting-item {
+#wdss-snippets-settings .wdss-setting-item {
   width: calc(33.33% - 25px);
 }
 
