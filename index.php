@@ -4,7 +4,7 @@
   Plugin Name: WD Sattelites Snippets
   Plugin URI: https://github.com/Mironezes
   Description: Bulk of usefull snippets for our sattelites 
-  Version: 0.2.3
+  Version: 0.2.3.1
   Author: Alexey
   Author URI: https://github.com/Mironezes
   Text Domain: wdss_domain
@@ -381,15 +381,14 @@ class WD_Sattelites_Snippets {
       }
       add_action('wp', 'wdss_generate_rewrite_rules', -1);
   
-  
-      if ($_SERVER['REQUEST_URI'] == "/index.html"  || 
-          $_SERVER['REQUEST_URI'] == "/index.php"   || 
-          $_SERVER['REQUEST_URI'] == "/feed"        || 
-          $_SERVER['REQUEST_URI'] == "/feed/"       || 
-          $_SERVER['REQUEST_URI'] == "/amp"         || 
-          $_SERVER['REQUEST_URI'] == "/?amp"        || 
-          $_SERVER['REQUEST_URI'] == "/?amp/"       || 
-          $_SERVER['REQUEST_URI'] == "//?amp/"
+      if (strpos($_SERVER['REQUEST_URI'], 'index.html')   || 
+          strpos($_SERVER['REQUEST_URI'], 'index.php')   || 
+          strpos($_SERVER['REQUEST_URI'], 'feed')        || 
+          strpos($_SERVER['REQUEST_URI'], 'feed/')       || 
+          strpos($_SERVER['REQUEST_URI'], 'amp')         || 
+          strpos($_SERVER['REQUEST_URI'], '?amp')        || 
+          strpos($_SERVER['REQUEST_URI'], '?amp/')       || 
+          strpos($_SERVER['REQUEST_URI'], '/?amp/')
         ) {
         header("Location: /", TRUE, 301);
         exit();
