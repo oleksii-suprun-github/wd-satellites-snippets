@@ -3,9 +3,9 @@
 /*
   Plugin Name: WD Sattelites Snippets
   Plugin URI: https://github.com/Mironezes
-  Description: Bulk of usefull snippets for our sattelites 
-  Version: 0.2.4
-  Author: Alexey
+  Description: Bulk of usefull snippets and options for our sattelites 
+  Version: 0.2.5
+  Author: Alexey Suprun
   Author URI: https://github.com/Mironezes
   Text Domain: wdss_domain
   Domain Path: /languages
@@ -13,6 +13,9 @@
 
 if ( !defined('ABSPATH') ) exit;
 
+
+define('WDSS_VERSION', '0.2.5');
+define('WDSS_DOMAIN', 'wdss_domain');
 
 class WD_Sattelites_Snippets {
 
@@ -114,8 +117,7 @@ class WD_Sattelites_Snippets {
 	
 	
   function wdss_snippets() {
-    
-	// 304 Not Modified Snipper
+	  // 304 Not Modified Snippet
     if( get_option('wdss_last_modified_n_304', '0') ) {
       add_action('wbcr/factory/option_if_modified_since_headers', function($option_value){
         $server_headers = apache_response_headers();
@@ -167,8 +169,8 @@ class WD_Sattelites_Snippets {
               'linkTo' => 'media',
           ) ),
       );
-  }
-  add_action( 'init', 'gallery_template_to_posts' );
+    }
+    add_action( 'init', 'gallery_template_to_posts' );
 
 
 
@@ -198,6 +200,40 @@ class WD_Sattelites_Snippets {
     }
 
 
+    // Auto Alt Attributes for images
+    if( get_option('wdss_auto_alt_attribute', '0') ) {
+      function wdss_alt_autocomplete( $content ) {
+        global $post;
+    
+        if ( empty( $post ) ) {
+          return $content;
+        }
+    
+        $old_content = $content;
+    
+        preg_match_all( '/<img[^>]+>/', $content, $images );
+    
+        if ( ! is_null( $images ) ) {
+          foreach ( $images[0] as $index => $value ) {
+            if ( ! preg_match( '/alt=/', $value ) ) {
+              $new_img = str_replace( '<img', '<img alt="' . esc_attr( $post->post_title ) . '"', $images[0][ $index ] );
+              $content = str_replace( $images[0][ $index ], $new_img, $content );
+            } else if ( preg_match( '/alt=["\']\s?["\']/', $value ) ) {
+              $new_img = preg_replace( '/alt=["\']\s?["\']/', 'alt="' . esc_attr( $post->post_title ) . '"', $images[0][ $index ] );
+              $content = str_replace( $images[0][ $index ], $new_img, $content );
+            }
+          }
+        }
+    
+        if ( empty( $content ) ) {
+          return $old_content;
+        }
+    
+        return $content;
+      }
+      add_filter('the_content', 'wdss_alt_autocomplete');
+    }
+
 
     // AMP Template Fix
     if( function_exists('amp_bootstrap_plugin') && get_option('wdss_amp_fix', '0') ) {
@@ -225,17 +261,44 @@ class WD_Sattelites_Snippets {
       } );
     }
 
+
     // Disable Automatic Plugins and Theme Updates Snippet
     if( get_option('wdss_disable_autoupdates', '0') ) {
       add_filter( 'auto_update_plugin', '__return_false' );
       add_filter( 'auto_update_theme', '__return_false' );
     }
 
+
     // Disable Admin Notices
     if( get_option('wdss_disable_admin_notices', '0') ) {
 
+      function wdss_disable_admin_notices() {   
+        // Hide Update notifications
+        echo '<style>
+            body.wp-admin .update-plugins, 
+            body.wp-admin #wp-admin-bar-updates {display: none !important;} 
+        </style>';
+                      
+
+        // Hide notices from the wordpress backend
+        echo '<style> 
+          body.wp-admin .error:not(.is-dismissible),
+          #yoast-indexation-warning{display: none !important;}
+          body.wp-admin #loco-content .notice,
+          body.wp-admin #loco-notices .notice{display:block !important;}
+        </style>';
+
+        // Hide PHP Updates from the wordpress backend
+        echo '<style>
+          #dashboard_php_nag {display:none;}
+        </style>';
+                        
+      }
+      add_action('admin_enqueue_scripts', 'wdss_disable_admin_notices');
+      add_action('login_enqueue_scripts', 'wdss_disable_admin_notices');
     }
 
+    
     // Remove redundant links Snippet
     if( get_option( 'wdss_redundant_links', '0' ) ) {
       remove_action( 'wp_head', 'wlwmanifest_link' );
@@ -262,10 +325,12 @@ class WD_Sattelites_Snippets {
       add_filter( 'rest_jsonp_enabled', '__return_false' );
     }
   
+    
     // Remove Yoast Schema Snippet
     if( function_exists('wpseo_init') && get_option('wdss_yoast_schema', '0') ) {
       add_filter( 'wpseo_json_ld_output', '__return_false' );
     }
+
 
     // Set title`s length of posts/pages
     if( function_exists('wpseo_init') && get_option('wdss_enable_title_clipping', '0') ) {
@@ -303,11 +368,13 @@ class WD_Sattelites_Snippets {
       }
     }
 
+
     // Autoptimize Lazyload Fix Snippet
     if( function_exists('autoptimize') && get_option('wdss_autoptimize_lazy_fix', '0') ) {
       add_filter( 'autoptimize_filter_imgopt_lazyload_cssoutput', '__return_false' );
       add_action( 'wp_head', function() { echo '<style>.lazyload,.lazyloading{opacity:0;}.lazyloaded{opacity:1;transition:opacity 300ms;}</style>'; }, 999 );
     }
+
 
     // Remove Gutenberg-related stylesheets Snippet
     if( get_option('wdss_gutenberg_styles', '0') ) {
@@ -317,6 +384,7 @@ class WD_Sattelites_Snippets {
         wp_dequeue_style('wp-block-library-theme');
       }
     }
+
 
     // Redirects Rules Snippet
     if( get_option('wdss_amp_rules', '0') ) {
@@ -406,6 +474,7 @@ class WD_Sattelites_Snippets {
       }
     }
 
+
     // Force tralling slash
     if( get_option('wdss_forced_trail_slash', '0') ) {
 
@@ -424,6 +493,7 @@ class WD_Sattelites_Snippets {
 
         add_filter('mod_rewrite_rules', 'wdss_forced_trail_slash'); 
     }
+
 
     // Disable Feeds
     if( get_option('wdss_disable_rss', '0') )  {
@@ -480,6 +550,7 @@ class WD_Sattelites_Snippets {
 
     }
 
+
     // Yoast Canonical Pagination Fix Snippet
     if( get_option('wdss_yoast_canonical_fix', '0') ) {
       add_filter('wpseo_canonical', 'wdss_fix_canon_pagination');
@@ -489,6 +560,7 @@ class WD_Sattelites_Snippets {
       }
     }
 
+    
     // 410 Category Rules
     if( get_option('wdss_410_rules', '0') ) {
       add_action( 'wp', 'wdss_force_410' );
@@ -548,11 +620,12 @@ class WD_Sattelites_Snippets {
       update_option('wdss_redundant_links', sanitize_text_field($_POST['wdss_redundant_links']));   
 
       update_option('wdss_disable_autoupdates', sanitize_text_field($_POST['wdss_disable_autoupdates']));
-      update_option( 'wdss_disable_admin_notices', sanitize_text_field( $_POST['wdss_disable_admin_notices'] ));
-      update_option( 'wdss_disable_rss', sanitize_text_field( $_POST['wdss_disable_rss'] ));      
+      update_option('wdss_disable_admin_notices', sanitize_text_field( $_POST['wdss_disable_admin_notices']));
+      update_option('wdss_disable_rss', sanitize_text_field( $_POST['wdss_disable_rss']));      
       
-      update_option( 'wdss_auto_featured_image', sanitize_text_field( $_POST['wdss_auto_featured_image'] ));
-      
+      update_option('wdss_auto_featured_image', sanitize_text_field( $_POST['wdss_auto_featured_image']));
+      update_option('wdss_auto_alt_attribute', sanitize_text_field( $_POST['wdss_auto_alt_attribute']));
+
       update_option('wdss_yoast_schema', sanitize_text_field($_POST['wdss_yoast_schema']));   
       update_option('wdss_yoast_canonical_fix', sanitize_text_field($_POST['wdss_yoast_canonical_fix']));   
       update_option('wdss_autoptimize_lazy_fix', sanitize_text_field($_POST['wdss_autoptimize_lazy_fix']));   
@@ -589,6 +662,8 @@ class WD_Sattelites_Snippets {
   function wdss_settings_template() { ?>
     <div id="wdss-settings-page">
       <div class="container">
+
+        <h1>Satellites Snippets <small>ver <?= WDSS_VERSION ?></small></h1>
 
         <?php $_POST['wdss_form_submitted'] === 'true' ? $this->wdss_form_handler() : null; ?>
 
@@ -640,6 +715,18 @@ class WD_Sattelites_Snippets {
                         ?>    
                     </label>
                   </div>
+
+                  <div id="wdss-auto-alt-attr" class="wdss-setting-item">
+                      <label>
+                        <span>Auto Alt Attributes</span>
+                        <?php 
+                          $this->checkbox_handler_html(['field_name' => 'wdss_auto_alt_attribute']); 
+                          if( get_option('wdss_auto_alt_attribute') == '' ) update_option( 'wdss_auto_alt_attribute', '0' );               
+                        ?>    
+                    </label>
+                  </div>
+
+
                   
                   <div id="wdss-disable-rss" class="wdss-setting-item">
                       <label>

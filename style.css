@@ -5,6 +5,11 @@
 }
 
 /* Admin Section Styling */
+
+#wdss-settings-page h1 > small {
+  font-size: 1rem;
+}
+
 #wdss-settings-page .wdss-setting-group {
   position: relative;
   overflow: hidden;
