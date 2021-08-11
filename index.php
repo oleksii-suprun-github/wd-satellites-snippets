@@ -4,7 +4,7 @@
   Plugin Name: WD Sattelites Snippets
   Plugin URI: https://github.com/Mironezes
   Description: Bulk of usefull snippets for our sattelites 
-  Version: 0.2.3.1
+  Version: 0.2.4
   Author: Alexey
   Author URI: https://github.com/Mironezes
   Text Domain: wdss_domain
@@ -114,7 +114,6 @@ class WD_Sattelites_Snippets {
 	
 	
   function wdss_snippets() {
-
     
 	// 304 Not Modified Snipper
     if( get_option('wdss_last_modified_n_304', '0') ) {
@@ -149,7 +148,6 @@ class WD_Sattelites_Snippets {
             $ehi_image_meta = array(
                 'ID'        => $postID,
                 'post_title'    => $ehi_image_title, // Image Title
-                'post_excerpt'  => $ehi_image_title, // Image Caption (Excerpt)
                 'post_content'  => $ehi_image_title, // Image Description (Content)
             );
     
@@ -161,6 +159,16 @@ class WD_Sattelites_Snippets {
         } 
     }
 
+
+    function gallery_template_to_posts() {
+      $post_type_object = get_post_type_object( 'post' );
+      $post_type_object->template = array(
+          array( 'core/gallery', array(
+              'linkTo' => 'media',
+          ) ),
+      );
+  }
+  add_action( 'init', 'gallery_template_to_posts' );
 
 
 
@@ -230,9 +238,6 @@ class WD_Sattelites_Snippets {
 
     // Remove redundant links Snippet
     if( get_option( 'wdss_redundant_links', '0' ) ) {
-      remove_action( 'wp_head', 'feed_links_extra', 3 ); 
-      remove_action( 'wp_head', 'feed_links', 2 ); 
-      remove_action( 'wp_head', 'rsd_link' ); 
       remove_action( 'wp_head', 'wlwmanifest_link' );
       remove_action( 'wp_head', 'index_rel_link' ); 
       remove_action( 'wp_head', 'parent_post_rel_link', 10, 0 ); 
@@ -313,10 +318,10 @@ class WD_Sattelites_Snippets {
       }
     }
 
-    // AMP Redirects Rules Snippet
+    // Redirects Rules Snippet
     if( get_option('wdss_amp_rules', '0') ) {
       function wdss_amp_plugin_change_behavior($url, $status) {
-        if (!is_admin()) {
+        if ( !is_admin() ) {
   
             if ($_SERVER['SCRIPT_NAME'] === '/wp-login.php'
                 || $_SERVER['SCRIPT_NAME'] === '/wp-admin/index.php'
@@ -353,7 +358,7 @@ class WD_Sattelites_Snippets {
       add_filter('wp_redirect', 'wdss_amp_plugin_change_behavior', 10, 2);
   
       function wdss_generate_rewrite_rules() {
-          if (!is_admin()) {
+          if ( !is_admin() ) {
               $url = $_SERVER['REQUEST_URI'];
               $regex = '/\/{0,5}([_\?\/])amp[_]*\/?/';
               preg_match($regex, $url, $matches);
@@ -381,18 +386,98 @@ class WD_Sattelites_Snippets {
       }
       add_action('wp', 'wdss_generate_rewrite_rules', -1);
   
-      if (strpos($_SERVER['REQUEST_URI'], 'index.html')   || 
-          strpos($_SERVER['REQUEST_URI'], 'index.php')   || 
-          strpos($_SERVER['REQUEST_URI'], 'feed')        || 
-          strpos($_SERVER['REQUEST_URI'], 'feed/')       || 
-          strpos($_SERVER['REQUEST_URI'], 'amp')         || 
-          strpos($_SERVER['REQUEST_URI'], '?amp')        || 
-          strpos($_SERVER['REQUEST_URI'], '?amp/')       || 
-          strpos($_SERVER['REQUEST_URI'], '/?amp/')
+
+      if( !is_admin() ) {
+        $url = $_SERVER['REQUEST_URI'];
+
+        if (
+          $url == "/index.html"  || 
+          $url == "/index.php"   || 
+          $url == "/feed"        || 
+          $url == "/feed/"       || 
+          $url == "/amp"         || 
+          $url == "/?amp"        || 
+          $url == "/?amp/"       || 
+          $url == "//?amp/"
         ) {
-        header("Location: /", TRUE, 301);
-        exit();
+          wp_redirect(site_url('/'), 301);
+          exit();
+        }
       }
+    }
+
+    // Force tralling slash
+    if( get_option('wdss_forced_trail_slash', '0') ) {
+
+      function wdss_forced_trail_slash($rules) {
+          $rule  = "\n";
+          $rule .= "# Force Tralling Slash.\n";
+          $rule .= "<IfModule mod_rewrite.c>\n";
+          $rule .= "RewriteEngine On\n";
+          $rule .= "RewriteCond %{REQUEST_URI} !(/$|\.)\n";
+          $rule .= "RewriteRule (.*) %{REQUEST_URI}/ [R=301,L]\n";
+          $rule .= "</IfModule>\n";
+          $rule .= "\n";
+        
+          return $rule . $rules;
+        }
+
+        add_filter('mod_rewrite_rules', 'wdss_forced_trail_slash'); 
+    }
+
+    // Disable Feeds
+    if( get_option('wdss_disable_rss', '0') )  {
+
+      function remove_feed_links()
+      {
+        remove_action( 'wp_head', 'feed_links', 2 ); 
+        remove_action( 'wp_head', 'feed_links_extra', 3 );       
+        remove_action( 'wp_head', 'rsd_link', 4 ); 
+      }
+
+      function disabled_feed_behaviour()
+      {
+        global $wp_rewrite, $wp_query;
+
+          if( isset($_GET['feed']) ) {
+            wp_redirect(esc_url_raw(remove_query_arg('feed')), 301);
+            exit;
+          }
+
+          if( 'old' !== get_query_var('feed') ) {    // WP redirects these anyway, and removing the query var will confuse it thoroughly
+            set_query_var('feed', '');
+          }
+
+          redirect_canonical();    // Let WP figure out the appropriate redirect URL.
+
+          // Still here? redirect_canonical failed to redirect, probably because of a filter. Try the hard way.
+          $struct = (!is_singular() && is_comment_feed()) ? $wp_rewrite->get_comment_feed_permastruct() : $wp_rewrite->get_feed_permastruct();
+
+          $struct = preg_quote($struct, '#');
+          $struct = str_replace('%feed%', '(\w+)?', $struct);
+          $struct = preg_replace('#/+#', '/', $struct);
+          $requested_url = (is_ssl() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+          $new_url = preg_replace('#' . $struct . '/?$#', '', $requested_url);
+
+          if( $new_url !== $requested_url ) {
+            wp_redirect($new_url, 301);
+            exit;
+          }
+      }    
+      
+      function filter_feeds()
+      {
+        if( !is_feed() || is_404() ) {
+          return;
+        }
+
+        disabled_feed_behaviour();
+      }
+
+      add_action('wp_loaded', 'remove_feed_links');
+      add_action('template_redirect', 'filter_feeds', 1);
+
     }
 
     // Yoast Canonical Pagination Fix Snippet
@@ -455,12 +540,16 @@ class WD_Sattelites_Snippets {
 
 
   function wdss_form_handler() {
-    if(wp_verify_nonce($_POST['wfp_nonce'], 'wdss_save_settings') && current_user_can('manage_options')) {
+    if(wp_verify_nonce($_POST['wfp_nonce'], 'wdss_save_settings') && current_user_can('manage_options')) { 
 
-      update_option('wdss_last_modified_n_304', sanitize_text_field($_POST['wdss_last_modified_n_304']));   
+      update_option('wdss_last_modified_n_304', sanitize_text_field($_POST['wdss_last_modified_n_304'])); 
+      update_option('wdss_forced_trail_slash', sanitize_text_field($_POST['wdss_forced_trail_slash']));    
+      
       update_option('wdss_redundant_links', sanitize_text_field($_POST['wdss_redundant_links']));   
+
       update_option('wdss_disable_autoupdates', sanitize_text_field($_POST['wdss_disable_autoupdates']));
       update_option( 'wdss_disable_admin_notices', sanitize_text_field( $_POST['wdss_disable_admin_notices'] ));
+      update_option( 'wdss_disable_rss', sanitize_text_field( $_POST['wdss_disable_rss'] ));      
       
       update_option( 'wdss_auto_featured_image', sanitize_text_field( $_POST['wdss_auto_featured_image'] ));
       
@@ -522,6 +611,16 @@ class WD_Sattelites_Snippets {
                     </label>
                   </div>
                 
+                  <div id="wdss-last-modified" class="wdss-setting-item">
+                      <label>
+                        <span title="To apply changes visit Permalinks page ">Force Trailling Slash *</span>
+                        <?php 
+                          $this->checkbox_handler_html(['field_name' => 'wdss_forced_trail_slash']); 
+                          if( get_option('wdss_forced_trail_slash') == '' ) update_option( 'wdss_forced_trail_slash', '0' );               
+                        ?>    
+                    </label>
+                  </div>
+
                   <div id="wdss-redundant-links" class="wdss-setting-item">
                       <label>
                         <span>Remove Redundant Links</span>
@@ -542,6 +641,15 @@ class WD_Sattelites_Snippets {
                     </label>
                   </div>
                   
+                  <div id="wdss-disable-rss" class="wdss-setting-item">
+                      <label>
+                        <span>Disable RSS Feeds</span>
+                        <?php 
+                          $this->checkbox_handler_html(['field_name' => 'wdss_disable_rss']); 
+                          if( get_option('wdss_disable_rss') == '' ) update_option( 'wdss_disable_rss', '0' );               
+                        ?>    
+                    </label>
+                  </div>
 
                   <div id="wdss-disable-autoupdates" class="wdss-setting-item">
                       <label>
@@ -611,7 +719,7 @@ class WD_Sattelites_Snippets {
 
                   <div id="wdss-redundant-links" class="wdss-setting-item">
                       <label>
-                        <span>AMP & Home Redirects</span>
+                        <span>Basic Redirect Rules</span>
                         <?php 
                           $this->checkbox_handler_html(['field_name' => 'wdss_amp_rules']); 
                           if( get_option('wdss_amp_rules') == '' ) update_option( 'wdss_amp_rules', '0' );               
