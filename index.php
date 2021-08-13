@@ -4,7 +4,7 @@
   Plugin Name: WD Sattelites Snippets
   Plugin URI: https://github.com/Mironezes
   Description: Bulk of usefull snippets and options for our sattelites 
-  Version: 0.2.5
+  Version: 0.2.5.1
   Author: Alexey Suprun
   Author URI: https://github.com/Mironezes
   Text Domain: wdss_domain
@@ -14,7 +14,7 @@
 if ( !defined('ABSPATH') ) exit;
 
 
-define('WDSS_VERSION', '0.2.5');
+define('WDSS_VERSION', '0.2.5.1');
 define('WDSS_DOMAIN', 'wdss_domain');
 
 class WD_Sattelites_Snippets {
@@ -57,20 +57,81 @@ class WD_Sattelites_Snippets {
 
   // Last-modifed Snippet
   function wdss_last_modified() {
-        $LastModified_unix = getlastmod();
-        $LastModified = gmdate( "D, d M Y H:i:s \G\M\T", $LastModified_unix );
-        $IfModifiedSince = false;
-        if ( isset($_ENV['HTTP_IF_MODIFIED_SINCE']) ) {
-          $IfModifiedSince = strtotime( substr($_ENV['HTTP_IF_MODIFIED_SINCE'], 5) );
+    add_action( 'template_redirect', 'HTTP_Headers_Last_Modified' );
+
+    function HTTP_Headers_Last_Modified() {
+    
+      if ( ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || ( is_admin() ) ) {
+        return;
+      }
+    
+      $last_modified = '';
+    
+      if ( is_singular() ) {
+        global $post;
+    
+        if ( post_password_required( $post ) )
+          return;
+    
+        if ( !isset( $post -> post_modified_gmt ) ) {
+          return;
         }
-        if ( isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ) {
-          $IfModifiedSince = strtotime(substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 5));
+    
+        $post_time = strtotime( $post -> post_modified_gmt );
+        $modified_time = $post_time;
+    
+        if ( ( int ) $post -> comment_count > 0 ) {
+          $comments = get_comments( array(
+            'post_id' => $post -> ID,
+            'number' => '1',
+            'status' => 'approve',
+            'orderby' => 'comment_date_gmt',
+              ) );
+          if ( !empty( $comments ) && isset( $comments[0] ) ) {
+            $comment_time = strtotime( $comments[0] -> comment_date_gmt );
+            if ( $comment_time > $post_time ) {
+              $modified_time = $comment_time;
+            }
+          }
         }
-        if ( $IfModifiedSince && $IfModifiedSince >= $LastModified_unix ) {
-          header( $_SERVER['SERVER_PROTOCOL'] . ' 304 Not Modified' );
-          exit;
+    
+        $last_modified = str_replace( '+0000', 'GMT', gmdate( 'r', $modified_time ) );
+      }
+    
+      if ( is_archive() || is_home() ) {
+        global $posts;
+    
+        if ( empty( $posts ) ) {
+          return;
         }
-        header( 'Last-Modified: '. $LastModified );
+    
+        $post = $posts[0];
+    
+        if ( !isset( $post -> post_modified_gmt ) ) {
+          return;
+        }
+    
+        $post_time = strtotime( $post -> post_modified_gmt );
+        $modified_time = $post_time;
+    
+        $last_modified = str_replace( '+0000', 'GMT', gmdate( 'r', $modified_time ) );
+      }
+    
+      if ( headers_sent() ) {
+        return;
+      }
+    
+      if ( !empty( $last_modified ) ) {
+        header( 'Last-Modified: ' . $last_modified );
+    
+        if ( !is_user_logged_in() ) {
+          if ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && strtotime( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) >= $modified_time ) {
+            $protocol = (isset( $_SERVER['SERVER_PROTOCOL'] ) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
+            header( $protocol . ' 304 Not Modified' );
+          }
+        }
+      }
+    }
   }
 
 	
@@ -117,21 +178,6 @@ class WD_Sattelites_Snippets {
 	
 	
   function wdss_snippets() {
-	  // 304 Not Modified Snippet
-    if( get_option('wdss_last_modified_n_304', '0') ) {
-      add_action('wbcr/factory/option_if_modified_since_headers', function($option_value){
-        $server_headers = apache_response_headers();
-        if (isset($server_headers['Last-Modified'])
-          && !empty($server_headers['Last-Modified'])
-          && $option_value){
-          
-          header_remove('Set-Cookie');
-        }
-          
-        return $option_value;
-      }, 1);
-    }
-
     // Auto Generated Alts for images on attach action
     add_action('add_attachment', 'wd_auto_generated_image_alts');
     function wd_auto_generated_image_alts($postID)
@@ -274,22 +320,28 @@ class WD_Sattelites_Snippets {
 
       function wdss_disable_admin_notices() {   
         // Hide Update notifications
-        echo '<style>
+        echo 
+        '<style>
             body.wp-admin .update-plugins, 
-            body.wp-admin #wp-admin-bar-updates {display: none !important;} 
+            body.wp-admin  .plugin-update-tr,
+            body.wp-admin #wp-admin-bar-updates,
+            body.wp-admin .update-nag,
+            .jitm-banner {display: none !important;} 
         </style>';
                       
 
         // Hide notices from the wordpress backend
-        echo '<style> 
+        echo 
+        '<style> 
           body.wp-admin .error:not(.is-dismissible),
-          #yoast-indexation-warning{display: none !important;}
+          #yoast-indexation-warning, #akismet_setup_prompt, .jp-wpcom-connect__container {display: none !important;}
           body.wp-admin #loco-content .notice,
           body.wp-admin #loco-notices .notice{display:block !important;}
         </style>';
 
         // Hide PHP Updates from the wordpress backend
-        echo '<style>
+        echo 
+        '<style>
           #dashboard_php_nag {display:none;}
         </style>';
                         
@@ -563,7 +615,6 @@ class WD_Sattelites_Snippets {
     
     // 410 Category Rules
     if( get_option('wdss_410_rules', '0') ) {
-      add_action( 'wp', 'wdss_force_410' );
       function wdss_force_410()
       {
           $requestUri = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
@@ -583,7 +634,7 @@ class WD_Sattelites_Snippets {
                   exit;
           }
       }
-
+      add_action( 'wp', 'wdss_force_410' );
     }
   }
 
