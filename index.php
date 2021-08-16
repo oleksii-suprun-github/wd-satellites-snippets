@@ -4,7 +4,7 @@
   Plugin Name: WD Sattelites Snippets
   Plugin URI: https://github.com/Mironezes
   Description: Bulk of usefull snippets and options for our sattelites 
-  Version: 0.2.5.2
+  Version: 0.2.6.1
   Author: Alexey Suprun
   Author URI: https://github.com/Mironezes
   Text Domain: wdss_domain
@@ -14,7 +14,7 @@
 if ( !defined('ABSPATH') ) exit;
 
 
-define('WDSS_VERSION', '0.2.5.2');
+define('WDSS_VERSION', '0.2.6.1');
 define('WDSS_DOMAIN', 'wdss_domain');
 
 class WD_Sattelites_Snippets {
@@ -282,7 +282,7 @@ class WD_Sattelites_Snippets {
 
     // Auto Alt Attributes for images
     if( get_option('wdss_auto_alt_attribute', '0') ) {
-      function wdss_alt_autocomplete( $content ) {
+      function wdss_alt_singlepage_autocomplete( $content ) {
         global $post;
     
         if ( empty( $post ) ) {
@@ -311,7 +311,20 @@ class WD_Sattelites_Snippets {
     
         return $content;
       }
-      add_filter('the_content', 'wdss_alt_autocomplete');
+      add_filter('the_content', 'wdss_alt_singlepage_autocomplete');
+
+      function wdss_alt_attachment_autocomplete($html, $post_id, $post_thumbnail_id, $size, $attr) {
+        
+        if(!isset($attr['alt'])) {
+          $id = get_post_thumbnail_id();
+          $alt_text = get_the_title($post_id);
+       
+          $html = str_replace( 'alt=""', 'alt="' . esc_attr( $alt_text ) . '"', $html );
+        }
+
+        return $html;
+      }
+      add_filter('post_thumbnail_html', 'wdss_alt_attachment_autocomplete', 10, 5);      
     }
 
 
@@ -422,12 +435,10 @@ class WD_Sattelites_Snippets {
     if( function_exists('wpseo_init') && get_option('wdss_enable_title_clipping', '0') ) {
       add_filter('wpseo_title', 'yoast_trim_title');
       function yoast_trim_title($post_title) {
-        
+        global $post;
         $is_old_post = false;
         
         if( get_option('wdss_title_clipping_condition', '0') ) {
-
-          global $post;
           $post_date = strtotime($post->post_date);
           
           if( get_option('wdss_title_clipping_by_date', '0') ) {
@@ -441,15 +452,22 @@ class WD_Sattelites_Snippets {
         $ending = ' ' . get_option('wdss_title_ending') . ''; // adds title`s ending
         $ending_exists = boolval(strpos($post_title, $ending));
         $title_less_than_count = boolval(mb_strlen($post_title) < $symbols_limit);
+
         $is_already_exists = $title_less_than_count && $ending_exists;
+
+        if( get_option('wdss_title_clipping_excluded', '') !== '' ) {
+          $excludedArr =  explode(',', get_option('wdss_title_clipping_excluded'));
+          $is_excluded = in_array($post->ID, $excludedArr);
+        }
         
-        if ( is_front_page() || is_archive() || is_category() || $is_already_exists || $is_old_post )   { // where`s title trimming shouldn`t be implemented
-            return $post_title;
+        if ( !is_single()  || $is_already_exists || $is_old_post ||  $is_excluded )   { // where`s title trimming shouldn`t be implemented
+          return $post_title;
         }	
         
         $words = explode(' ', $post_title);
         array_splice($words, $words_limit);
         $post_title = implode(' ', $words);
+
         return $post_title . $ending;
       }
     }
@@ -720,6 +738,7 @@ class WD_Sattelites_Snippets {
       update_option('wdss_force_lowercase', sanitize_text_field($_POST['wdss_force_lowercase']));  
       
       update_option('wdss_enable_title_clipping', sanitize_text_field($_POST['wdss_enable_title_clipping']));   
+      update_option('wdss_title_clipping_excluded', sanitize_text_field($_POST['wdss_title_clipping_excluded']));
       update_option('wdss_title_clipping_condition', sanitize_text_field($_POST['wdss_title_clipping_condition']));   
       update_option('wdss_title_clipping_by_date', sanitize_text_field($_POST['wdss_title_clipping_by_date']));         
       
@@ -925,8 +944,12 @@ class WD_Sattelites_Snippets {
               </div>
           </section>
 
+          <?php 
+            $total_post_count = wp_count_posts('post')->publish;
+            if( $total_post_count !== 0 ) { 
+          ?>
           <section id="wdss-title-clipping-settings">
-            <h2>Long Title Clipping Settings <small>(posts & pages only)</small></h2>
+            <h2>Long Title Clipping Settings <small>(posts only)</small></h2>
             <div class="wdss-row">
                 <div id="wdss-title-clipping" class="wdss-setting-item">
                     <label>
@@ -943,7 +966,7 @@ class WD_Sattelites_Snippets {
                   <div id="wdss-title-clipping-condition-group">
                     <div id="wdss-title-clipping-condition" class="wdss-setting-item">
                     <label>
-                          <span>Date Condition for Clipping</span>
+                          <span>Date Condition </span>
                           <?php 
                           $this->checkbox_handler_html(['field_name' => 'wdss_title_clipping_condition']); 
                           if( get_option('wdss_title_clipping_condition') == '' ) update_option( 'wdss_title_clipping_condition', '0' );               
@@ -968,7 +991,7 @@ class WD_Sattelites_Snippets {
 
                   <div id="wdss-words-limit" class="wdss-setting-item">
                   <label>
-                        <span>Words Limit (default 6)</span>
+                        <span title="By default: 6">Words Limit</span>
                         <?php 
                           $default_words_limit = '6';
                           $this->number_handler_html(['field_name' => 'wdss_title_words_limit', 'min' => '2', 'max' => '7']); 
@@ -979,7 +1002,7 @@ class WD_Sattelites_Snippets {
 
                   <div id="wdss-chars-limit" class="wdss-setting-item">
                       <label>
-                        <span>Chars per Word Limit (default: 35)</span>
+                        <span title="By default: 35">Chars Per Word</span>
                         <?php 
                           $default_chars_limit = '35';
                           $this->number_handler_html(['field_name' => 'wdss_word_chars_limit', 'min' => '32', 'max' => '50']); 
@@ -987,6 +1010,21 @@ class WD_Sattelites_Snippets {
                         ?>    
                     </label>
                   </div>   
+
+                  <div id="wdss-title-clipping-excluded" class="wdss-setting-item">
+                      <label>
+                        <span title="Exclude some special posts from global clipping (comma separated)">Exclude by ID</span>
+                        <?php 
+                          $this->text_handler_html(['field_name' => 'wdss_title_clipping_excluded']); 
+                          if( get_option('wdss_title_clipping_excluded') == '' ) update_option( 'wdss_title_clipping_excluded', '' );               
+                        ?>    
+                    </label>
+                  </div>  
+
+
+                  
+
+
                   
                   <div id="wdss-title-ending" class="wdss-setting-item">
                       <label>
@@ -1000,7 +1038,9 @@ class WD_Sattelites_Snippets {
                 </div> 
             </div>
           </section>
-
+          <?php } 
+          else { update_option('wdss_enable_title_clipping', '0'); }
+          ?>
 
           <?php 
             $total_post_count = wp_count_posts('post')->publish;
@@ -1017,9 +1057,7 @@ class WD_Sattelites_Snippets {
                 </div>
               </section>
             <?php }
-            else {
-              update_option('wdss_410_rules', '0');
-            }        
+            else { update_option('wdss_410_rules', '0'); }        
           ?>
 
           <input type="submit" name="submit" id="submit" class="button" value="<?= __('Save changes', 'wdss_domain') ?>">
