@@ -34,7 +34,9 @@
     if(wp_verify_nonce($_POST['wfp_nonce'], 'wdss_save_settings') && current_user_can('manage_options')) { 
 
       update_option('wdss_last_modified_n_304', sanitize_text_field($_POST['wdss_last_modified_n_304'])); 
-      update_option('wdss_forced_trail_slash', sanitize_text_field($_POST['wdss_forced_trail_slash']));    
+
+      update_option('wdss_forced_trail_slash', sanitize_text_field($_POST['wdss_forced_trail_slash']));   
+      update_option('wdss_disable_jquery', sanitize_text_field($_POST['wdss_disable_jquery'])); 
       
       update_option('wdss_redundant_links', sanitize_text_field($_POST['wdss_redundant_links']));   
 

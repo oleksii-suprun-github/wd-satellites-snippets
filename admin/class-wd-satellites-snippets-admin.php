@@ -55,16 +55,14 @@ class Wd_Satellites_Snippets_Admin {
 		}
 		
 		$this->wdss_snippets();
+    if( get_option('wdss_last_modified_n_304', '0') ) {
+      $this->wdss_last_modified();
+    }
 	}
 
 
-	// Snippets List
-  protected function wdss_snippets() {
-
-		// Last-modifed Snippet
-		if( get_option('wdss_last_modified_n_304', '0') ) {
-			function wdss_last_modified() {
-
+	// Last-modifed Settings
+	function wdss_last_modified() {
 				function last_modified_default() {
 					$LastModified_unix = getlastmod();
 					$LastModified = gmdate( "D, d M Y H:i:s \G\M\T", $LastModified_unix );
@@ -173,9 +171,21 @@ class Wd_Satellites_Snippets_Admin {
 				else {
 					last_modified_default();
 				}
-			}
-		}
+	}
 
+	// Basic Snippets List 
+  protected function wdss_snippets() {
+
+    // Disables jQuery and Migration script for Frontend
+    if( get_option('wdss_disable_jquery', '0') ) {
+      function wdss_disable_jquery() {
+        if( !is_admin() ) {
+          wp_deregister_script( 'jquery' );
+          wp_deregister_script( 'jquery-migrate' );
+        }
+      }
+      add_action('wp_loaded', 'wdss_disable_jquery');
+    }
 
 		// Force Lowercase URLs Snippet
 		if( get_option('wdss_force_lowercase', '0') ) {
@@ -479,17 +489,27 @@ class Wd_Satellites_Snippets_Admin {
         $is_already_exists = $title_less_than_count && $ending_exists;
 
         if( get_option('wdss_title_clipping_excluded', '') !== '' ) {
-          $excludedArr =  explode(',', get_option('wdss_title_clipping_excluded'));
-          $is_excluded = in_array($post->ID, $excludedArr);
+          $excluded_arr =  explode(',', get_option('wdss_title_clipping_excluded'));
+          $is_excluded = in_array($post->ID, $excluded_arr);
         }
+
         
         if ( !is_single()  || $is_already_exists || $is_old_post ||  $is_excluded )   { // where`s title trimming shouldn`t be implemented
           return $post_title;
         }	
         
-        $words = explode(' ', $post_title);
-        array_splice($words, $words_limit);
-        $post_title = implode(' ', $words);
+        $title_arr = explode(' ', $post_title);
+        // small words counter; if there`is none of them then don't extend words limit
+        $words_limit_ext = 0;
+
+        foreach($title_arr as $word) {
+          if(mb_strlen($word) < 2) {
+            $words_limit_ext++;
+          }
+        }
+
+        array_splice($title_arr, $words_limit + $words_limit_ext);
+        $post_title = implode(' ', $title_arr);
 
         return $post_title . $ending;
       }

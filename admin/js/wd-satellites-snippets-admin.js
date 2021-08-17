@@ -27,10 +27,59 @@ function sectionToggler(section) {
 }
 
 
+function toggleCheckbox() {
+  const inputs = Array.from(document.querySelectorAll('input[type="checkbox"'));
+  inputs.forEach((input) => {
+    input.addEventListener('click', () => {
+      
+      if(input.hasAttribute('checked')) {
+        input.removeAttribute('checked');
+        input.checked = false;
+      }
+      else {
+        input.setAttribute('checked', 'checked');
+        input.checked = true;
+      }
+    })
+  });
+}
+
+
+function toggleAllOptions() {
+  const inputs = Array.from(document.querySelectorAll('#wdss-snippets-settings input'));
+  let toggler = document.querySelector('#wdss-toggle-options');
+
+  function uncheckAll() {
+    inputs.forEach((input) => {
+        input.removeAttribute('checked');
+        input.checked = false;
+    });  
+  }
+
+  function checkAll() {
+    inputs.forEach((input) => {
+        input.setAttribute('checked', 'checked');
+        input.checked = true;
+    });  
+  }
+
+  toggler.addEventListener('click', () => {
+    if(inputs[0].hasAttribute('checked')) {
+      uncheckAll();
+    }
+    else {
+      checkAll();
+    }
+  });
+}
+
+
 function init() {
   if(isPluginPage) {
     sectionToggler(titleClippingSection);
     sectionToggler(titleClippingByDateSection);
+    toggleCheckbox();
+    toggleAllOptions();
   }
 }
 

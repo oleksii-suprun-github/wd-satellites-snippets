@@ -1,5 +1,8 @@
-<section id="wdss-snippets-settings">
-              <h2>Snippets List</h2>
+<section id="wdss-snippets-settings" class="wdss-section">
+              <div class="wdss-section-header">
+                <h2>Snippets List</h2>
+                <span id="wdss-toggle-options">Toggle Options</span>
+              </div>
               <div class="wdss-row">
                   <div id="wdss-last-modified" class="wdss-setting-item">
                       <label>
@@ -10,6 +13,16 @@
                         ?>    
                     </label>
                   </div>
+
+                  <div id="wdss-disable-jquery" class="wdss-setting-item">
+                      <label>
+                        <span title="Disables jQuery and Migration script for Frontend">Disable jQuery *</span>
+                        <?php 
+                          checkbox_handler_html(['field_name' => 'wdss_disable_jquery']); 
+                          if( get_option('wdss_disable_jquery') == '' ) update_option( 'wdss_disable_jquery', '0' );               
+                        ?>    
+                    </label>
+                  </div>           
                 
                   <div id="wdss-last-modified" class="wdss-setting-item">
                       <label>

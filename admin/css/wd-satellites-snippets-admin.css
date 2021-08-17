@@ -40,6 +40,7 @@
 }
 
 #wdss-settings-page .wdss-row {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -64,12 +65,37 @@
   width: calc(33.33% - 25px);
 }
 
+.wdss-section {
+  position: relative;
+}
+
+.wdss-section-header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 20px 20px;
+  background: #1d2327;
+}
+
+.wdss-section-header h2,
+.wdss-section-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+#wdss-settings-page .wdss-setting-item,
 #wdss-settings-page .wdss-setting-item label {
   position: relative;
   display: flex;
+  align-items: center;
+}
+
+#wdss-settings-page .wdss-setting-item label {
   width: fit-content;
   width: -moz-fit-content;
-  align-items: center;
   padding: 15px;
 }
 
@@ -91,13 +117,6 @@
   padding: 0;
 }
 
-#wdss-settings-page h2 {
-  margin: 0;
-  padding: 20px 20px;
-  color: #fff;
-  background: #1d2327;
-}
-
 #wdss-settings-page table.form-table {
   display: flex;
   padding: 10px;
@@ -109,4 +128,28 @@
   color: #fff;
   border-color: green;
   background: green;
+}
+
+/* Snippets List Settings */
+span#wdss-toggle-options {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 15px;  
+  color: #2c3338;
+  background: #fff;
+  border: 1px solid #2c3338;
+  border-radius: 4px;
+  cursor: pointer; 
+}
+
+/* Long Title Clipping Settings */
+#wdss-title-ending button {
+  height: 30px;
+  padding: 0 15px;  
+  color: #fff;
+  background: #2c3338;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
 }
