@@ -240,15 +240,41 @@ class Wd_Satellites_Snippets_Admin {
     }
 
 
-    function gallery_template_to_posts() {
-      $post_type_object = get_post_type_object( 'post' );
-      $post_type_object->template = array(
-          array( 'core/gallery', array(
-              'linkTo' => 'media',
-          ) ),
-      );
+    // Fixes WP Comments Passive Listener Issue 
+    if( get_option('wdss_comments_passive_listener_fix', '0') ) {
+      function wp_dereg_script_comment_reply(){wp_deregister_script( 'comment-reply' );}
+      add_action('init','wp_dereg_script_comment_reply');
+      add_action('wp_head', 'wp_reload_script_comment_reply');
+      function wp_reload_script_comment_reply() {
+          ?>
+      <script>
+      //Function checks if a given script is already loaded
+      function isScriptLoaded(src){
+          return document.querySelector('script[src="' + src + '"]') ? true : false;
+      }
+      //When a reply link is clicked, check if reply-script is loaded. If not, load it and emulate the click
+      document.getElementsByClassName("comment-reply-link").onclick = function() { 
+          if(!(isScriptLoaded("/wp-includes/js/comment-reply.min.js"))){
+              var script = document.createElement('script');
+              script.src = "/wp-includes/js/comment-reply.min.js"; 
+          script.onload = emRepClick($(this).attr('data-commentid'));        
+              document.head.appendChild(script);
+          } 
+      }
+      //Function waits 50 ms before it emulates a click on the relevant reply link now that the reply script is loaded
+      function emRepClick(comId) {
+      sleep(50).then(() => {
+      document.querySelectorAll('[data-commentid="'+comId+'"]')[0].dispatchEvent(new Event('click'));
+      });
+      }
+      //Function does nothing, for a given amount of time
+      function sleep (time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+      }
+      </script>
+      <?php
+      }  
     }
-    add_action( 'init', 'gallery_template_to_posts' );
 
 
     // Auto Featured Image on post saving (from first attached image)

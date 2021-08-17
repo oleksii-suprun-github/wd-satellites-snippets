@@ -51,7 +51,15 @@
                     </label>
                   </div>
 
-
+                  <div id="wdss-comments-passive-listener-fix" class="wdss-setting-item">
+                      <label>
+                        <span>WP Comments Fix</span>
+                        <?php 
+                          checkbox_handler_html(['field_name' => 'wdss_comments_passive_listener_fix']); 
+                          if( get_option('wdss_comments_passive_listener_fix') == '' ) update_option( 'wdss_comments_passive_listener_fix', '0' );               
+                        ?>    
+                    </label>
+                  </div>
                   
                   <div id="wdss-disable-rss" class="wdss-setting-item">
                       <label>

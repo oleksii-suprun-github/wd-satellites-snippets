@@ -45,6 +45,8 @@
       update_option('wdss_auto_featured_image', sanitize_text_field( $_POST['wdss_auto_featured_image']));
       update_option('wdss_auto_alt_attribute', sanitize_text_field( $_POST['wdss_auto_alt_attribute']));
 
+      update_option('wdss_comments_passive_listener_fix', sanitize_text_field( $_POST['wdss_comments_passive_listener_fix']));
+    
       update_option('wdss_yoast_schema', sanitize_text_field($_POST['wdss_yoast_schema']));   
       update_option('wdss_yoast_canonical_fix', sanitize_text_field($_POST['wdss_yoast_canonical_fix']));   
       update_option('wdss_autoptimize_lazy_fix', sanitize_text_field($_POST['wdss_autoptimize_lazy_fix']));   
