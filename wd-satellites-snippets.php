@@ -1,27 +1,20 @@
 <?php
-
 /**
- * The plugin bootstrap file
- *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
- *
- * @link              https://github.com/Mironezes
- * @package           Wd_Satellites_Snippets
- *
- * @wordpress-plugin
- * Plugin Name:       WD Sattelites Snippets
- * Plugin URI:        https://github.com/Mironezes
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           0.3.1.1
- * Author:            Alexey Suprun
- * Author URI:        https://github.com/Mironezes
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       wd-satellites-snippets
- * Domain Path:       /languages
+ * Plugin Name: WD Sattelites Snippets
+ * Plugin URI: https://github.com/Mironezes
+ * Description: Bulk of usefull snippets for our sattelites.
+ * Version: 0.4
+ * Author: Alexey Suprun
+ * Author URI: https://github.com/Mironezes
+ * Requires at least: 5.5
+ * Requires PHP: 7.0
+ * Tested up to: 5.8
+ * License: GPL-2.0+
+ * Text Domain: wd-satellites-snippets
+ * Domain Path: /languages
+ * 
+ * @link https://github.com/Mironezes
+ * @package Wd_Satellites_Snippets
  */
 
 // If this file is called directly, abort.
@@ -33,7 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Currently plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.3.2' );
+define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.4' );
 
 /**
  * The code that runs during plugin activation.

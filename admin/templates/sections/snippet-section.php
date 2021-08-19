@@ -1,7 +1,7 @@
 <section id="wdss-snippets-settings" class="wdss-section">
               <div class="wdss-section-header">
                 <h2>Snippets List</h2>
-                <span id="wdss-toggle-options">Toggle Options</span>
+                <button type="button" id="wdss-toggle-options">Toggle Options</button>
               </div>
               <div class="wdss-row">
                   <div id="wdss-last-modified" class="wdss-setting-item">
@@ -16,7 +16,7 @@
 
                   <div id="wdss-disable-jquery" class="wdss-setting-item">
                       <label>
-                        <span title="Disables jQuery and Migration script for Frontend">Disable jQuery *</span>
+                        <span title="Disables jQuery and Migration script for Frontend">Disable jQuery <sup>?</sup></span>
                         <?php 
                           checkbox_handler_html(['field_name' => 'wdss_disable_jquery']); 
                           if( get_option('wdss_disable_jquery') == '' ) update_option( 'wdss_disable_jquery', '0' );               
@@ -26,7 +26,7 @@
                 
                   <div id="wdss-last-modified" class="wdss-setting-item">
                       <label>
-                        <span title="To apply changes visit Permalinks page ">Force Trailling Slash *</span>
+                        <span title="To apply changes visit Permalinks page ">Force Trailling Slash <sup>?</sup></span>
                         <?php 
                           checkbox_handler_html(['field_name' => 'wdss_forced_trail_slash']); 
                           if( get_option('wdss_forced_trail_slash') == '' ) update_option( 'wdss_forced_trail_slash', '0' );               
@@ -36,7 +36,7 @@
 
                   <div id="wdss-redundant-links" class="wdss-setting-item">
                       <label>
-                        <span>Remove Redundant Links</span>
+                        <span title="Removes different links from head section (e.g. rest-api, wp_generator etc)">Remove Redundant Links <sup>?</sup></span>
                         <?php 
                           checkbox_handler_html(['field_name' => 'wdss_redundant_links']); 
                           if( get_option('wdss_redundant_links') == '' ) update_option( 'wdss_redundant_links', '0' );               
@@ -44,12 +44,12 @@
                     </label>
                   </div>
 
-                  <div id="wdss-auto-featured-image" class="wdss-setting-item">
+                  <div id="wdss-remove-hentry" class="wdss-setting-item">
                       <label>
-                        <span>Auto Featured Image</span>
+                        <span>Remove Hentry</span>
                         <?php 
-                          checkbox_handler_html(['field_name' => 'wdss_auto_featured_image']); 
-                          if( get_option('wdss_auto_featured_image') == '' ) update_option( 'wdss_auto_featured_image', '0' );               
+                          checkbox_handler_html(['field_name' => 'wdss_remove_hentry']); 
+                          if( get_option('wdss_remove_hentry') == '' ) update_option( 'wdss_remove_hentry', '0' );               
                         ?>    
                     </label>
                   </div>
@@ -66,7 +66,7 @@
 
                   <div id="wdss-comments-passive-listener-fix" class="wdss-setting-item">
                       <label>
-                        <span>WP Comments Fix</span>
+                        <span title="Fixes *Remove passive event listener* Pagespeed warning">WP Comments Fix <sup>?</sup></span>
                         <?php 
                           checkbox_handler_html(['field_name' => 'wdss_comments_passive_listener_fix']); 
                           if( get_option('wdss_comments_passive_listener_fix') == '' ) update_option( 'wdss_comments_passive_listener_fix', '0' );               
@@ -131,7 +131,7 @@
                   <?php if( function_exists('autoptimize') ) { ?>           
                   <div id="wdss-autoptimize-lazyload" class="wdss-setting-item">
                       <label>
-                        <span>Autoptimize Lazyload Fix</span>
+                        <span title="Fixes W3C Validation error with enabled lazyload">Autoptimize Lazyload Fix <sup>?</sup></span>
                         <?php 
                           checkbox_handler_html(['field_name' => 'wdss_autoptimize_lazy_fix']); 
                           if( get_option('wdss_autoptimize_lazy_fix') == '' ) update_option( 'wdss_autoptimize_lazy_fix', '0' );               

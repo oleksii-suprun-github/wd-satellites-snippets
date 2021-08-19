@@ -1,0 +1,56 @@
+<?php 
+  $total_post_count = wp_count_posts('post')->publish;
+  if( $total_post_count > 0 )  : 
+?>
+<section id="featured-images-settings" class="wdss-section">
+  <div class="wdss-section-header">
+    <h2>Featured Images Settings</h2>
+  </div>
+  <div class="wdss-row">
+
+    <div id="wdss-auto-featured-image" class="wdss-setting-item">
+        <label>
+            <span>Auto Featured Image</span>
+            <?php 
+              checkbox_handler_html(['field_name' => 'wdss_auto_featured_image']); 
+              if( get_option('wdss_auto_featured_image') == '' ) update_option( 'wdss_auto_featured_image', '0' );               
+            ?>    
+        </label>
+    </div>
+
+    <div id="wdss-featured-images-add-column" class="wdss-setting-item">
+      <label>
+        <span>Featured image column on posts screen</span>
+         <?php 
+            checkbox_handler_html(['field_name' => 'wdss_featured_images_add_column']); 
+            if( get_option('wdss_featured_images_add_column') == '' ) update_option( 'wdss_featured_images_add_column', '0' );               
+          ?>
+      </label> 
+    </div>
+
+    <div id="wdss-featured-images-condition" class="wdss-setting-item">
+      <label>
+        <span>Advanced</span>
+        <?php checkbox_handler_html(['field_name' => 'wdss_featured_images']); ?>
+      </label>
+    </div>
+
+    <div id="wdss-featured-images-group" class="wdss-setting-group">    
+      <div id="wdss-featured-images-list" class="wdss-setting-item">
+        <label>
+        <span title="If post has no featured image then it will be choosen randomly from the list">-- Default images list<br> <small>(coma-separated, images IDs only)</small><sup>?</sup></span>
+        <?php 
+          text_handler_html(['field_name' => 'wdss_featured_images_list']);            
+        ?>  
+        </label>
+      </div>
+    </div>
+</section>
+<?php 
+  else : 
+    update_option('wdss_auto_featured_image', '0');
+    update_option('wdss_featured_images_add_column', '0');
+    update_option('wdss_featured_images', '0');
+    update_option('wdss_featured_images_list', '');
+  endif; 
+?>

@@ -1,7 +1,7 @@
 const isPluginPage = document.querySelector('#wdss-settings-page');
 
 const titleClippingSection = {
-  toggler: '#wdss-title-clipping input',
+  toggler: '#wdss-title-clipping-condition input',
   target: '#wdss-title-clipping-group'
 };
 
@@ -9,6 +9,16 @@ const titleClippingByDateSection = {
   toggler: '#wdss-title-clipping-condition input',
   target: '#wdss-title-clipping-by-date'
 };
+
+const featuredImageSection = {
+  toggler: '#wdss-featured-images-condition input',
+  target: '#wdss-featured-images-group'
+};
+
+const polylangSection = {
+  toggler: '#wdss-polylang-meta-data-conditions input',
+  target: '#wdss-polylang-meta-data-group'  
+}
 
 
 function sectionToggler(section) {
@@ -73,14 +83,29 @@ function toggleAllOptions() {
   });
 }
 
+function getSiteTitle() {
+  const btn = document.querySelector('#wdss-get-title');
+  const input = document.querySelector('#wdss-title-ending input');
+  const siteTitle = wdss_localize.site_title;
 
-function init() {
+  btn.addEventListener('click', () => input.value = siteTitle);
+}
+
+
+function Init() {
   if(isPluginPage) {
-    sectionToggler(titleClippingSection);
-    sectionToggler(titleClippingByDateSection);
+    if(wdss_localize.total_post_count > 0) {
+      sectionToggler(titleClippingSection);
+      sectionToggler(titleClippingByDateSection);
+      sectionToggler(featuredImageSection);
+      getSiteTitle();
+    }
+    if(wdss_localize.is_polylang_exists) {
+      sectionToggler(polylangSection);  
+    }
     toggleCheckbox();
     toggleAllOptions();
   }
 }
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', Init);

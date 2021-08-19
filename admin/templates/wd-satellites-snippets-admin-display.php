@@ -19,6 +19,9 @@
     <input type="text" name="<?= $args['field_name']; ?>" value="<?= esc_attr(get_option($args['field_name']));?>" >  
   <? }
 
+  function textarea_handler_html($args) { ?>
+    <textarea name="<?= $args['field_name']; ?>" cols="30" rows="10"><?= esc_attr(get_option($args['field_name']));?></textarea>
+  <?php }
 
   function date_handler_html($args) { ?>
     <input type="date" name="<?= $args['field_name']; ?>" value="<?= esc_attr(get_option($args['field_name']));?>" >  
@@ -44,11 +47,13 @@
       update_option('wdss_disable_admin_notices', sanitize_text_field( $_POST['wdss_disable_admin_notices']));
       update_option('wdss_disable_rss', sanitize_text_field( $_POST['wdss_disable_rss']));      
       
+
       update_option('wdss_auto_featured_image', sanitize_text_field( $_POST['wdss_auto_featured_image']));
       update_option('wdss_auto_alt_attribute', sanitize_text_field( $_POST['wdss_auto_alt_attribute']));
 
       update_option('wdss_comments_passive_listener_fix', sanitize_text_field( $_POST['wdss_comments_passive_listener_fix']));
     
+      update_option('wdss_remove_hentry', sanitize_text_field( $_POST['wdss_remove_hentry']));
       update_option('wdss_yoast_schema', sanitize_text_field($_POST['wdss_yoast_schema']));   
       update_option('wdss_yoast_canonical_fix', sanitize_text_field($_POST['wdss_yoast_canonical_fix']));   
       update_option('wdss_autoptimize_lazy_fix', sanitize_text_field($_POST['wdss_autoptimize_lazy_fix']));   
@@ -62,12 +67,29 @@
       update_option('wdss_title_clipping_condition', sanitize_text_field($_POST['wdss_title_clipping_condition']));   
       update_option('wdss_title_clipping_by_date', sanitize_text_field($_POST['wdss_title_clipping_by_date']));         
       
-
       update_option('wdss_title_words_limit', sanitize_text_field($_POST['wdss_title_words_limit']));  
       update_option('wdss_word_chars_limit', sanitize_text_field($_POST['wdss_word_chars_limit']));  
       update_option('wdss_title_ending', sanitize_text_field($_POST['wdss_title_ending']));  
       
       update_option('wdss_410_rules', sanitize_text_field($_POST['wdss_410_rules']));
+
+      update_option('wdss_featured_images', sanitize_text_field($_POST['wdss_featured_images']));
+      update_option('wdss_featured_images_add_column', sanitize_text_field($_POST['wdss_featured_images_add_column']));
+      update_option('wdss_featured_images_list', sanitize_text_field($_POST['wdss_featured_images_list']));
+    
+      update_option('wdss_polylang_meta_data', sanitize_text_field($_POST['wdss_polylang_meta_data']));   
+      
+      if( function_exists('pll_languages_list') ) {
+        $polylang_lang_list = pll_languages_list(['fields' => []]); 
+        $authors = get_users( array( 'fields' => array( 'ID', 'display_name', 'user_nicename' ), 'has_published_posts' => 'post' ) );
+
+        foreach($polylang_lang_list as $lang) {
+          update_option('wdss_polylang_home_desc_' . $lang->slug . '', sanitize_text_field($_POST['wdss_polylang_home_desc_' . $lang->slug . '']));  
+          foreach($authors as $author) {
+            update_option('wdss_polylang_author_desc_' . $author->user_nicename . '_' . $lang->slug . '', sanitize_text_field($_POST['wdss_polylang_author_desc_' . $author->user_nicename . '_' . $lang->slug . '']));   
+          }     
+        }
+      }
 
     ?>
 
@@ -98,8 +120,15 @@
 
 
           <?php include_once('sections/snippet-section.php') ?>
+
           <?php include_once('sections/title-clipping-section.php') ?>
+
           <?php include_once('sections/410-status-section.php') ?>
+
+          <?php include_once('sections/featured-images-section.php') ?>
+
+          <?php include_once('sections/polylang-section.php') ?>
+
 
           <input type="submit" name="submit" id="submit" class="button" value="<?= __('Save changes', 'wdss_domain') ?>">
         </form>

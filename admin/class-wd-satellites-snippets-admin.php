@@ -176,6 +176,141 @@ class Wd_Satellites_Snippets_Admin {
 	// Basic Snippets List 
   protected function wdss_snippets() {
 
+    if(get_option('wdss_polylang_meta_data', '0')) {
+      function polylang_meta_description($meta_description) {
+        if( function_exists('pll_the_languages') ) {
+    
+            $current_lang = pll_current_language();
+            $author = get_the_author_meta('user_nicename');   
+
+            if( is_home() || is_front_page() ) {
+                switch ($current_lang) {
+                    case 'en'  :
+                        $meta_description = get_option('wdss_polylang_home_desc_en', '');
+                        break;
+                    case 'de'  :
+                        $meta_description = get_option('wdss_polylang_home_desc_de', '');
+                        break;
+                    case 'pl'  :
+                        $meta_description = get_option('wdss_polylang_home_desc_pl', '');
+                        break;
+                    case 'es'  :
+                        $meta_description = get_option('wdss_polylang_home_desc_es', '');
+                        break;
+                    default :
+                        $meta_description;
+                }
+                return $meta_description;
+            }
+            elseif( is_author($author) ) {
+          
+                switch ($current_lang) {
+                    case 'en'  :
+                        $meta_description = get_option('wdss_polylang_author_desc_' . $author . '_en', '');
+                        var_dump($meta_description);
+                        break;
+                    case 'de'  :
+                        $meta_description = get_option('wdss_polylang_author_desc_' . $author . '_de', '');
+                        break;
+                    case 'pl'  :
+                        $meta_description = get_option('wdss_polylang_author_desc_' . $author . '_pl', '');
+                        break;
+                    case 'es'  :
+                        $meta_description = get_option('wdss_polylang_author_desc_' . $author . '_es', '');
+                        break;
+                    default :
+                      $meta_description;
+                }     
+                return $meta_description;
+            }
+        }
+      }
+      add_filter('wpseo_metadesc', 'polylang_meta_description', 99);
+      add_filter('wpseo_opengraph_desc', 'polylang_meta_description', 99);
+    }
+
+
+    // Random Featured Image from the list
+    function wdss_random_featured_image() {
+
+      global $post;
+      require_once ABSPATH . 'wp-admin/includes/file.php';
+  
+      if (!has_post_thumbnail($post->ID)) {
+  
+          $attached_image = get_children( "post_parent=$post->ID&amp;post_type=attachment&amp;post_mime_type=image&amp;numberposts=1" );
+  
+          if ($attached_image) {
+              foreach ($attached_image as $attachment_id => $attachment) {
+                  set_post_thumbnail($post->ID, $attachment_id);
+              }
+          }
+          else {
+            if( get_option('wdss_featured_images_list', '' )) {
+              $images_ids_arr = explode(',', get_option('wdss_featured_images_list'));
+              var_dump($images_ids_arr);
+              $rand_index = array_rand($images_ids_arr);
+              $image_id = intval($images_ids_arr[$rand_index]);
+              set_post_thumbnail($post->ID, $image_id);
+            }
+            return;
+          }
+      }
+    }
+    add_action('the_post', 'wdss_random_featured_image');
+    
+    add_action('publish_post', 'wdss_random_featured_image');
+    add_action('save_post', 'wdss_random_featured_image');
+    add_action('draft_to_publish', 'wdss_random_featured_image');
+    add_action('new_to_publish', 'wdss_random_featured_image');
+    add_action('pending_to_publish', 'wdss_random_featured_image');
+    add_action('future_to_publish', 'wdss_random_featured_image');
+
+
+    if( get_option('wdss_featured_images_add_column', '0') ) {
+
+      function wdss_add_images_size() {
+        add_image_size( 'featured-column', 120, 120, true );
+      }
+      add_action('wp_loaded', 'wdss_add_images_size');
+
+
+      add_action('wp_loaded', 'wdss_featured_image_column');
+      function wdss_featured_image_column() {
+  
+        // Creates a new column
+        add_filter('manage_post_posts_columns', 'add_image_column', 4);
+        function add_image_column( $columns ){
+          // unset($columns['author']); // deletes Author column
+  
+          $out = array();
+          foreach($columns as $col=>$name){
+            if(++$i==2) // where we want to place our column
+              $out['featured'] = 'Featured';
+            $out[$col] = $name;
+          }
+  
+          return $out;
+        }
+
+        // Fill in our column with data -  wp-admin/includes/class-wp-posts-list-table.php
+        add_filter('manage_post_posts_custom_column', 'fill_images_column', 5, 2);
+        function fill_images_column( $colname, $post_id ){
+          if( $colname === 'featured' ) {
+            the_post_thumbnail('featured-column');
+          }
+        }
+  
+        // CSS Column width styling
+        add_action('admin_head', 'add_images_column_css');
+        function add_images_column_css(){
+          if( get_current_screen()->base == 'edit')
+            echo '<style type="text/css">.column-featured{width:10%;}</style>';
+        }
+      }
+    }
+
+
     // Disables jQuery and Migration script for Frontend
     if( get_option('wdss_disable_jquery', '0') ) {
       function wdss_disable_jquery() {
@@ -250,70 +385,7 @@ class Wd_Satellites_Snippets_Admin {
     }
 
 
-    // Fixes WP Comments Passive Listener Issue 
-    if( get_option('wdss_comments_passive_listener_fix', '0') ) {
-      function wp_dereg_script_comment_reply(){wp_deregister_script( 'comment-reply' );}
-      add_action('init','wp_dereg_script_comment_reply');
-      add_action('wp_head', 'wp_reload_script_comment_reply');
-      function wp_reload_script_comment_reply() {
-          ?>
-      <script>
-      //Function checks if a given script is already loaded
-      function isScriptLoaded(src){
-          return document.querySelector('script[src="' + src + '"]') ? true : false;
-      }
-      //When a reply link is clicked, check if reply-script is loaded. If not, load it and emulate the click
-      document.getElementsByClassName("comment-reply-link").onclick = function() { 
-          if(!(isScriptLoaded("/wp-includes/js/comment-reply.min.js"))){
-              var script = document.createElement('script');
-              script.src = "/wp-includes/js/comment-reply.min.js"; 
-          script.onload = emRepClick($(this).attr('data-commentid'));        
-              document.head.appendChild(script);
-          } 
-      }
-      //Function waits 50 ms before it emulates a click on the relevant reply link now that the reply script is loaded
-      function emRepClick(comId) {
-      sleep(50).then(() => {
-      document.querySelectorAll('[data-commentid="'+comId+'"]')[0].dispatchEvent(new Event('click'));
-      });
-      }
-      //Function does nothing, for a given amount of time
-      function sleep (time) {
-        return new Promise((resolve) => setTimeout(resolve, time));
-      }
-      </script>
-      <?php
-      }  
-    }
-
-
-    // Auto Featured Image on post saving (from first attached image)
-    if( get_option('wdss_auto_featured_image', '0') ) {
-      add_action('future_to_publish', 'autoset_featured');
-      add_action('draft_to_publish', 'autoset_featured');
-      add_action('new_to_publish', 'autoset_featured');
-      add_action('pending_to_publish', 'autoset_featured');
-      add_action('save_post', 'autoset_featured');
-  
-      function autoset_featured() {
-        global $post;
-  
-        if( has_post_thumbnail($post->ID) )
-          return;
-  
-        $attached_image = get_children( array(
-          'post_parent'=>$post->ID, 'post_type'=>'attachment', 'post_mime_type'=>'image', 'numberposts'=>1, 'order'=>'ASC'
-        ) );
-  
-        if( $attached_image ){
-          foreach ($attached_image as $attachment_id => $attachment)
-            set_post_thumbnail($post->ID, $attachment_id);
-        }
-      }
-    }
-
-
-    // Auto Alt Attributes for images
+    // Auto Alt Attributes for the rest images
     if( get_option('wdss_auto_alt_attribute', '0') ) {
       function wdss_alt_singlepage_autocomplete( $content ) {
         global $post;
@@ -360,6 +432,42 @@ class Wd_Satellites_Snippets_Admin {
       add_filter('post_thumbnail_html', 'wdss_alt_attachment_autocomplete', 10, 5);      
     }
 
+
+    // Fixes WP Comments Passive Listener Issue 
+    if( get_option('wdss_comments_passive_listener_fix', '0') ) {
+      function wp_dereg_script_comment_reply(){wp_deregister_script( 'comment-reply' );}
+      add_action('init','wp_dereg_script_comment_reply');
+      add_action('wp_head', 'wp_reload_script_comment_reply');
+      function wp_reload_script_comment_reply() {
+          ?>
+      <script>
+      //Function checks if a given script is already loaded
+      function isScriptLoaded(src){
+          return document.querySelector('script[src="' + src + '"]') ? true : false;
+      }
+      //When a reply link is clicked, check if reply-script is loaded. If not, load it and emulate the click
+      document.getElementsByClassName("comment-reply-link").onclick = function() { 
+          if(!(isScriptLoaded("/wp-includes/js/comment-reply.min.js"))){
+              var script = document.createElement('script');
+              script.src = "/wp-includes/js/comment-reply.min.js"; 
+          script.onload = emRepClick($(this).attr('data-commentid'));        
+              document.head.appendChild(script);
+          } 
+      }
+      //Function waits 50 ms before it emulates a click on the relevant reply link now that the reply script is loaded
+      function emRepClick(comId) {
+      sleep(50).then(() => {
+      document.querySelectorAll('[data-commentid="'+comId+'"]')[0].dispatchEvent(new Event('click'));
+      });
+      }
+      //Function does nothing, for a given amount of time
+      function sleep (time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+      }
+      </script>
+      <?php
+      }  
+    }
 
     // AMP Template Fix
     if( function_exists('amp_bootstrap_plugin') && get_option('wdss_amp_fix', '0') ) {
@@ -430,7 +538,19 @@ class Wd_Satellites_Snippets_Admin {
       add_action('login_enqueue_scripts', 'wdss_disable_admin_notices');
     }
 
+
+    // Removes WP Hentry markup
+    if( get_option('wdss_remove_hentry', '0') ) {
+      function wdss_remove_hentry( $classes ) {
+        if ( is_home() || is_archive() || is_singular() ) {
+          $classes = array_diff( $classes, array( 'hentry' ) );
+        }
+        return $classes;
+      }
+      add_filter( 'post_class','wdss_remove_hentry' );
+    }
     
+
     // Remove redundant links Snippet
     if( get_option( 'wdss_redundant_links', '0' ) ) {
       remove_action( 'wp_head', 'wlwmanifest_link' );
@@ -707,6 +827,49 @@ class Wd_Satellites_Snippets_Admin {
       }
     }
 
+    // Custom Excerpts for imported articles
+    function custom_excerpts( $excerpt, $raw_excerpt ) {
+      if ( is_admin() ||  '' !== $raw_excerpt) {
+        return $excerpt;
+      }
+     
+      $condition = '#<div[^>]*id="toc"[^>]*>.*?</div>#is';
+      $content = apply_filters( 'the_content', get_the_content() );
+    
+      if( preg_match($condition, $content) ) {
+        $clear = preg_replace($condition, '', $content);	
+        $stripped = strip_tags($clear);
+        $excerpt = mb_substr($stripped, 0, 500, 'UTF-8') . ' [...]';
+        
+        return $excerpt;
+      }
+    
+      return $excerpt;
+    
+    }
+    add_filter( 'wp_trim_excerpt', 'custom_excerpts', 99, 2 );
+    
+    
+    // Custom Descriptions for imported articles
+    function custom_post_descriptions($meta_description, $presentation)  {
+       
+      $condition = '#<div[^>]*id="toc"[^>]*>.*?</div>#is';
+      $content = apply_filters( 'the_content', get_the_content() );
+    
+      if( preg_match($condition, $content) ) {
+        $raw = apply_filters( 'the_content', get_the_content() );
+        $clear = preg_replace('#<div[^>]*id="toc"[^>]*>.*?</div>#is', '', $raw);	
+        $stripped = strip_tags($clear);
+        $meta_description = mb_substr($stripped, 0, 150, 'UTF-8') . ' [...]';
+      }
+    
+      return $meta_description;
+    
+    }
+    add_filter('wpseo_metadesc', 'custom_post_descriptions', 10, 2 );
+    add_filter('wpseo_opengraph_desc', 'custom_post_descriptions', 10, 2);
+    
+
     
     // 410 Category Rules
     if( get_option('wdss_410_rules', '0') ) {
@@ -759,6 +922,12 @@ class Wd_Satellites_Snippets_Admin {
 	//Register the JavaScript for the admin area
 	public function wdss_enqueue_scripts() {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wd-satellites-snippets-admin.js', array(), $this->version, true );
+    $wdss_localize_script = [
+      'site_title' => get_bloginfo('name'),
+      'total_post_count' => wp_count_posts('post')->publish,
+      'is_polylang_exists' => function_exists('pll_languages_list'),
+    ];
+    wp_localize_script($this->plugin_name, 'wdss_localize', $wdss_localize_script);
 	}
 }
 
