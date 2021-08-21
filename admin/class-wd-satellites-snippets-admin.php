@@ -590,14 +590,11 @@ class Wd_Satellites_Snippets_Admin {
       function yoast_trim_title($post_title) {
         global $post;
         $is_old_post = false;
-        
-        if( get_option('wdss_title_clipping_condition', '0') ) {
-          $post_date = strtotime($post->post_date);
+        $post_date = strtotime($post->post_date);
           
-          if( get_option('wdss_title_clipping_by_date', '0') ) {
-            $post_date_limiter = strtotime(get_option('wdss_title_clipping_by_date', '0'));
-            $is_old_post =  $post_date > $post_date_limiter ? false : true;           
-          }
+        if( get_option('wdss_title_clipping_by_date', '') ) {
+          $post_date_limiter = strtotime(get_option('wdss_title_clipping_by_date', ''));
+          $is_old_post =  $post_date > $post_date_limiter ? false : true;           
         }
 
         $words_limit = get_option('wdss_title_words_limit', '6'); // max title`s words amount 
@@ -915,12 +912,14 @@ class Wd_Satellites_Snippets_Admin {
 
 	// Register the stylesheets for the admin area
 	public function wdss_enqueue_styles() {
+    wp_enqueue_style('font-awesome', plugin_dir_url( __FILE__ ) . 'css/font-awesome/css/all.min.css', array(), $this->version, 'all');
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wd-satellites-snippets-admin.css', array(), $this->version, 'all' );
 
 	}
 
 	//Register the JavaScript for the admin area
 	public function wdss_enqueue_scripts() {
+    wp_enqueue_media();
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wd-satellites-snippets-admin.js', array(), $this->version, true );
     $wdss_localize_script = [
       'site_title' => get_bloginfo('name'),

@@ -37,12 +37,12 @@
 
     <div id="wdss-featured-images-group" class="wdss-setting-group">    
       <div id="wdss-featured-images-list" class="wdss-setting-item">
-        <label>
         <span title="If post has no featured image then it will be choosen randomly from the list">-- Default images list<br> <small>(coma-separated, images IDs only)</small><sup>?</sup></span>
         <?php 
           text_handler_html(['field_name' => 'wdss_featured_images_list']);            
         ?>  
-        </label>
+        <button type="button" id="wdss-featured-images__choose" class="wdss-button">Choose</button>
+        <button type="button" class="wdss-button clear"><i class="fas fa-trash"></i></button>
       </div>
     </div>
 </section>

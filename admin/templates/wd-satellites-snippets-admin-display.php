@@ -63,8 +63,7 @@
       update_option('wdss_force_lowercase', sanitize_text_field($_POST['wdss_force_lowercase']));  
       
       update_option('wdss_enable_title_clipping', sanitize_text_field($_POST['wdss_enable_title_clipping']));   
-      update_option('wdss_title_clipping_excluded', sanitize_text_field($_POST['wdss_title_clipping_excluded']));
-      update_option('wdss_title_clipping_condition', sanitize_text_field($_POST['wdss_title_clipping_condition']));   
+      update_option('wdss_title_clipping_excluded', sanitize_text_field($_POST['wdss_title_clipping_excluded']));   
       update_option('wdss_title_clipping_by_date', sanitize_text_field($_POST['wdss_title_clipping_by_date']));         
       
       update_option('wdss_title_words_limit', sanitize_text_field($_POST['wdss_title_words_limit']));  
@@ -130,7 +129,7 @@
           <?php include_once('sections/polylang-section.php') ?>
 
 
-          <input type="submit" name="submit" id="submit" class="button" value="<?= __('Save changes', 'wdss_domain') ?>">
+          <input type="submit" name="submit" id="submit" class="wdss-button" value="<?= __('Save changes', 'wdss_domain') ?>">
         </form>
       </div>
     </div>

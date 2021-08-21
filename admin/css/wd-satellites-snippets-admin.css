@@ -4,12 +4,14 @@
   top: 2px;  
 }
 
-/* Admin Section Styling */
+/* 
+  Admin Section Styling 
+*/
 
+/* General */
 #wdss-settings-page h1 > small {
   font-size: 1rem;
 }
-
 #wdss-settings-page .wdss-setting-group {
   position: relative;
   overflow: hidden;
@@ -17,29 +19,30 @@
   height: 0;
   opacity: 0;
 }
-
+#wdss-settings-page {
+  margin-top: 35px;
+}
 #wdss-settings-page .wdss-setting-group.visible {
   height: fit-content;
   opacity: 1;
   transition: height 0ms 0ms, opacity 600ms 0ms;
 }
-
-#wdss-settings-page {
-  margin-top: 35px;
+#wdss-settings-page input {
+  position: relative;
 }
-
+#wdss-settings-page input[type="checkbox"] {
+  top: 1px;
+}
 #wdss-settings-page .container {
   width: 95%;
   padding: 0 10px;
 }
-
 #wdss-settings-page .notice {
   display: block !important;
   margin-left: 0;
   margin-right: 0;
   margin-bottom: 25px;
 }
-
 #wdss-settings-page .wdss-row {
   position: relative;
   display: flex;
@@ -51,25 +54,20 @@
   justify-content: flex-start;
   align-items: flex-start;
 }
-
 #wdss-settings-page #wdss-snippets-settings .wdss-row {
   flex-direction: row;
 }
-
 #wdss-snippets-settings .wdss-setting-item {
   width: calc(33.33% - 25px);
 }
-
 #wdss-settings-page .wdss-col-4 {
   display: flex;
   flex-direction: column;
   width: calc(33.33% - 25px);
 }
-
 .wdss-section {
   position: relative;
 }
-
 .wdss-section-header {
   position: relative;
   display: flex;
@@ -79,27 +77,23 @@
   padding: 20px 20px;
   background: #1d2327;
 }
-
 .wdss-section-header h2,
 .wdss-section-header h3 {
   margin: 0;
   font-size: 1.25rem;
   color: #fff;
 }
-
 #wdss-settings-page .wdss-setting-item,
 #wdss-settings-page .wdss-setting-item label {
   position: relative;
   display: flex;
   align-items: center;
 }
-
 #wdss-settings-page .wdss-setting-item label {
   width: fit-content;
   width: -moz-fit-content;
   padding: 15px;
 }
-
 #wdss-settings-page .wdss-setting-item span {
   margin-right: 25px;
   width: 200px;
@@ -108,27 +102,112 @@
   font-weight: 600;
   color: #222;
 }
-
 #wdss-settings-page table:first-of-type tbody tr > th {
   margin-right: 15px;
 }
-
 #wdss-settings-page table:first-of-type tbody tr > * {
   padding: 0;
 }
-
 #wdss-settings-page table.form-table {
   display: flex;
   padding: 10px;
   background: #fff;
   margin-bottom: 35px;
 }
-
+input[type="submit"],
+button {
+  cursor: pointer;
+}
+input:focus, 
+textarea:focus {
+  border-color: #2c3338 !important;
+  box-shadow: none !important;
+}
+input[type=checkbox]:checked::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f00c";
+  font-size: .8rem;
+  position: absolute;
+  top: 7px;
+  left: 1px;
+  margin: 0;
+  height: unset;
+  width: unset;
+}
+.wdss-button {
+  height: 30px;
+  padding: 0 15px;  
+  color: #fff;
+  background: #2c3338;
+  border: 0;
+  border-radius: 4px;
+  transition: all 300ms;
+}
+.wdss-button:hover {
+  background: #50575e;
+  transition: all 300ms;
+}
+.wdss-button.clear {
+  padding: 0;
+  background: transparent;
+}
+.wdss-button.clear i {  
+  color: #2c3338;
+  font-size: 1rem;
+}
 #wdss-settings-page #submit {
   color: #fff;
   border-color: green;
   background: green;
 }
+#wdss-settings-page #submit:hover {
+  background: #1ea71e;
+}
+#wdss-featured-images__clear {
+  background: none;
+  border: 0;
+  font-size: 1.15rem;
+}
+
+/*  Accordions  */
+.wdss-setting-item-accordion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  color: #fff;
+  background: #1d2327;
+  cursor: pointer;
+}
+.wdss-setting-item-accordion h3 {
+  margin: 0;
+  color: #fff; 
+}
+.wdss-setting-item-accordion i {
+  font-size: 1.15rem;
+  transition: transform 500ms;
+}
+.wdss-setting-item-accordion.opened i {
+  transform: rotate(180deg);
+  transition: transform 500ms;
+}
+.wdss-setting-item-accordion-content {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  height: 0;
+  opacity: 0;
+  border: 1px solid;
+}
+.wdss-setting-item-accordion-content.active {
+  height: fit-content;
+  padding: 20px;
+  opacity: 1;
+  transition: height 0ms 0ms, opacity 600ms 0ms;
+}
+
 
 /* Snippets List Settings */
 button#wdss-toggle-options {
@@ -144,27 +223,35 @@ button#wdss-toggle-options {
 }
 
 /* Long Title Clipping Settings */
-#wdss-title-ending button {
-  height: 30px;
-  padding: 0 15px;  
-  color: #fff;
-  background: #2c3338;
-  border: 0;
-  border-radius: 4px;
-  cursor: pointer;
-}
 #wdss-title-clipping-excluded input {
   min-width: 350px;
 }
 
 
 /* Featured Images Settings */
+#wdss-featured-images-group  > div {
+  margin-left: 15px;
+}
 #wdss-featured-images-list input {
   min-width: 550px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-right: 0;
+  pointer-events: none;
+}
+#wdss-featured-images-list button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+#wdss-featured-images__choose {
+  margin-right: 15px;
 }
 
 
 /* Polylang Settings */
+#wdss-polylang-meta-data-group {
+  margin-top: 25px;
+}
 #wdss-settings-page #wdss-polylang-homepage-description span,
 #wdss-settings-page #wdss-polylang-author-description span {
   margin-right: 10px;
@@ -199,14 +286,8 @@ button#wdss-toggle-options {
   display: flex;
   flex-direction: column;
   align-items: unset;
-  margin-left: 100px;
+  margin-left: 15px;
   margin-bottom: 35px;
-}
-#wdss-polylang-homepage-description h3,
-#wdss-polylang-author-description h3 {
-  padding: 20px;
-  color: #fff; 
-  background: #1d2327;
 }
 .wdss-polylang-author-block {
   display: flex;
@@ -218,9 +299,15 @@ button#wdss-toggle-options {
   align-items: center;
   font-size: 1.15rem;
 }
-#wdss-settings-page .wdss-polylang-author-block h4 span {
-  width: fit-content;
-  font-size: 1.8rem;
-  display: block;
-  line-height: unset;
+#wdss-settings-page .wdss-polylang-author-block h4 i {
+  border-radius: 50%;
+  color: #fff;
+  background: #1d2327;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  font-size: 1.15rem;
 }

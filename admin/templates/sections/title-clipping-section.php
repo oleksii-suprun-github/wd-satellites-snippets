@@ -17,26 +17,18 @@
       </label>
     </div>
     <div id="wdss-title-clipping-group" class="wdss-setting-group">
-      <div id="wdss-title-clipping-condition-group">
-        <div id="wdss-title-clipping-condition" class="wdss-setting-item">
+      
+      <div id="wdss-title-clipping-by-date" class="wdss-setting-item">
           <label>
-          <span>Date Condition </span>
-          <?php 
-            checkbox_handler_html(['field_name' => 'wdss_title_clipping_condition']); 
-            if( get_option('wdss_title_clipping_condition') == '' ) update_option( 'wdss_title_clipping_condition', '0' );               
-            ?>     
+            <span>Cut titles since</span>
+            <?php 
+              date_handler_html(['field_name' => 'wdss_title_clipping_by_date']); 
+              if( get_option('wdss_title_clipping_by_date') == '' ) update_option( 'wdss_title_clipping_by_date', '0' );               
+              ?>  
           </label>
-        </div>
-        <div id="wdss-title-clipping-by-date" class="wdss-setting-item wdss-setting-group">
-          <label>
-          <span>-- Cut titles since</span>
-          <?php 
-            date_handler_html(['field_name' => 'wdss_title_clipping_by_date']); 
-            if( get_option('wdss_title_clipping_by_date') == '' ) update_option( 'wdss_title_clipping_by_date', '0' );               
-            ?>  
-          </label>
-        </div>
+          <button type="button" class="wdss-button clear"><i class="fas fa-trash"></i></button>
       </div>
+
       <div id="wdss-words-limit" class="wdss-setting-item">
         <label>
         <span title="By default: 6; counts words from 3 or more chars">Words Limit <sup>?</sup></span>
@@ -72,7 +64,7 @@
           text_handler_html(['field_name' => 'wdss_title_ending']);             
           ?>    
         </label>
-        <button type="button" id="wdss-get-title">Get Site Title</button>
+        <button type="button" id="wdss-get-title" class="wdss-button">Get Site Title</button>
       </div>
     </div>
   </div>
