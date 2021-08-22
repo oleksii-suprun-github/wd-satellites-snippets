@@ -16,7 +16,10 @@
   <? }
 
   function text_handler_html($args) { ?>
-    <input type="text" name="<?= $args['field_name']; ?>" value="<?= esc_attr(get_option($args['field_name']));?>" >  
+    <input type="text" 
+      <?php if($args['id']) : ?> id="<?= $args['id']; ?>" <?php endif ?>
+      name="<?= $args['field_name']; ?>" 
+      value="<?= esc_attr(get_option($args['field_name']));?>" >  
   <? }
 
   function textarea_handler_html($args) { ?>
@@ -72,7 +75,6 @@
       
       update_option('wdss_410_rules', sanitize_text_field($_POST['wdss_410_rules']));
 
-      update_option('wdss_featured_images', sanitize_text_field($_POST['wdss_featured_images']));
       update_option('wdss_featured_images_add_column', sanitize_text_field($_POST['wdss_featured_images_add_column']));
       update_option('wdss_featured_images_list', sanitize_text_field($_POST['wdss_featured_images_list']));
     
@@ -118,7 +120,7 @@
           <?php wp_nonce_field('wdss_save_settings', 'wfp_nonce'); ?>
 
 
-          <?php include_once('sections/snippet-section.php') ?>
+          <?php include_once('sections/snippets-section.php') ?>
 
           <?php include_once('sections/title-clipping-section.php') ?>
 
@@ -129,7 +131,7 @@
           <?php include_once('sections/polylang-section.php') ?>
 
 
-          <input type="submit" name="submit" id="submit" class="wdss-button" value="<?= __('Save changes', 'wdss_domain') ?>">
+          <input type="submit" name="submit" id="submit" class="wdss-button submit" value="<?= __('Save changes', 'wdss_domain') ?>">
         </form>
       </div>
     </div>

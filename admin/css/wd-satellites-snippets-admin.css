@@ -83,36 +83,25 @@
   font-size: 1.25rem;
   color: #fff;
 }
-#wdss-settings-page .wdss-setting-item,
-#wdss-settings-page .wdss-setting-item label {
+.wdss-setting-item,
+.wdss-setting-item label {
   position: relative;
   display: flex;
   align-items: center;
 }
-#wdss-settings-page .wdss-setting-item label {
+.wdss-setting-item label {
   width: fit-content;
   width: -moz-fit-content;
   padding: 15px;
 }
-#wdss-settings-page .wdss-setting-item span {
+.wdss-setting-item label span,
+.wdss-setting-item > span {
   margin-right: 25px;
   width: 200px;
   font-size: 14px;
   line-height: 1.3;
   font-weight: 600;
   color: #222;
-}
-#wdss-settings-page table:first-of-type tbody tr > th {
-  margin-right: 15px;
-}
-#wdss-settings-page table:first-of-type tbody tr > * {
-  padding: 0;
-}
-#wdss-settings-page table.form-table {
-  display: flex;
-  padding: 10px;
-  background: #fff;
-  margin-bottom: 35px;
 }
 input[type="submit"],
 button {
@@ -129,7 +118,7 @@ input[type=checkbox]:checked::before {
   content: "\f00c";
   font-size: .8rem;
   position: absolute;
-  top: 7px;
+  top: 8px;
   left: 1px;
   margin: 0;
   height: unset;
@@ -148,27 +137,117 @@ input[type=checkbox]:checked::before {
   background: #50575e;
   transition: all 300ms;
 }
-.wdss-button.clear {
+.wdss-button.reset {
   padding: 0;
   background: transparent;
 }
-.wdss-button.clear i {  
+.wdss-button.reset i {  
   color: #2c3338;
   font-size: 1rem;
+  transition: all 300ms;
 }
-#wdss-settings-page #submit {
+.wdss-button.reset:hover i {
+  color: #cc2020;
+  transition: all 300ms;
+}
+.wdss-button.submit {
   color: #fff;
   border-color: green;
   background: green;
 }
-#wdss-settings-page #submit:hover {
+.wdss-button.submit:hover {
   background: #1ea71e;
 }
-#wdss-featured-images__clear {
+#wdss-featured-images__reset {
   background: none;
   border: 0;
   font-size: 1.15rem;
 }
+
+
+/* Modals */
+.wdss-modal {
+  position: fixed;
+  z-index: 2;
+  background: #fff;
+  width: 50vw;
+  height: 50vh;
+  overflow: hidden;
+  top: 25%;
+  left: 0;
+  right: 0;
+  margin: 0 auto; 
+  box-shadow: 1px 1px 3px 1px #2c3338;
+}
+.wdss-modal-header {
+  display: flex;
+  align-items: center;
+  height: 5vh;
+  color: #fff;
+  background: #2c3338;
+}
+.wdss-modal-header i {
+  font-size: 1.2rem;
+  margin-left: auto;
+  margin-right: 15px;
+  cursor: pointer;
+}
+.wdss-modal-footer {
+  display: flex;
+  align-items: center;
+  height: 5vh;
+  color: #fff;
+  background: #2c3338;
+}
+.wdss-modal-footer button {
+  padding: 0 25px;
+  margin-bottom: 0;
+  margin-left: auto;
+  margin-right: 15px;
+}
+
+
+/* Post Excluded Table */
+.wdss-modal-header span {
+  text-align: center;
+  font-weight: bold;
+  color: #fff;
+}
+.wdss-table-wrapper {
+  max-height: 40vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.wdss-table {
+  width: 100%;
+  max-height: 450px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  border-collapse: collapse;
+}
+.wdss-table-row.header {
+  color: #fff;
+  background: #2c3338;
+}
+.wdss-table td {
+  padding: 5px;
+  border: 1px solid #2c3338;
+  text-align: center;
+}
+.wdss-table-post__select {
+  width: 5%;
+}
+.wdss-table-post__id {
+  width: 5%;
+}
+.wdss-table-post__title {
+  width: 63%;
+}
+.wdss-table-post__status {
+  width: 25%;
+}
+
+
 
 /*  Accordions  */
 .wdss-setting-item-accordion {
@@ -223,8 +302,18 @@ button#wdss-toggle-options {
 }
 
 /* Long Title Clipping Settings */
-#wdss-title-clipping-excluded input {
+#wdss-title-clipping-excluded {
+  margin-left: 15px;
+}
+#wdss-title-clipping-excluded input[type="text"] {
   min-width: 350px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-right: 0;
+}
+#wdss-title-clipping-excluded__choose {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 
@@ -232,8 +321,11 @@ button#wdss-toggle-options {
 #wdss-featured-images-group  > div {
   margin-left: 15px;
 }
+#wdss-featured-images-list {
+  margin-bottom: 20px;
+}
 #wdss-featured-images-list input {
-  min-width: 550px;
+  min-width: 350px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   margin-right: 0;
@@ -243,8 +335,12 @@ button#wdss-toggle-options {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-#wdss-featured-images__choose {
+#wdss-featured-images__choose,
+#wdss-title-clipping-excluded__choose {
   margin-right: 15px;
+}
+#wdss-title-clipping-excluded input[type="text"] {
+  pointer-events: none;
 }
 
 

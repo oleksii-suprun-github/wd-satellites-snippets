@@ -8,14 +8,25 @@
   </div>
   <div class="wdss-row">
 
-    <div id="wdss-auto-featured-image" class="wdss-setting-item">
+    <div id="wdss-auto-featured-image-condition" class="wdss-setting-item">
         <label>
-            <span>Auto Featured Image</span>
+            <span title="Takes featured image from the first attached image">Auto Featured Image <sup>?</sup></span>
             <?php 
               checkbox_handler_html(['field_name' => 'wdss_auto_featured_image']); 
               if( get_option('wdss_auto_featured_image') == '' ) update_option( 'wdss_auto_featured_image', '0' );               
             ?>    
         </label>
+    </div>
+
+    <div id="wdss-featured-images-group" class="wdss-setting-group">    
+      <div id="wdss-featured-images-list" class="wdss-setting-item">
+        <span title="When chosen if post has no featured image then it will be chosen randomly from the list">-- Default images list <sup>?</sup></span>
+        <?php 
+          text_handler_html(['field_name' => 'wdss_featured_images_list']);            
+        ?>  
+        <button type="button" id="wdss-featured-images__choose" class="wdss-button">Choose</button>
+        <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>
+      </div>
     </div>
 
     <div id="wdss-featured-images-add-column" class="wdss-setting-item">
@@ -27,30 +38,11 @@
           ?>
       </label> 
     </div>
-
-    <div id="wdss-featured-images-condition" class="wdss-setting-item">
-      <label>
-        <span>Advanced</span>
-        <?php checkbox_handler_html(['field_name' => 'wdss_featured_images']); ?>
-      </label>
-    </div>
-
-    <div id="wdss-featured-images-group" class="wdss-setting-group">    
-      <div id="wdss-featured-images-list" class="wdss-setting-item">
-        <span title="If post has no featured image then it will be choosen randomly from the list">-- Default images list<br> <small>(coma-separated, images IDs only)</small><sup>?</sup></span>
-        <?php 
-          text_handler_html(['field_name' => 'wdss_featured_images_list']);            
-        ?>  
-        <button type="button" id="wdss-featured-images__choose" class="wdss-button">Choose</button>
-        <button type="button" class="wdss-button clear"><i class="fas fa-trash"></i></button>
-      </div>
-    </div>
 </section>
 <?php 
   else : 
     update_option('wdss_auto_featured_image', '0');
     update_option('wdss_featured_images_add_column', '0');
-    update_option('wdss_featured_images', '0');
     update_option('wdss_featured_images_list', '');
   endif; 
 ?>

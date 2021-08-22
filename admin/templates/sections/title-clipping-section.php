@@ -22,11 +22,10 @@
           <label>
             <span>Cut titles since</span>
             <?php 
-              date_handler_html(['field_name' => 'wdss_title_clipping_by_date']); 
-              if( get_option('wdss_title_clipping_by_date') == '' ) update_option( 'wdss_title_clipping_by_date', '0' );               
+              date_handler_html(['field_name' => 'wdss_title_clipping_by_date']);     
               ?>  
           </label>
-          <button type="button" class="wdss-button clear"><i class="fas fa-trash"></i></button>
+          <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>
       </div>
 
       <div id="wdss-words-limit" class="wdss-setting-item">
@@ -50,12 +49,12 @@
         </label>
       </div>
       <div id="wdss-title-clipping-excluded" class="wdss-setting-item">
-        <label>
         <span title="Exclude some special posts from global clipping (comma separated)">Exclude by ID <sup>?</sup></span>
         <?php 
           text_handler_html(['field_name' => 'wdss_title_clipping_excluded']);               
           ?>    
-        </label>
+        <button id="wdss-title-clipping-excluded__choose" type="button" class="wdss-button">Choose</button>
+        <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>
       </div>
       <div id="wdss-title-ending" class="wdss-setting-item">
         <label>
