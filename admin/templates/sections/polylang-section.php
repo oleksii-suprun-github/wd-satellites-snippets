@@ -18,7 +18,6 @@
     </div>
 
     <div id="wdss-polylang-meta-data-group" class="wdss-setting-group">    
-
       <div id="wdss-polylang-homepage-description" class="wdss-setting-item">
         <div class="wdss-setting-item-accordion">
           <h3>Homepage description</h3>
@@ -50,11 +49,10 @@
           </div>
 
           <div class="wdss-setting-item-accordion-content">
-
-          <?php
-            $authors = get_users( array( 'fields' => array( 'ID', 'display_name', 'user_nicename' ), 'has_published_posts' => 'post' ) );
-            foreach($authors as $author) : 
-          ?>    
+            <?php
+              $authors = get_users( array( 'fields' => array( 'ID', 'display_name', 'user_nicename' ), 'has_published_posts' => 'post' ) );
+              foreach($authors as $author) : 
+            ?>    
             <div class="wdss-polylang-author-block">
               <h4><i class="fas fa-user"></i> <?= $author->display_name; ?></h4>
               <div class="wdss-polylang-textarea-blocks">
@@ -65,23 +63,25 @@
                       textarea_handler_html(['field_name' => 'wdss_polylang_author_desc_' . $author->user_nicename . '_'. $lang->slug . '']);       
                     ?>
                 </div>
-              <?php endforeach;  ?>
-            </div>
-          <?php endforeach; ?>   
-        </div>
-      <?php endif; ?>
-    </div>
-
-    <div id="wdss-multilang-sitemap-condition" class="wdss-setting-item">
-        <label>
-            <span>Use Multilang Sitemap<br> instead of Yoast</span>
-            <?php 
-              checkbox_handler_html(['field_name' => 'wdss_multilang_sitemap']); 
-              if( get_option('wdss_multilang_sitemap') == '' ) update_option( 'wdss_multilang_sitemap', '0' );               
-            ?>    
-        </label>
+                <?php endforeach;  ?>
+              </div>
+            <?php endforeach; ?>   
+          </div>
+        <?php endif; ?>
+      </div>
     </div>
   </div>
+
+  <div id="wdss-multilang-sitemap-condition" class="wdss-setting-item">
+      <label>
+          <span>Use Multilang Sitemap<br> instead of Yoast</span>
+          <?php 
+            checkbox_handler_html(['field_name' => 'wdss_multilang_sitemap']); 
+            if( get_option('wdss_multilang_sitemap') == '' ) update_option( 'wdss_multilang_sitemap', '0' );               
+          ?>    
+      </label>
+  </div>
+
 </section>
 <?php 
   else : 

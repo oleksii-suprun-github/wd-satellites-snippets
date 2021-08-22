@@ -71,6 +71,7 @@ class Wd_Satellites_Snippets_Admin {
 		add_menu_page('WD Sattelites Snippets', 'WD Sattelites Snippets', 'manage_options', 'wd-sattelites-snippets', 'wdss_settings_template', 'dashicons-admin-tools', 100 );
 	}
 
+
 	// Add Adminbar Quick Link
 	public function wdss_add_adminbar_link($admin_bar) {
 		$admin_bar->add_menu([
@@ -83,16 +84,15 @@ class Wd_Satellites_Snippets_Admin {
 		]);
 	}
 
+
 	// Register the stylesheets for the admin area
 	public function wdss_enqueue_styles() {
     wp_enqueue_style('font-awesome', plugin_dir_url( __FILE__ ) . 'css/font-awesome/css/all.min.css', array(), $this->version, 'all');
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wd-satellites-snippets-admin.css', array(), $this->version, 'all' );
-
 	}
 
 
-
-
+	// Get Posts Modal window
 	public function wdss_get_posts() {
     $args = array(  
 			'post_type' => 'post',
@@ -144,20 +144,23 @@ class Wd_Satellites_Snippets_Admin {
 		<?php return ob_get_clean();
 	}
 
-	//Register the JavaScript for the admin area
-	public function wdss_enqueue_scripts() {
-    wp_enqueue_media();
 	
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/main.js', array(), $this->version, true );
-		
+	//Register the JavaScript for the admin area
+	public function wdss_enqueue_scripts($page) {
 
-    $wdss_localize_script = [
-      'site_title' => get_bloginfo('name'),
-      'total_post_count' => wp_count_posts('post')->publish,
-      'is_polylang_exists' => function_exists('pll_languages_list'),
-			'posts_list' => $this->wdss_get_posts()
-    ];
-    wp_localize_script($this->plugin_name, 'wdss_localize', $wdss_localize_script);
+		if( get_current_screen()->id == 'toplevel_page_wd-sattelites-snippets' ) {
+			wp_enqueue_media();
+		
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/main.js', array(), $this->version, true );
+			
+			$wdss_localize_script = [
+				'site_title' => get_bloginfo('name'),
+				'total_post_count' => wp_count_posts('post')->publish,
+				'is_polylang_exists' => function_exists('pll_languages_list'),
+				'posts_list' => $this->wdss_get_posts()
+			];
+			wp_localize_script($this->plugin_name, 'wdss_localize', $wdss_localize_script);
+		}
 	}
 }
 

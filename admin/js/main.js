@@ -47,10 +47,10 @@ function resetValue(item) {
 function sectionToggler(section) {
 
   const toggler = document.querySelector(section.toggler);
-  const isEnabled = toggler.hasAttribute('checked');
+  const is_enabled = toggler.hasAttribute('checked');
   const target = document.querySelector(section.target);
   
-  if (isEnabled) {
+  if (is_enabled) {
     target.classList.toggle('visible');
   }
   
@@ -176,8 +176,8 @@ function getPostsModal() {
     this.insertAdjacentHTML('beforeend', $content);
   
     const modal = this.querySelector('.wdss-modal');
-    const closeBtn = modal.querySelector('.wdss-modal-header i');
-    const saveBtn = modal.querySelector('.wdss-button.submit');
+    const close_btn = modal.querySelector('.wdss-modal-header i');
+    const save_btn = modal.querySelector('.wdss-button.submit');
     const input = this.querySelector('#wdss-title-clipping-excluded input[type="text"]');
   
     if(input.value !== '') {
@@ -191,9 +191,9 @@ function getPostsModal() {
       });
     }
 
-    closeBtn.addEventListener('click', () => modal.remove());
+    close_btn.addEventListener('click', () => modal.remove());
   
-    saveBtn.addEventListener('click', () => {
+    save_btn.addEventListener('click', () => {
       
       const posts = modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]:checked');
       let idsArr = [];
@@ -216,42 +216,43 @@ function mediaFileChooser() {
 
   btn.addEventListener('click', function(e) {
       e.preventDefault();
+      
       let image_frame;
       if (image_frame) {
-          image_frame.open();
+        image_frame.open();
       }
 
       image_frame = wp.media({
-          title: 'Select Featured Images',
-          multiple: true,
-          library: {
-              type: 'image',
-          },
-          button: {
-            text: 'Select'
-          }
+        title: 'Select Featured Images',
+        multiple: true,
+        library: {
+          type: 'image',
+        },
+        button: {
+          text: 'Select'
+        }
       });
 
       image_frame.on('close', function() {
-          let selection = image_frame.state().get('selection');
-          let gallery_ids = new Array();
-          let my_index = 0;
-          selection.forEach(function(attachment) {
-              gallery_ids[my_index] = attachment['id'];
-              my_index++;
-          });
-          let ids = gallery_ids.join(",");
-          document.querySelector('#wdss-featured-images-list input').value = ids;
+        let selection = image_frame.state().get('selection');
+        let gallery_ids = new Array();
+        let my_index = 0;
+        selection.forEach(function(attachment) {
+            gallery_ids[my_index] = attachment['id'];
+            my_index++;
+        });
+        let ids = gallery_ids.join(",");
+        document.querySelector('#wdss-featured-images-list input').value = ids;
       });
 
       image_frame.on('open', function() {
-          let selection = image_frame.state().get('selection');
-          let ids = document.querySelector('#wdss-featured-images-list input').value.split(',');
-          ids.forEach(function(id) {
-              let attachment = wp.media.attachment(id);
-              attachment.fetch();
-              selection.add(attachment ? [attachment] : []);
-          });
+        let selection = image_frame.state().get('selection');
+        let ids = document.querySelector('#wdss-featured-images-list input').value.split(',');
+        ids.forEach(function(id) {
+          let attachment = wp.media.attachment(id);
+          attachment.fetch();
+          selection.add(attachment ? [attachment] : []);
+        });
 
       });
 
@@ -283,9 +284,6 @@ function Init() {
     toggleCheckbox();
     toggleAllOptions();
     toggleAccordion();
-
-
-
   }
 }
 

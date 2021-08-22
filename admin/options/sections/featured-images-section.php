@@ -41,7 +41,7 @@
     if( get_option('wdss_featured_images_add_column', '0') ) {
 
       function wdss_add_images_size() {
-        add_image_size( 'featured-column', 120, 120, true );
+        add_image_size( 'featured-column', 50, 50, true );
       }
       add_action('wp_loaded', 'wdss_add_images_size');
 
@@ -76,7 +76,7 @@
         add_action('admin_head', 'add_images_column_css');
         function add_images_column_css(){
           if( get_current_screen()->base == 'edit')
-            echo '<style type="text/css">.column-featured{width:10%;}</style>';
+            echo '<style type="text/css">.column-featured{width:5%;}</style>';
         }
       }
     }
