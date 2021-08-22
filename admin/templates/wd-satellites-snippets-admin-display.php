@@ -79,7 +79,9 @@
       update_option('wdss_featured_images_list', sanitize_text_field($_POST['wdss_featured_images_list']));
     
       update_option('wdss_polylang_meta_data', sanitize_text_field($_POST['wdss_polylang_meta_data']));   
-      
+      update_option('wdss_multilang_sitemap', sanitize_text_field($_POST['wdss_multilang_sitemap']));
+
+
       if( function_exists('pll_languages_list') ) {
         $polylang_lang_list = pll_languages_list(['fields' => []]); 
         $authors = get_users( array( 'fields' => array( 'ID', 'display_name', 'user_nicename' ), 'has_published_posts' => 'post' ) );

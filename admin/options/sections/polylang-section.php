@@ -1,9 +1,7 @@
 <?php 
 
-
-
 // Polylang Meta Descriptions Settings
-if(get_option('wdss_polylang_meta_data', '0')) {
+if( get_option('wdss_polylang_meta_data', '0') ) {
   function polylang_meta_description($meta_description) {
     if( function_exists('pll_the_languages') ) {
 
@@ -54,4 +52,20 @@ if(get_option('wdss_polylang_meta_data', '0')) {
   }
   add_filter('wpseo_metadesc', 'polylang_meta_description', 99);
   add_filter('wpseo_opengraph_desc', 'polylang_meta_description', 99);
+}
+
+
+if( get_option('wdss_multilang_sitemap', '0') ) {
+    function wdss_multilang_sitemap() {
+        require_once dirname( __FILE__ ) . '/../inc/multilang_sitemap_generator.php';
+    }
+    add_action('wp_loaded', 'wdss_multilang_sitemap');
+}
+else if(get_option('wdss_multilang_sitemap', '0') === '0') {
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+
+    $file = get_home_path(). 'sitemap_index.xml';
+    if( file_exists($file) ) {
+        wp_delete_file( $file);
+    }
 }

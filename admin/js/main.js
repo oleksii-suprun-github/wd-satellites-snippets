@@ -11,7 +11,7 @@ const featuredImageSection = {
 };
 
 const polylangSection = {
-  toggler: '#wdss-polylang-meta-data-conditions input',
+  toggler: '#wdss-polylang-meta-data-condition input',
   target: '#wdss-polylang-meta-data-group'  
 };
 
@@ -268,6 +268,12 @@ function Init() {
       sectionToggler(featuredImageSection);
       getSiteTitle();
       mediaFileChooser();
+
+      resetValue(cutTitleClippingReset);
+      resetValue(cutTitleSinceReset);
+      resetValue(featuredImagesListReset);
+
+      getPostsModal();
     }
 
     if(wdss_localize.is_polylang_exists) {
@@ -278,11 +284,7 @@ function Init() {
     toggleAllOptions();
     toggleAccordion();
 
-    resetValue(cutTitleClippingReset);
-    resetValue(cutTitleSinceReset);
-    resetValue(featuredImagesListReset);
 
-    getPostsModal();
 
   }
 }

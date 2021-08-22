@@ -7,7 +7,7 @@
   </div>
   <div class="wdss-row">
 
-    <div id="wdss-polylang-meta-data-conditions" class="wdss-setting-item">
+    <div id="wdss-polylang-meta-data-condition" class="wdss-setting-item">
         <label>
             <span>Custom meta descriptions</span>
             <?php 
@@ -39,13 +39,17 @@
           </div>
       </div>   
 
-      <div id="wdss-polylang-author-description" class="wdss-setting-item">
-        <div class="wdss-setting-item-accordion">
-          <h3>Author`s page description</h3>
-          <i class="fas fa-chevron-down"></i>
-        </div>
+      <?php 
+        $total_posts = wp_count_posts('post')->publish;
+        if($total_posts > 0) : 
+      ?>
+        <div id="wdss-polylang-author-description" class="wdss-setting-item">
+          <div class="wdss-setting-item-accordion">
+            <h3>Author`s page description</h3>
+            <i class="fas fa-chevron-down"></i>
+          </div>
 
-        <div class="wdss-setting-item-accordion-content">
+          <div class="wdss-setting-item-accordion-content">
 
           <?php
             $authors = get_users( array( 'fields' => array( 'ID', 'display_name', 'user_nicename' ), 'has_published_posts' => 'post' ) );
@@ -65,11 +69,23 @@
             </div>
           <?php endforeach; ?>   
         </div>
-      </div>
+      <?php endif; ?>
     </div>
+
+    <div id="wdss-multilang-sitemap-condition" class="wdss-setting-item">
+        <label>
+            <span>Use Multilang Sitemap<br> instead of Yoast</span>
+            <?php 
+              checkbox_handler_html(['field_name' => 'wdss_multilang_sitemap']); 
+              if( get_option('wdss_multilang_sitemap') == '' ) update_option( 'wdss_multilang_sitemap', '0' );               
+            ?>    
+        </label>
+    </div>
+  </div>
 </section>
 <?php 
   else : 
     update_option('wdss_polylang_meta_data', '0');
+    update_option('wdss_multilang_sitemap', '0');
   endif; 
 ?>

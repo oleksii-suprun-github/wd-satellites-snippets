@@ -91,6 +91,8 @@ class Wd_Satellites_Snippets_Admin {
 	}
 
 
+
+
 	public function wdss_get_posts() {
     $args = array(  
 			'post_type' => 'post',
@@ -146,7 +148,9 @@ class Wd_Satellites_Snippets_Admin {
 	public function wdss_enqueue_scripts() {
     wp_enqueue_media();
 	
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wd-satellites-snippets-admin.js', array(), $this->version, true );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/main.js', array(), $this->version, true );
+		
+
     $wdss_localize_script = [
       'site_title' => get_bloginfo('name'),
       'total_post_count' => wp_count_posts('post')->publish,
