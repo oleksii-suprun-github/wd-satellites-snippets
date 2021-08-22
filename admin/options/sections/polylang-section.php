@@ -32,7 +32,6 @@ if( get_option('wdss_polylang_meta_data', '0') ) {
             switch ($current_lang) {
                 case 'en'  :
                     $meta_description = get_option('wdss_polylang_author_desc_' . $author . '_en', '');
-                    var_dump($meta_description);
                     break;
                 case 'de'  :
                     $meta_description = get_option('wdss_polylang_author_desc_' . $author . '_de', '');

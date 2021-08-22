@@ -19,7 +19,6 @@
             else {
               if( get_option('wdss_featured_images_list', '' )) {
                 $images_ids_arr = explode(',', get_option('wdss_featured_images_list'));
-                var_dump($images_ids_arr);
                 $rand_index = array_rand($images_ids_arr);
                 $image_id = intval($images_ids_arr[$rand_index]);
                 set_post_thumbnail($post->ID, $image_id);

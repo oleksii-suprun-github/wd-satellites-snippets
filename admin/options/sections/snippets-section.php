@@ -506,10 +506,3 @@
     add_filter('wpseo_metadesc', 'custom_post_descriptions', 10, 2 );
     add_filter('wpseo_opengraph_desc', 'custom_post_descriptions', 10, 2);
     
-
-
-
-    function load_admin_resources_footer() {
-      wp_enqueue_script( 'filter', get_template_directory_uri() . '/js/article-filter.js', array('jquery', 'wp-blocks', 'wp-edit-post'));
-    }
-    add_action('admin_footer', 'load_admin_resources_footer');
