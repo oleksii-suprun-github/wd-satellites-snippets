@@ -244,7 +244,10 @@ input[type=checkbox]:checked::before {
   width: 63%;
 }
 .wdss-table-post__status {
-  width: 25%;
+  width: 10%;
+}
+.wdss-table-post__date {
+  width: 15%;
 }
 
 

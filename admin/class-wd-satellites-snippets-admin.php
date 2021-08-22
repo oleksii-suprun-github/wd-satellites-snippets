@@ -96,8 +96,8 @@ class Wd_Satellites_Snippets_Admin {
 			'post_type' => 'post',
 			'post_status' => 'any',
 			'numberposts' => -1,
-			'orderby' => 'title', 
-			'order' => 'ASC', 
+			'orderby' => 'date', 
+			'order' => 'DESC', 
 		);
 
 		$posts = get_posts($args);	
@@ -116,6 +116,7 @@ class Wd_Satellites_Snippets_Admin {
 							<th class="wdss-table-post__id">ID</th>
 							<th class="wdss-table-post__title">Title</th>
 							<th class="wdss-table-post__status">Status</th>
+							<th class="wdss-table-post__date">Date</th>
 						</tr>
 					<?php
 						foreach($posts as $post) : ?>
@@ -124,6 +125,7 @@ class Wd_Satellites_Snippets_Admin {
 								<td class="wdss-table-post__id"><?= $post->ID?></td>
 								<td class="wdss-table-post__title"><?= $post->post_title?></td>
 								<td class="wdss-table-post__status"><?= $post->post_status?></td>
+								<td class="wdss-table-post__date"><?= $post->post_date?></td>							
 							</tr>
 					<?php 
 						endforeach;
