@@ -11,6 +11,19 @@
 *==========================/
 
 /* Layout */
+html.fixed {
+  position: fixed;
+  overflow: hidden;
+}
+html.fixed::before {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: .7;
+}
 #wdss-settings-page .wdss-setting-group {
   position: relative;
   overflow: hidden;
@@ -61,6 +74,24 @@
 .wdss-section {
   position: relative;
 }
+@media screen and (max-width: 550px) {
+  #wdss-settings-page #wdss-snippets-settings .wdss-row {
+    flex-direction: column;
+  }
+  #wdss-snippets-settings .wdss-setting-item {
+    width: 100%;
+  }
+}
+@media (min-width:550px) and (max-width: 1200px) {
+  #wdss-snippets-settings .wdss-setting-item {
+    width: calc(50% - 25px);
+  }
+
+}
+@media (min-width: 768px) and (max-width: 1200px) {
+
+}
+
 
 
 /* Headings */
@@ -105,6 +136,20 @@
   font-weight: 600;
   color: #222;
 }
+@media screen and (max-width: 550px) {
+  .wdss-setting-item label span, 
+  .wdss-setting-item > span {
+    width: fit-content;
+  }
+  #wdss-snippets-settings label span {
+    width: 200px;
+  }
+}
+@media (min-width:550px) and (max-width: 768px) {
+  .wdss-setting-item label span, .wdss-setting-item > span {
+    margin-right: 10px;
+  }
+}
 
 
 /* Inputs */
@@ -134,6 +179,21 @@
   margin: 0;
   height: unset;
   width: unset;
+}
+@media screen and (max-width: 1200px) {
+  input[type="text"],
+  input[type="date"],
+  input[type="number"], textarea {
+    min-height: 30px;
+    font-size: 14px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+  input[type=checkbox], input[type=radio] {
+    min-height: unset;
+    width: 1rem;
+    height: 1rem;
+  }
 }
 
 
@@ -206,6 +266,10 @@
   margin-right: 15px;
   cursor: pointer;
 }
+.wdss-modal-body {
+  position: relative;
+  height: 40vh;
+}
 .wdss-modal-footer {
   display: flex;
   align-items: center;
@@ -219,6 +283,16 @@
   margin-left: auto;
   margin-right: 15px;
 }
+@media screen and (max-width: 550px) {
+  .wdss-modal {
+    width: 80vw;
+    height: 70vh;
+    top: 20%;
+  }
+  .wdss-modal-body {
+    height: 60vh;
+  }
+}
 
 
 /* Post Excluded Table */
@@ -229,7 +303,7 @@
 }
 .wdss-table-wrapper {
   max-height: 40vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 .wdss-table {
@@ -262,6 +336,11 @@
 }
 .wdss-table-post__date {
   width: 15%;
+}
+@media screen and (max-width: 1200px) {
+  .wdss-table td {
+    padding: 0;
+  }
 }
 
 
@@ -302,6 +381,12 @@
   opacity: 1;
   transition: height 0ms 0ms, opacity 600ms 0ms;
 }
+@media screen and (max-width: 550px) {
+  .wdss-setting-item-accordion-content {
+    width: unset;
+    flex-direction: column;
+  }
+}
 
 
 /* Snippets List Settings */
@@ -332,6 +417,37 @@ button#wdss-toggle-options {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
+@media screen and (max-width: 550px) {
+  #wdss-title-clipping-excluded,
+  #wdss-title-ending {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #wdss-title-clipping-excluded span,
+  #wdss-title-ending span {
+    margin-bottom: 10px;
+  }
+  #wdss-title-clipping-excluded input[type="text"],
+  #wdss-title-ending input[type="text"] {
+    min-width: unset;
+    width: 95%;
+    margin-bottom: 4px;
+  }
+  #wdss-title-clipping-excluded__choose {
+    margin-left: auto;
+    margin-right: 50px !important;
+    border-radius: 4px;
+  }
+  #wdss-title-clipping-excluded .wdss-button.reset {
+    position: absolute;
+    bottom: 0;
+    right: 18px
+  }
+  #wdss-get-title {
+    margin-left: auto;
+    margin-right: 15px;
+  }
+}
 
 
 /* Featured Images Settings */
@@ -358,6 +474,30 @@ button#wdss-toggle-options {
 }
 #wdss-title-clipping-excluded input[type="text"] {
   pointer-events: none;
+}
+@media screen and (max-width: 550px) {
+  #wdss-featured-images-list {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #wdss-featured-images-list span {
+    margin-bottom: 10px;
+  }
+  #wdss-featured-images-list input[type="text"] {
+    min-width: unset;
+    width: 95%;
+    margin-bottom: 4px;
+  }
+  #wdss-featured-images__choose {
+    margin-left: auto;
+    margin-right: 50px !important;
+    border-radius: 4px;
+  }
+  #wdss-featured-images-list .wdss-button.reset {
+    position: absolute;
+    bottom: 0;
+    right: 18px
+  }
 }
 
 
@@ -424,3 +564,18 @@ button#wdss-toggle-options {
   margin-right: 10px;
   font-size: 1.15rem;
 }
+@media screen and (max-width: 768px) {
+  .wdss-setting-item-accordion-content,
+  .wdss-polylang-textarea-blocks {
+    flex-direction: column;
+  }
+  .wdss-polylang-textarea-block {
+    width: 95%;
+    margin-bottom: 15px;
+  }
+  .wdss-polylang-textarea-block:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+

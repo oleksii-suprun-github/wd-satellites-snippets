@@ -31,7 +31,7 @@ const featuredImagesListReset = {
 };
 
 
-
+// Resets value attr in target input
 function resetValue(item) {
   const button = document.querySelector(item.button);
   const target = document.querySelector(item.target);
@@ -43,7 +43,7 @@ function resetValue(item) {
   });
 }
 
-
+// Show/hide section on-condition helper
 function sectionToggler(section) {
 
   const toggler = document.querySelector(section.toggler);
@@ -59,7 +59,7 @@ function sectionToggler(section) {
   });
 }
 
-
+// Show/hide accordion content helper
 function toggleAccordion() {
   const accordions = Array.from(document.querySelectorAll('.wdss-setting-item-accordion'));
 
@@ -80,7 +80,7 @@ function toggleAccordion() {
   });
 }
 
-
+// Checkbox toggle helper
 function toggleCheckbox() {
   const inputs = Array.from(document.querySelectorAll('input[type="checkbox"'));
   inputs.forEach((input) => {
@@ -100,7 +100,7 @@ function toggleCheckbox() {
   });
 }
 
-
+// Checks/unchecks all checkbox inputs within section
 function toggleAllOptions() {
   const inputs = Array.from(document.querySelectorAll('#wdss-snippets-settings input'));
   let toggler = document.querySelector('#wdss-toggle-options');
@@ -129,7 +129,7 @@ function toggleAllOptions() {
   });
 }
 
-
+// Gets site title on click for Long Title Clipping Settings 
 function getSiteTitle() {
   const btn = document.querySelector('#wdss-get-title');
   const input = document.querySelector('#wdss-title-ending input');
@@ -138,7 +138,7 @@ function getSiteTitle() {
   btn.addEventListener('click', () => input.value = siteTitle);
 }
 
-
+// Custom popup with list of published posts for Long Title Clipping Settings
 function getPostsModal() {
   const btn = document.querySelector('#wdss-title-clipping-excluded__choose');
   const context = document.querySelector('#wdss-title-clipping-excluded');
@@ -173,13 +173,18 @@ function getPostsModal() {
   }
 
   function modalHandler($content) {
+
+    const html = document.querySelector('html'); 
+    html.classList.add('fixed');
+
     this.insertAdjacentHTML('beforeend', $content);
-  
+     
     const modal = this.querySelector('.wdss-modal');
     const close_btn = modal.querySelector('.wdss-modal-header i');
     const save_btn = modal.querySelector('.wdss-button.submit');
     const input = this.querySelector('#wdss-title-clipping-excluded input[type="text"]');
   
+    
     if(input.value !== '') {
       let inputIdsArr = input.value.split(',');
       let checkboxes = Array.from(modal.querySelectorAll('input[type="checkbox"]'));
@@ -191,7 +196,10 @@ function getPostsModal() {
       });
     }
 
-    close_btn.addEventListener('click', () => modal.remove());
+    close_btn.addEventListener('click', () => {
+      modal.remove();
+      html.classList.remove('fixed');
+    });
   
     save_btn.addEventListener('click', () => {
       
@@ -205,12 +213,13 @@ function getPostsModal() {
   
       ids = idsArr.join(',');
       input.value = ids;
-      modal.remove()
+      modal.remove();
+      html.classList.remove('fixed');
     });
   }
 }
 
-
+// Built-in WP.media popup for Featured Images Settings
 function mediaFileChooser() {
   const btn = document.querySelector('#wdss-featured-images__choose');
 

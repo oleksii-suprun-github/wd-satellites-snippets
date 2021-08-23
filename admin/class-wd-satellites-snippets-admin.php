@@ -110,7 +110,7 @@ class Wd_Satellites_Snippets_Admin {
 			<div class="wdss-modal-header">
 				<i class="fas fa-times"></i>
 			</div>
-			<div clas="wdss-modal-body">
+			<div class="wdss-modal-body">
 				<div class="wdss-table-wrapper">
 					<table id="wdss-exclude-posts-table" class="wdss-table">
 						<tr class="wdss-table-row header">
