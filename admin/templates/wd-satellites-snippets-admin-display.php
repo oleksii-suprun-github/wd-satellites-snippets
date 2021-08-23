@@ -16,7 +16,10 @@
   <? }
 
   function text_handler_html($args) { ?>
-    <input type="text" name="<?= $args['field_name']; ?>" value="<?= esc_attr(get_option($args['field_name']));?>" >  
+    <input type="text" 
+      <?php if($args['id']) : ?> id="<?= $args['id']; ?>" <?php endif ?>
+      name="<?= $args['field_name']; ?>" 
+      value="<?= esc_attr(get_option($args['field_name']));?>" >  
   <? }
 
   function textarea_handler_html($args) { ?>
@@ -63,8 +66,7 @@
       update_option('wdss_force_lowercase', sanitize_text_field($_POST['wdss_force_lowercase']));  
       
       update_option('wdss_enable_title_clipping', sanitize_text_field($_POST['wdss_enable_title_clipping']));   
-      update_option('wdss_title_clipping_excluded', sanitize_text_field($_POST['wdss_title_clipping_excluded']));
-      update_option('wdss_title_clipping_condition', sanitize_text_field($_POST['wdss_title_clipping_condition']));   
+      update_option('wdss_title_clipping_excluded', sanitize_text_field($_POST['wdss_title_clipping_excluded']));   
       update_option('wdss_title_clipping_by_date', sanitize_text_field($_POST['wdss_title_clipping_by_date']));         
       
       update_option('wdss_title_words_limit', sanitize_text_field($_POST['wdss_title_words_limit']));  
@@ -73,12 +75,13 @@
       
       update_option('wdss_410_rules', sanitize_text_field($_POST['wdss_410_rules']));
 
-      update_option('wdss_featured_images', sanitize_text_field($_POST['wdss_featured_images']));
       update_option('wdss_featured_images_add_column', sanitize_text_field($_POST['wdss_featured_images_add_column']));
       update_option('wdss_featured_images_list', sanitize_text_field($_POST['wdss_featured_images_list']));
     
       update_option('wdss_polylang_meta_data', sanitize_text_field($_POST['wdss_polylang_meta_data']));   
-      
+      update_option('wdss_multilang_sitemap', sanitize_text_field($_POST['wdss_multilang_sitemap']));
+
+
       if( function_exists('pll_languages_list') ) {
         $polylang_lang_list = pll_languages_list(['fields' => []]); 
         $authors = get_users( array( 'fields' => array( 'ID', 'display_name', 'user_nicename' ), 'has_published_posts' => 'post' ) );
@@ -119,7 +122,7 @@
           <?php wp_nonce_field('wdss_save_settings', 'wfp_nonce'); ?>
 
 
-          <?php include_once('sections/snippet-section.php') ?>
+          <?php include_once('sections/snippets-section.php') ?>
 
           <?php include_once('sections/title-clipping-section.php') ?>
 
@@ -130,7 +133,7 @@
           <?php include_once('sections/polylang-section.php') ?>
 
 
-          <input type="submit" name="submit" id="submit" class="button" value="<?= __('Save changes', 'wdss_domain') ?>">
+          <input type="submit" name="submit" id="submit" class="wdss-button submit" value="<?= __('Save changes', 'wdss_domain') ?>">
         </form>
       </div>
     </div>
