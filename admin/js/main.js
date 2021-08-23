@@ -1,5 +1,7 @@
+// Condition for calling our functions
 const isPluginPage = document.querySelector('#wdss-settings-page');
 
+// Selectors for our functions
 const titleClippingSection = {
   toggler: '#wdss-title-clipping-condition input',
   target: '#wdss-title-clipping-group'
@@ -29,7 +31,6 @@ const featuredImagesListReset = {
   button: '#wdss-featured-images-group button.reset',
   target: '#wdss-featured-images-group input'
 };
-
 
 // Resets value attr in target input
 function resetValue(item) {
