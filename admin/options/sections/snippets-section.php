@@ -1,6 +1,30 @@
 <?php
 
-// Disables jQuery and Migration script for Frontend
+    // Removes homepage pagination
+    if( get_option('wdss_disable_homepage_pagination', '0') ) {
+      
+      add_action( 'template_redirect', 'wdss_disable_homepage_pagination', 1 );
+      function wdss_disable_homepage_pagination() {
+        global $post, $wp_query;
+        if ( (is_home() || is_front_page()) && (is_paged()) ) {
+         $wp_query->set_404();
+         status_header(404);
+         include( get_query_template( '404' ) );
+         exit;
+        }
+       }
+  
+       add_filter( 'wpseo_next_rel_link', 'wdss_remove_homepage_rel_links' );
+       function wdss_remove_homepage_rel_links( $link ) {
+          if ( is_front_page() ) {
+            $link = '';
+          }
+          return $link;
+       }
+    }
+
+
+    // Disables jQuery and Migration script for Frontend
     if( get_option('wdss_disable_jquery', '0') ) {
       function wdss_disable_jquery() {
         if( !is_admin() ) {
@@ -124,29 +148,34 @@
 
     // Fixes WP Comments Passive Listener Issue 
     if( get_option('wdss_comments_passive_listener_fix', '0') ) {
-      function wp_dereg_script_comment_reply(){wp_deregister_script( 'comment-reply' );}
-      add_action('init','wp_dereg_script_comment_reply');
-      add_action('wp_head', 'wp_reload_script_comment_reply');
-      function wp_reload_script_comment_reply() {
+
+      function wdss_dereg_script_comment_reply(){wp_deregister_script( 'comment-reply' );}
+      add_action('init','wdss_dereg_script_comment_reply');
+      
+      add_action('wp_head', 'wdss_reload_script_comment_reply');
+      function wdss_reload_script_comment_reply() {
           ?>
       <script>
+
       //Function checks if a given script is already loaded
       function isScriptLoaded(src){
           return document.querySelector('script[src="' + src + '"]') ? true : false;
       }
+
       //When a reply link is clicked, check if reply-script is loaded. If not, load it and emulate the click
       document.getElementsByClassName("comment-reply-link").onclick = function() { 
           if(!(isScriptLoaded("/wp-includes/js/comment-reply.min.js"))){
-              var script = document.createElement('script');
-              script.src = "/wp-includes/js/comment-reply.min.js"; 
-          script.onload = emRepClick($(this).attr('data-commentid'));        
-              document.head.appendChild(script);
+            let script = document.createElement('script');
+            script.src = "/wp-includes/js/comment-reply.min.js"; 
+            script.onload = emRepClick($(this).attr('data-commentid'));        
+            document.head.appendChild(script);
           } 
       }
+
       //Function waits 50 ms before it emulates a click on the relevant reply link now that the reply script is loaded
       function emRepClick(comId) {
-      sleep(50).then(() => {
-      document.querySelectorAll('[data-commentid="'+comId+'"]')[0].dispatchEvent(new Event('click'));
+        sleep(50).then(() => {
+        document.querySelectorAll('[data-commentid="'+comId+'"]')[0].dispatchEvent(new Event('click'));
       });
       }
       //Function does nothing, for a given amount of time
@@ -465,7 +494,7 @@
     }
 
     // Custom Excerpts for imported articles
-    function custom_excerpts( $excerpt, $raw_excerpt ) {
+    function wpss_custom_excerpts( $excerpt, $raw_excerpt ) {
       if ( is_admin() ||  '' !== $raw_excerpt) {
         return $excerpt;
       }
@@ -484,11 +513,11 @@
       return $excerpt;
     
     }
-    add_filter( 'wp_trim_excerpt', 'custom_excerpts', 99, 2 );
+    add_filter( 'wp_trim_excerpt', 'wpss_custom_excerpts', 99, 2 );
     
     
     // Custom Descriptions for imported articles
-    function custom_post_descriptions($meta_description, $presentation)  {
+    function wpss_custom_post_descriptions($meta_description, $presentation)  {
        
       $condition = '#<div[^>]*id="toc"[^>]*>.*?</div>#is';
       $content = apply_filters( 'the_content', get_the_content() );
@@ -503,6 +532,6 @@
       return $meta_description;
     
     }
-    add_filter('wpseo_metadesc', 'custom_post_descriptions', 10, 2 );
-    add_filter('wpseo_opengraph_desc', 'custom_post_descriptions', 10, 2);
+    add_filter('wpseo_metadesc', 'wpss_custom_post_descriptions', 10, 2 );
+    add_filter('wpseo_opengraph_desc', 'wpss_custom_post_descriptions', 10, 2);
     

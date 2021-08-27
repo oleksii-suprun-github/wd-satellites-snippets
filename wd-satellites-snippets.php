@@ -1,24 +1,18 @@
 <?php
 /**
  * Plugin Name: WD Sattelites Snippets
- * Plugin URI: https://github.com/Mironezes
  * Description: Bulk of usefull snippets for our sattelites.
- * Version: 0.5
+ * Version: 0.5.1
  * Author: Alexey Suprun
  * Author URI: https://github.com/Mironezes
- * Requires at least: 5.5
- * Requires PHP: 7.0
- * Tested up to: 5.8
- * License: GPL-2.0+
- * Text Domain: wd-satellites-snippets
+ * License: GPL3
+ * Text Domain: wdss
  * Domain Path: /languages
- * 
- * @link https://github.com/Mironezes
- * @package Wd_Satellites_Snippets
- */
+ *
+ * @package wd-satellites-snippets
+*/
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
@@ -26,7 +20,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Currently plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.5' );
+define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.5.1' );
 
 /**
  * The code that runs during plugin activation.

@@ -41,6 +41,8 @@
 
       update_option('wdss_last_modified_n_304', sanitize_text_field($_POST['wdss_last_modified_n_304'])); 
 
+      update_option('wdss_disable_homepage_pagination', sanitize_text_field($_POST['wdss_disable_homepage_pagination']));
+
       update_option('wdss_forced_trail_slash', sanitize_text_field($_POST['wdss_forced_trail_slash']));   
       update_option('wdss_disable_jquery', sanitize_text_field($_POST['wdss_disable_jquery'])); 
       

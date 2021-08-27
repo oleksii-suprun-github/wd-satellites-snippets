@@ -14,6 +14,17 @@
                     </label>
                   </div>
 
+                  <div id="wdss-disable-homepage-pagination" class="wdss-setting-item">
+                      <label>
+                        <span>Disable Homepage Pagination</span>
+                        <?php 
+                          checkbox_handler_html(['field_name' => 'wdss_disable_homepage_pagination']); 
+                          if( get_option('wdss_disable_homepage_pagination') == '' ) update_option( 'wdss_disable_homepage_pagination', '0' );               
+                        ?>    
+                    </label>
+                  </div>  
+
+
                   <div id="wdss-disable-jquery" class="wdss-setting-item">
                       <label>
                         <span title="Disables jQuery and Migration script for Frontend">Disable jQuery <sup>?</sup></span>
