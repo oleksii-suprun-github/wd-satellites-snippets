@@ -153,8 +153,13 @@ class Wd_Satellites_Snippets_Admin {
 		
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/main.js', array(), $this->version, true );
 			
+			$get_title_separator;
+			if(YoastSEO()->helpers->options->get_title_separator() !== null) {
+				$get_title_separator = YoastSEO()->helpers->options->get_title_separator();
+			}
+
 			$wdss_localize_script = [
-				'site_title' => get_bloginfo('name'),
+				'site_title' => $get_title_separator . ' ' . get_bloginfo('name'),
 				'total_post_count' => wp_count_posts('post')->publish,
 				'is_polylang_exists' => function_exists('pll_languages_list'),
 				'posts_list' => $this->wdss_get_posts()

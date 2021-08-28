@@ -30,7 +30,7 @@
 
       <div id="wdss-words-limit" class="wdss-setting-item">
         <label>
-        <span title="By default: 6; counts words from 3 or more chars">Words Limit <sup>?</sup></span>
+        <span title="By default: 6; counts words with 3 or more chars">Words Limit <sup>?</sup></span>
         <?php 
           $default_words_limit = '6';
           number_handler_html(['field_name' => 'wdss_title_words_limit', 'min' => '2', 'max' => '7']); 

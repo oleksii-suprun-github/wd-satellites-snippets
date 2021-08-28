@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WD Sattelites Snippets
  * Description: Bulk of usefull snippets for our sattelites.
- * Version: 0.5.1
+ * Version: 0.5.2
  * Author: Alexey Suprun
  * Author URI: https://github.com/Mironezes
  * License: GPL3
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Currently plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.5.1' );
+define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.5.2' );
 
 /**
  * The code that runs during plugin activation.

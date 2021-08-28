@@ -17,7 +17,7 @@
 
   function text_handler_html($args) { ?>
     <input type="text" 
-      <?php if($args['id']) : ?> id="<?= $args['id']; ?>" <?php endif ?>
+      <?php if(isset($args['id'])) : ?> id="<?= $args['id']; ?>" <?php endif ?>
       name="<?= $args['field_name']; ?>" 
       value="<?= esc_attr(get_option($args['field_name']));?>" >  
   <? }
@@ -116,7 +116,11 @@
 
         <h1>Satellites Snippets <small>ver <?= WD_SATELLITES_SNIPPETS_VERSION ?></small></h1>
 
-        <?php $_POST['wdss_form_submitted'] === 'true' ? wdss_form_handler() : null; ?>
+        <?php 
+          if(isset($_POST['wdss_form_submitted']) && $_POST['wdss_form_submitted'] === true) {
+            wdss_form_handler();
+          }
+        ?>
 
         <form method="POST">
 

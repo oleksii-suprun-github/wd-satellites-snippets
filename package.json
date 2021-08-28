@@ -1,6 +1,6 @@
 {
   "name": "wd-satellites-snippets",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Bulk of usefull snippets for our sattelites",
   "main": "index.php",
   "scripts": {
