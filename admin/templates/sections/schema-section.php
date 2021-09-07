@@ -10,6 +10,7 @@
               <span>Organization Logo</span>
               <?php 
                 text_handler_html(['field_name' => 'wdss_jsonld_schema_logo']);            
+                if( get_option('wdss_jsonld_schema_logo') == '' ) update_option( 'wdss_jsonld_schema_logo', '' );   
               ?>  
               <button type="button" id="wdss_jsonld_schema_logo__choose" class="wdss-button choose">Choose</button>
               <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>   

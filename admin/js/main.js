@@ -32,6 +32,11 @@ const featuredImagesListReset = {
   target: '#wdss-featured-images-group input'
 };
 
+const organizationLogoReset = {
+  button: '#wdss-jsonld-schema-logo button.reset',
+  target: '#wdss-jsonld-schema-logo input'
+};
+
 const featuredImagesChooser = {
   select: '#wdss-featured-images__choose',
   target: '#wdss-featured-images-list input',
@@ -145,11 +150,13 @@ function toggleAllOptions() {
 
 // Gets site title on click for Long Title Clipping Settings 
 function getSiteTitle() {
-  const btn = document.querySelector('#wdss-get-title');
-  const input = document.querySelector('#wdss-title-ending input');
-  const siteTitle = wdss_localize.site_title;
-
-  btn.addEventListener('click', () => input.value = siteTitle);
+  if(document.querySelector('#wdss-get-title')) {
+    const btn = document.querySelector('#wdss-get-title');
+    const input = document.querySelector('#wdss-title-ending input');
+    const siteTitle = wdss_localize.site_title;
+  
+    btn.addEventListener('click', () => input.value = siteTitle);
+  }
 }
 
 // Custom popup with list of published posts for Long Title Clipping Settings
@@ -348,6 +355,7 @@ function Init() {
       resetValue(cutTitleSinceReset);
       resetValue(featuredImagesListReset);
 
+
       getPostsModal();
     }
 
@@ -356,6 +364,7 @@ function Init() {
     }
 
     mediaFileChooser(organizationLogoChooser);
+    resetValue(organizationLogoReset);
     customSchemaSettings();
 
     toggleCheckbox();

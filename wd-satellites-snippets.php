@@ -3,7 +3,7 @@
  * Plugin Name: WD Sattelites Snippets
  * Plugin URI: https://github.com/Mironezes
  * Description: Bulk of usefull snippets for our sattelites.
- * Version: 0.5
+ * Version: 0.6b
  * Author: Alexey Suprun
  * Author URI: https://github.com/Mironezes
  * Requires at least: 5.5
@@ -26,7 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Currently plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.5' );
+define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.6b' );
 
 /**
  * The code that runs during plugin activation.

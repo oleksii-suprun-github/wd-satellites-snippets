@@ -1,172 +1,184 @@
 <?php
 
-if(get_the_post_thumbnail_url($post->ID)) {
-	$image = get_the_post_thumbnail_url($post->ID);
-}
-else {
-	$image = 'https://coinranking.info/wp-content/uploads/2020/09/bitcoin-news-1.png';	
-}
 
+if( get_option('wdss_jsonld_schema_orgname', '') ) {
+	add_action('wp_head', 'json_ld_schema_template');
+	function json_ld_schema_template() {
+		global $post;
 
-if(is_front_page()): ?>
-    <script type="application/ld+json">
-        {
-            "@context": "http://schema.org/",
-            "@type": "Organization",
-            "name": "coinranking.info",
-            "url": "https://coinranking.info/",
-            "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Brestska St, 8",
-                "addressRegion": "Kyiv, 02000",
-                "addressCountry": "UA"
-            },
-            "logo": {
-                "@type": "ImageObject",
-                "contentUrl": "https://coinranking.info/wp-content/uploads/2020/09/bitcoin-news-1.png"
-            },
-            "contactPoint": {
-                "@type": "contactPoint",
-                "contactType": "Customer Service",
-                "telephone": "+7 781-738-8276",
-                "email": "gena_ant@coinranking.info"
-            }
-        }
-    </script>
-<?php elseif ( is_singular('post')) : ?>
-    <script type="application/ld+json">
-	{
-		"@context": "https://schema.org",
-		"@type": "Article",
-		"mainEntityOfPage": {
-			"@type": "WebPage",
-			"@id": "<?php echo get_permalink();?>"
-		},
-		"headline": "<?php echo the_title(); ?>",
-		"description": "<?php echo get_post_meta($post->ID, "
-		_yoast_wpseo_metadesc ", true); ?>",
-		"image": "<?php echo $image;?>",
-		"author": {
-			"@type": "Person",
-			"name": "Hennadii Antipov"
-		},
-		"publisher": {
-			"@type": "Organization",
-			"name": "coinranking",
-			"logo": {
-				"@type": "ImageObject",
-				"url": "https://coinranking.info/wp-content/uploads/2020/09/bitcoin-news-1.png"
+		$logo = wp_get_attachment_image(get_option('wdss_jsonld_schema_logo'), 'thumbnail');
+		$logo_url = $logo[0];
+		
+		if(get_the_post_thumbnail_url($post->ID)) {
+			$image_url = get_the_post_thumbnail_url($post->ID);
+		}
+		else {
+			$image_url = $logo_url;
+		}
+	
+
+		if(is_front_page()): ?>
+			<script type="application/ld+json">
+					{
+							"@context": "http://schema.org/",
+							"@type": "Organization",
+							"name": "<?= get_option('wdss_jsonld_schema_orgname'); ?>",
+							"url": "<?= get_site_url(); ?>",
+							"address": {
+									"@type": "PostalAddress",
+									"addressLocality": "<?= get_option('wdss_jsonld_schema_locality'); ?>",
+									"addressRegion": "<?= get_option('wdss_jsonld_schema_region'); ?>",
+									"addressCountry": "<?= get_option('wdss_jsonld_schema_country'); ?>"
+							},
+							"logo": {
+									"@type": "ImageObject",
+									"contentUrl": "<?= $logo_url; ?>"
+							},
+							"contactPoint": {
+									"@type": "contactPoint",
+									"contactType": "Customer Service",
+									"telephone": "<?= get_option('wdss_jsonld_schema_telephone'); ?>",
+									"email": "<?= get_option('wdss_jsonld_schema_email'); ?>"
+							}
+					}
+			</script>
+		<?php elseif ( is_singular('post')) : ?>
+				<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Article",
+				"mainEntityOfPage": {
+					"@type": "WebPage",
+					"@id": "<?= get_permalink();?>"
+				},
+				"headline": "<?= the_title(); ?>",
+				"description": "<?= get_post_meta($post->ID, "
+				_yoast_wpseo_metadesc ", true); ?>",
+				"image": "<?= $image_url; ?>",
+				"author": {
+					"@type": "Person",
+					"name": "<?= get_option('wdss_jsonld_schema_author'); ?>"
+				},
+				"publisher": {
+					"@type": "Organization",
+					"name": "<?= get_option('wdss_jsonld_schema_orgname'); ?>",
+					"logo": {
+						"@type": "ImageObject",
+						"url": "<?= $logo_url; ?>"
+					}
+				},
+		"datePublished": "<?php the_time('Y-m-d\'T\'H:m:s'); ?>",
+		"dateModified": "<?php the_time('Y-m-d\'T\'H:m:s'); ?>"
+	
 			}
-		},
-"datePublished": "<?php the_time('Y-m-d\'T\'H:m:s'); ?>",
-"dateModified": "<?php the_time('Y-m-d\'T\'H:m:s'); ?>"
-
-	}
-	</script>
-    <script type="application/ld+json">
-	{
-		"@context": "https://schema.org",
-		"@type": "BreadcrumbList",
-		"itemListElement": [{
-			"@type": "ListItem",
-			"position": 1,
-			"name": "Main",
-			"item": "<?php echo get_site_url(); ?>"
-		}, {
-			"@type": "ListItem",
-			"position": 2,
-			"name": "<?php $cat = get_the_category(); echo $cat[0]->cat_name; ?>",
-			"item": "<?php $category = get_the_category(); $link = get_category_link( $category[0]->term_id ); echo $link; ?>"
-		}, {
-			"@type": "ListItem",
-			"position": 3,
-			"name": "<?php echo the_title(); ?>",
-			"item": "<?php echo get_permalink();?>"
-		}]
-	}
-	</script>
-<?php endif; ?>
-<?php if(is_category()) : ?>
-    <script type="application/ld+json">
-	{
-		"@context": "https://schema.org",
-		"@type": "BreadcrumbList",
-		"itemListElement": [{
-			"@type": "ListItem",
-			"position": 1,
-			"name": "Main",
-			"item": "<?php echo get_site_url(); ?>"
-		}, {
-			"@type": "ListItem",
-			"position": 2,
-			"name": "<?php $cat = get_the_category(); echo $cat[0]->cat_name; ?>",
-			"item": "<?php $category = get_the_category(); $link = get_category_link( $category[0]->term_id ); echo $link; ?>"
-		}]
-	}
-	</script>
-<?php elseif(is_author()): ?>
-    <script type="application/ld+json">
-	{
-		"@context": "https://schema.org",
-		"@type": "BreadcrumbList",
-		"itemListElement": [{
-			"@type": "ListItem",
-			"position": 1,
-			"name": "Main",
-			"item": "<?php echo get_site_url(); ?>"
-		}, {
-			"@type": "ListItem",
-			"position": 2,
-			"name": "<?php echo get_the_author_link() ?>",
-			"item": "<?php echo get_author_posts_url(1); ?>"
-		}]
-	}
-	</script>
-<?php endif; ?>
-
-<?php  if(is_page() && !is_front_page()) : ?>
-<script type="application/ld+json">
-	{
-		"@context": "https://schema.org",
-		"@type": "BreadcrumbList",
-		"itemListElement": [{
-			"@type": "ListItem",
-			"position": 1,
-			"name": "Main",
-			"item": "<?php echo get_site_url(); ?>"
-		}, {
-			"@type": "ListItem",
-			"position": 2,
-			"name": "<?php echo the_title() ?>",
-			"item": "<?php echo get_page_link() ?>"
-		}]
-	}
-</script>
-<script type="application/ld+json">
-	{
-		"@context": "https://schema.org",
-		"@type": "Article",
-		"mainEntityOfPage": {
-			"@type": "WebPage",
-			"@id": "<?php echo get_page_link();?>"
-		},
-		"headline": "<?php echo the_title(); ?>",
-		"image": "<?php echo $image;?>",
-		"author": {
-			"@type": "Organization",
-			"name": "coinranking"
-		},
-		"publisher": {
-			"@type": "Organization",
-			"name": "coinranking",
-			"logo": {
-				"@type": "ImageObject",
-				"url": "https://coinranking.info/wp-content/uploads/2020/09/bitcoin-news-1.png"
+			</script>
+				<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "BreadcrumbList",
+				"itemListElement": [{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Main",
+					"item": "<?= get_site_url(); ?>"
+				}, {
+					"@type": "ListItem",
+					"position": 2,
+					"name": "<?php $cat = get_the_category(); echo $cat[0]->cat_name; ?>",
+					"item": "<?php $category = get_the_category(); $link = get_category_link( $category[0]->term_id ); echo $link; ?>"
+				}, {
+					"@type": "ListItem",
+					"position": 3,
+					"name": "<?= the_title(); ?>",
+					"item": "<?= get_permalink();?>"
+				}]
 			}
-		},
-        "datePublished": "<?php the_time('Y-m-d\'T\'H:m:s'); ?>",
-        "dateModified": "<?php the_time('Y-m-d\'T\'H:m:s'); ?>"
+			</script>
+		<?php endif; ?>
+		<?php if(is_category()) : ?>
+				<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "BreadcrumbList",
+				"itemListElement": [{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Main",
+					"item": "<?= get_site_url(); ?>"
+				}, {
+					"@type": "ListItem",
+					"position": 2,
+					"name": "<?php $cat = get_the_category(); echo $cat[0]->cat_name; ?>",
+					"item": "<?php $category = get_the_category(); $link = get_category_link( $category[0]->term_id ); echo $link; ?>"
+				}]
+			}
+			</script>
+		<?php elseif(is_author()): ?>
+				<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "BreadcrumbList",
+				"itemListElement": [{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Main",
+					"item": "<?= get_site_url(); ?>"
+				}, {
+					"@type": "ListItem",
+					"position": 2,
+					"name": "<?= get_the_author_link() ?>",
+					"item": "<?= get_author_posts_url(1); ?>"
+				}]
+			}
+			</script>
+		<?php endif; ?>
+	
+		<?php  if(is_page() && !is_front_page()) : ?>
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "BreadcrumbList",
+				"itemListElement": [{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Main",
+					"item": "<?= get_site_url(); ?>"
+				}, {
+					"@type": "ListItem",
+					"position": 2,
+					"name": "<?= the_title() ?>",
+					"item": "<?= get_page_link() ?>"
+				}]
+			}
+		</script>
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Article",
+				"mainEntityOfPage": {
+					"@type": "WebPage",
+					"@id": "<?= get_page_link();?>"
+				},
+				"headline": "<?= the_title(); ?>",
+				"image": "<?= $image_url;?>",
+				"author": {
+					"@type": "Organization",
+					"name": "<?= get_option('wdss_jsonld_schema_orgname'); ?>",
+				},
+				"publisher": {
+					"@type": "Organization",
+					"name": "<?= get_option('wdss_jsonld_schema_orgname'); ?>",
+					"logo": {
+						"@type": "ImageObject",
+						"url": "<?= $logo_url; ?>"
+					}
+				},
+						"datePublished": "<?php the_time('Y-m-d\'T\'H:m:s'); ?>",
+						"dateModified": "<?php the_time('Y-m-d\'T\'H:m:s'); ?>"
+	
+			}
+			</script>
+		<?php endif;
+	}	
+}
 
-	}
-	</script>
-<?php endif; ?>
