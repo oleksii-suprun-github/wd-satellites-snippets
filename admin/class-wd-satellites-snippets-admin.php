@@ -63,6 +63,8 @@ class Wd_Satellites_Snippets_Admin {
       $options->wdss_last_modified();
     }
 
+		add_action('wp_ajax_get_posts', array($this, 'wdss_get_posts_query'));
+
 	}
 
 
@@ -93,16 +95,13 @@ class Wd_Satellites_Snippets_Admin {
 
 
 	// Get Posts Modal window
-	public function wdss_get_posts() {
-    $args = array(  
-			'post_type' => 'post',
-			'post_status' => 'any',
-			'numberposts' => -1,
-			'orderby' => 'date', 
-			'order' => 'DESC', 
-		);
 
-		$posts = get_posts($args);	
+	public function wdss_get_posts_query() {
+		$posts = $_POST['data'];	
+		echo $posts;
+	}
+
+	public function wdss_get_posts_modal() {
 		ob_start(); 
 		?>
 
@@ -120,19 +119,6 @@ class Wd_Satellites_Snippets_Admin {
 							<th class="wdss-table-post__status">Status</th>
 							<th class="wdss-table-post__date">Date</th>
 						</tr>
-					<?php
-						foreach($posts as $post) : ?>
-							<tr id="post-<?= $post->ID?>" class="wdss-table-row post">
-								<td class="wdss-table-post__select"><input name="wdss_exclude_post" value="<?= $post->ID?>" type="checkbox"></td>
-								<td class="wdss-table-post__id"><?= $post->ID?></td>
-								<td class="wdss-table-post__title"><?= $post->post_title?></td>
-								<td class="wdss-table-post__status"><?= $post->post_status?></td>
-								<td class="wdss-table-post__date"><?= $post->post_date?></td>							
-							</tr>
-					<?php 
-						endforeach;
-						wp_reset_postdata(); 
-					?>
 					</table>
 				</div>
 			</div>
@@ -153,11 +139,29 @@ class Wd_Satellites_Snippets_Admin {
 		
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/main.js', array(), $this->version, true );
 			
+			$get_title_separator;
+			if(YoastSEO()->helpers->options->get_title_separator() !== null) {
+				$get_title_separator = YoastSEO()->helpers->options->get_title_separator();
+			}
+
+			function query_posts_list() {
+				$args = array(  
+					'post_type' => 'post',
+					'post_status' => 'any',
+					'numberposts' => -1,
+					'orderby' => 'date', 
+					'order' => 'DESC', 
+				);
+
+				return serialize(get_posts($args)[0]);
+			}
+
 			$wdss_localize_script = [
-				'site_title' => get_bloginfo('name'),
+				'site_title' => $get_title_separator . ' ' . get_bloginfo('name'),
 				'total_post_count' => wp_count_posts('post')->publish,
 				'is_polylang_exists' => function_exists('pll_languages_list'),
-				'posts_list' => $this->wdss_get_posts()
+				'show_modal' => $this->wdss_get_posts_modal(),
+				'query_posts_list' => query_posts_list()
 			];
 			wp_localize_script($this->plugin_name, 'wdss_localize', $wdss_localize_script);
 		}

@@ -81,7 +81,20 @@
       update_option('wdss_polylang_meta_data', sanitize_text_field($_POST['wdss_polylang_meta_data']));   
       update_option('wdss_multilang_sitemap', sanitize_text_field($_POST['wdss_multilang_sitemap']));
 
+      update_option('wdss_jsonld_schema_logo__choose', sanitize_text_field($_POST['wdss_jsonld_schema_logo__choose']));
+      update_option('wdss_jsonld_schema_orgname', sanitize_text_field($_POST['wdss_jsonld_schema_orgname']));
+      update_option('wdss_jsonld_schema_locality', sanitize_text_field($_POST['wdss_jsonld_schema_locality']));   
+      update_option('wdss_jsonld_schema_region', sanitize_text_field($_POST['wdss_jsonld_schema_region']));
+      update_option('wdss_jsonld_schema_country', sanitize_text_field($_POST['wdss_jsonld_schema_country']));
+      update_option('wdss_jsonld_schema_telephone', sanitize_text_field($_POST['wdss_jsonld_schema_telephone']));   
+      update_option('wdss_jsonld_schema_email', sanitize_text_field($_POST['wdss_jsonld_schema_email']));
+      update_option('wdss_jsonld_schema_author', sanitize_text_field($_POST['wdss_jsonld_schema_author']));
 
+      update_option('wdss_advanced_jsonld_schema', sanitize_text_field($_POST['wdss_advanced_jsonld_schema']));
+      
+
+
+      
       if( function_exists('pll_languages_list') ) {
         $polylang_lang_list = pll_languages_list(['fields' => []]); 
         $authors = get_users( array( 'fields' => array( 'ID', 'display_name', 'user_nicename' ), 'has_published_posts' => 'post' ) );
@@ -132,6 +145,7 @@
 
           <?php include_once('sections/polylang-section.php') ?>
 
+          <?php include_once('sections/schema-section.php') ?>
 
           <input type="submit" name="submit" id="submit" class="wdss-button submit" value="<?= __('Save changes', 'wdss_domain') ?>">
         </form>

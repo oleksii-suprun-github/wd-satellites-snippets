@@ -8,7 +8,7 @@
           wp_deregister_script( 'jquery-migrate' );
         }
       }
-      add_action('wp_loaded', 'wdss_disable_jquery');
+      add_action('wp_enqueue_scripts', 'wdss_disable_jquery');
     }
 
 		// Force Lowercase URLs Snippet

@@ -32,6 +32,19 @@ const featuredImagesListReset = {
   target: '#wdss-featured-images-group input'
 };
 
+const featuredImagesChooser = {
+  select: '#wdss-featured-images__choose',
+  target: '#wdss-featured-images-list input',
+  is_multiple: true
+};
+
+const organizationLogoChooser = {
+  select: '#wdss_jsonld_schema_logo__choose',
+  target: '#wdss-jsonld-schema-logo input',
+  is_multiple: false
+}
+
+
 // Resets value attr in target input
 function resetValue(item) {
   const button = document.querySelector(item.button);
@@ -147,8 +160,31 @@ function getPostsModal() {
   btn.addEventListener('click', init);
 
   function init() {
-    modalHandler.call(context, wdss_localize.posts_list);
+
+    const ajaxData = {
+        action: 'get_posts',
+        data: wdss_localize.query_posts_list
+    };
   
+    modalHandler.call(context, wdss_localize.show_modal);
+
+    jQuery.post( ajaxurl, ajaxData, function( response ){
+  
+      console.log(response);
+
+      jQuery('.wdss-table-row.header').after('<td>Pizdec</td>');
+      // jQuery('#wdss-title-clipping-group').append(
+      //  `
+      //   <tr id="post-<?= $post->ID?>" class="wdss-table-row post">
+      //   <td class="wdss-table-post__select"><input name="wdss_exclude_post" value="<?= $post->ID?>" type="checkbox"></td>
+      //   <td class="wdss-table-post__id"><?= $post->ID?></td>
+      //   <td class="wdss-table-post__title"><?= $post->post_title?></td>
+      //   <td class="wdss-table-post__status"><?= $post->post_status?></td>
+      //   <td class="wdss-table-post__date"><?= $post->post_date?></td>							
+      // </tr>`
+      // );
+    });
+    
     const posts = Array.from(document.querySelectorAll('.wdss-table-row.post'));
     posts.forEach(post => {
         post.addEventListener('click', () => {
@@ -185,7 +221,6 @@ function getPostsModal() {
     const save_btn = modal.querySelector('.wdss-button.submit');
     const input = this.querySelector('#wdss-title-clipping-excluded input[type="text"]');
   
-    
     if(input.value !== '') {
       let inputIdsArr = input.value.split(',');
       let checkboxes = Array.from(modal.querySelectorAll('input[type="checkbox"]'));
@@ -197,11 +232,18 @@ function getPostsModal() {
       });
     }
 
-    close_btn.addEventListener('click', () => {
+    function closeModal() {
       modal.remove();
       html.classList.remove('fixed');
+    }
+
+    close_btn.addEventListener('click', closeModal);
+    document.onkeydown = ((e) => {
+      if(e.key === 'Esc' || e.key === 'Escape') {
+        closeModal();
+      }
     });
-  
+    
     save_btn.addEventListener('click', () => {
       
       const posts = modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]:checked');
@@ -221,8 +263,8 @@ function getPostsModal() {
 }
 
 // Built-in WP.media popup for Featured Images Settings
-function mediaFileChooser() {
-  const btn = document.querySelector('#wdss-featured-images__choose');
+function mediaFileChooser(obj) {
+  const btn = document.querySelector(obj.select);
 
   btn.addEventListener('click', function(e) {
       e.preventDefault();
@@ -234,7 +276,7 @@ function mediaFileChooser() {
 
       image_frame = wp.media({
         title: 'Select Featured Images',
-        multiple: true,
+        multiple: obj.is_multiple,
         library: {
           type: 'image',
         },
@@ -252,12 +294,12 @@ function mediaFileChooser() {
             my_index++;
         });
         let ids = gallery_ids.join(",");
-        document.querySelector('#wdss-featured-images-list input').value = ids;
+        document.querySelector(obj.target).value = ids;
       });
 
       image_frame.on('open', function() {
         let selection = image_frame.state().get('selection');
-        let ids = document.querySelector('#wdss-featured-images-list input').value.split(',');
+        let ids = document.querySelector(obj.target).value.split(',');
         ids.forEach(function(id) {
           let attachment = wp.media.attachment(id);
           attachment.fetch();
@@ -271,6 +313,27 @@ function mediaFileChooser() {
 }
 
 
+function customSchemaSettings() {
+  const toggler = document.querySelector('#wdss-advanced-jsonld-schema-condition input');
+  const target = document.querySelector('.wdss-jsonld-schema-predifined-settings');
+  
+  if(toggler.hasAttribute('checked')) {
+    target.classList.add('disabled');
+  }
+
+  function sectionToggler() {
+    if(target.classList.contains('disabled')) {
+      target.classList.remove('disabled');
+    }
+    else {
+      target.classList.add('disabled');
+    }
+  }
+
+  toggler.addEventListener('click', sectionToggler);
+}
+
+
 function Init() {
   if(isPluginPage) {
     
@@ -278,7 +341,8 @@ function Init() {
       sectionToggler(titleClippingSection);
       sectionToggler(featuredImageSection);
       getSiteTitle();
-      mediaFileChooser();
+
+      mediaFileChooser(featuredImagesChooser);
 
       resetValue(cutTitleClippingReset);
       resetValue(cutTitleSinceReset);
@@ -290,6 +354,9 @@ function Init() {
     if(wdss_localize.is_polylang_exists) {
       sectionToggler(polylangSection);  
     }
+
+    mediaFileChooser(organizationLogoChooser);
+    customSchemaSettings();
 
     toggleCheckbox();
     toggleAllOptions();

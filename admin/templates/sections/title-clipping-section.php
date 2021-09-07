@@ -63,7 +63,9 @@
           text_handler_html(['field_name' => 'wdss_title_ending']);             
           ?>    
         </label>
-        <button type="button" id="wdss-get-title" class="wdss-button">Get Site Title</button>
+        <?php if( class_exists( 'WPSEO_Options' ) ) : ?>
+        <button type="button" id="wdss-get-title" class="wdss-button">Get Site Title from Yoast</button>
+        <?php endif; ?>
       </div>
     </div>
   </div>
