@@ -139,7 +139,7 @@ class Wd_Satellites_Snippets_Admin {
 		
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/main.js', array(), $this->version, true );
 			
-			$get_title_separator;
+			$get_title_separator = '';
 			if(function_exists('YoastSEO') && YoastSEO()->helpers->options->get_title_separator() !== null) {
 				$get_title_separator = YoastSEO()->helpers->options->get_title_separator();
 			}

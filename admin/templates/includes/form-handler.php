@@ -9,6 +9,15 @@ function isset_option($option) {
   }
 }
 
+function isset_editor_content($option) {
+  if( isset($_POST[$option])) {
+    return update_option($option, stripslashes($_POST[$option]));   
+  }
+  else {
+    return update_option($option, '');    
+  }  
+}
+
 function wdss_form_handler() {
     if(wp_verify_nonce($_POST['wfp_nonce'], 'wdss_save_settings') && current_user_can('manage_options')) { 
 
@@ -60,14 +69,21 @@ function wdss_form_handler() {
       isset_option('wdss_jsonld_schema_orgname');
       isset_option('wdss_jsonld_schema_locality');
       isset_option('wdss_jsonld_schema_region');
+      isset_option('wdss_jsonld_schema_postal_code');
+      isset_option('wdss_jsonld_schema_street');
       isset_option('wdss_jsonld_schema_country');
       isset_option('wdss_jsonld_schema_telephone');
       isset_option('wdss_jsonld_schema_email');
       isset_option('wdss_jsonld_schema_author');
 
       isset_option('wdss_advanced_jsonld_schema');
-      
 
+      isset_editor_content('wdss_advanced_jsonld_schema_homepage');
+      isset_editor_content('wdss_advanced_jsonld_schema_category');
+      isset_editor_content('wdss_advanced_jsonld_schema_author');
+      isset_editor_content('wdss_advanced_jsonld_schema_page');
+      isset_editor_content('wdss_advanced_jsonld_schema_single');
+      
       if( function_exists('pll_languages_list') ) {
         $polylang_lang_list = pll_languages_list(['fields' => []]); 
         $authors = get_users( array( 'fields' => array( 'ID', 'display_name', 'user_nicename' ), 'has_published_posts' => 'post' ) );

@@ -251,7 +251,9 @@
       remove_action( 'wp_head', 'adjacent_posts_rel_link', 10, 0 ); 
       remove_action( 'wp_head', 'wp_generator' );
       remove_action( 'wp_head', 'wp_resource_hints', 2, 99 ); 
-    
+
+      remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
+
       remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
       remove_action( 'wp_head', 'wp_oembed_add_host_js' );
       remove_action( 'rest_api_init', 'wp_oembed_register_route' );

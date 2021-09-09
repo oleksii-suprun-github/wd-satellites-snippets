@@ -85,7 +85,7 @@ div.disabled:before {
   width: 100%;
   height: 100%;
   z-index: 1;
-  background: rgba(0,0,0, .15);
+  background: rgba(255,255,255, .7);
   position: absolute;
   border-radius: 5px;
 }
@@ -601,3 +601,14 @@ button#wdss-toggle-options {
 }
 
 
+/* Schema Settings */
+#wdss-advanced-jsonld-schema-group  > div {
+  margin-left: 15px;
+}
+.schema-editor-item {
+  flex-direction: column;
+  align-items: flex-start;
+}
+#wdss-advanced-jsonld-schema-group .wp-editor-wrap {
+  width: 100%;
+}

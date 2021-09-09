@@ -12,6 +12,11 @@ const featuredImageSection = {
   target: '#wdss-featured-images-group'
 };
 
+const customSchemaSection = {
+  toggler: '#wdss-advanced-jsonld-schema-condition input',
+  target: '#wdss-advanced-jsonld-schema-group' 
+}
+
 const polylangSection = {
   toggler: '#wdss-polylang-meta-data-condition input',
   target: '#wdss-polylang-meta-data-group'  
@@ -320,10 +325,10 @@ function mediaFileChooser(obj) {
 }
 
 
-function customSchemaSettings() {
+function schemaSectionSettings() {
   const toggler = document.querySelector('#wdss-advanced-jsonld-schema-condition input');
   const target = document.querySelector('.wdss-jsonld-schema-predifined-settings');
-  
+
   if(toggler.hasAttribute('checked')) {
     target.classList.add('disabled');
   }
@@ -365,7 +370,9 @@ function Init() {
 
     mediaFileChooser(organizationLogoChooser);
     resetValue(organizationLogoReset);
-    customSchemaSettings();
+
+    schemaSectionSettings();
+    sectionToggler(customSchemaSection);
 
     toggleCheckbox();
     toggleAllOptions();

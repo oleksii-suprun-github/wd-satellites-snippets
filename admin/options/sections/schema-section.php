@@ -1,12 +1,11 @@
 <?php
 
-
-if( get_option('wdss_jsonld_schema_orgname', '') ) {
+if( get_option('wdss_advanced_jsonld_schema') != '1' ) {
 	add_action('wp_head', 'json_ld_schema_template');
 	function json_ld_schema_template() {
 		global $post;
 
-		$logo = wp_get_attachment_image(get_option('wdss_jsonld_schema_logo'), 'thumbnail');
+		$logo = wp_get_attachment_image_src(get_option('wdss_jsonld_schema_logo'), 'medium');
 		$logo_url = $logo[0];
 		
 		if(get_the_post_thumbnail_url($post->ID)) {
@@ -28,6 +27,8 @@ if( get_option('wdss_jsonld_schema_orgname', '') ) {
 									"@type": "PostalAddress",
 									"addressLocality": "<?= get_option('wdss_jsonld_schema_locality'); ?>",
 									"addressRegion": "<?= get_option('wdss_jsonld_schema_region'); ?>",
+									"postalCode": "<?= get_option('wdss_jsonld_schema_postal_code'); ?>",
+    							"streetAddress": "<?= get_option('wdss_jsonld_schema_street'); ?>",
 									"addressCountry": "<?= get_option('wdss_jsonld_schema_country'); ?>"
 							},
 							"logo": {
@@ -180,5 +181,24 @@ if( get_option('wdss_jsonld_schema_orgname', '') ) {
 			</script>
 		<?php endif;
 	}	
+}
+elseif(get_option('wdss_advanced_jsonld_schema') === '1') {
+	add_action('wp_head', 'json_ld_custom_schema_template');
+	function json_ld_custom_schema_template() {
+		
+		if(is_front_page()) {
+			echo get_option('wdss_advanced_jsonld_schema_homepage', '');
+		} elseif ( is_singular('post')) {
+			echo get_option('wdss_advanced_jsonld_schema_single', '');
+		}
+		if(is_category()) {
+			echo get_option('wdss_advanced_jsonld_schema_category', '');
+		} elseif(is_author()) {
+			echo get_option('wdss_advanced_jsonld_schema_author', '');
+		}
+		if(is_page() && !is_front_page()) {
+			echo get_option('wdss_advanced_jsonld_schema_page', '');
+		}
+	}		
 }
 
