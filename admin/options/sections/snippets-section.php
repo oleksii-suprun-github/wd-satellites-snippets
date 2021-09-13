@@ -495,16 +495,18 @@
     // Custom Descriptions for imported articles
     function custom_post_descriptions($meta_description, $presentation)  {
        
-      $condition = '#<div[^>]*id="toc"[^>]*>.*?</div>#is';
-      $content = apply_filters( 'the_content', get_the_content() );
-    
-      if( preg_match($condition, $content) ) {
-        $raw = apply_filters( 'the_content', get_the_content() );
-        $clear = preg_replace('#<div[^>]*id="toc"[^>]*>.*?</div>#is', '', $raw);	
-        $stripped = strip_tags($clear);
-        $meta_description = mb_substr($stripped, 0, 150, 'UTF-8') . ' [...]';
+      if( is_single() ) {
+        $condition = '#<div[^>]*id="toc"[^>]*>.*?</div>#is';
+        $content = apply_filters( 'the_content', get_the_content() );
+      
+        if( preg_match($condition, $content) ) {
+          $raw = apply_filters( 'the_content', get_the_content() );
+          $clear = preg_replace('#<div[^>]*id="toc"[^>]*>.*?</div>#is', '', $raw);	
+          $stripped = strip_tags($clear);
+          $meta_description = mb_substr($stripped, 0, 150, 'UTF-8') . ' [...]';
+        }
       }
-    
+
       return $meta_description;
     
     }

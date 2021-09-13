@@ -55,6 +55,15 @@ const organizationLogoChooser = {
 }
 
 
+
+
+
+
+
+
+
+
+
 // Resets value attr in target input
 function resetValue(item) {
   const button = document.querySelector(item.button);
@@ -67,21 +76,39 @@ function resetValue(item) {
   });
 }
 
-// Show/hide section on-condition helper
-function sectionToggler(section) {
+function sectionToggler() {
+  const sectionsList = document.querySelectorAll('.wdss-section:not(#wdss-snippets-settings) > .wdss-row');
+  sectionsList.forEach((section) => {
+    section.classList.add('hidden');
 
+    let header = section.previousElementSibling;
+
+    if(header) {
+      header.addEventListener('click', () => {
+        header.classList.toggle('active');
+        section.classList.toggle('hidden');  
+      });  
+    }
+
+  });
+}
+
+
+// Show/hide section on-condition helper
+function groupToggler(section) {  
   const toggler = document.querySelector(section.toggler);
   const is_enabled = toggler.hasAttribute('checked');
   const target = document.querySelector(section.target);
   
   if (is_enabled) {
-    target.classList.toggle('visible');
+    target.classList.toggle('hidden');
   }
   
   toggler.addEventListener('click', () => {
-    target.classList.toggle('visible');
+    target.classList.toggle('hidden');
   });
 }
+
 
 // Show/hide accordion content helper
 function toggleAccordion() {
@@ -173,29 +200,8 @@ function getPostsModal() {
 
   function init() {
 
-    const ajaxData = {
-        action: 'get_posts',
-        data: wdss_localize.query_posts_list
-    };
-  
     modalHandler.call(context, wdss_localize.show_modal);
 
-    jQuery.post( ajaxurl, ajaxData, function( response ){
-  
-      console.log(response);
-
-      jQuery('.wdss-table-row.header').after('<td>Pizdec</td>');
-      // jQuery('#wdss-title-clipping-group').append(
-      //  `
-      //   <tr id="post-<?= $post->ID?>" class="wdss-table-row post">
-      //   <td class="wdss-table-post__select"><input name="wdss_exclude_post" value="<?= $post->ID?>" type="checkbox"></td>
-      //   <td class="wdss-table-post__id"><?= $post->ID?></td>
-      //   <td class="wdss-table-post__title"><?= $post->post_title?></td>
-      //   <td class="wdss-table-post__status"><?= $post->post_status?></td>
-      //   <td class="wdss-table-post__date"><?= $post->post_date?></td>							
-      // </tr>`
-      // );
-    });
     
     const posts = Array.from(document.querySelectorAll('.wdss-table-row.post'));
     posts.forEach(post => {
@@ -349,9 +355,11 @@ function schemaSectionSettings() {
 function Init() {
   if(isPluginPage) {
     
+    sectionToggler();
+
     if(wdss_localize.total_post_count > 0) {
-      sectionToggler(titleClippingSection);
-      sectionToggler(featuredImageSection);
+      groupToggler(titleClippingSection);
+      groupToggler(featuredImageSection);
       getSiteTitle();
 
       mediaFileChooser(featuredImagesChooser);
@@ -365,14 +373,14 @@ function Init() {
     }
 
     if(wdss_localize.is_polylang_exists) {
-      sectionToggler(polylangSection);  
+      groupToggler(polylangSection);  
     }
 
     mediaFileChooser(organizationLogoChooser);
     resetValue(organizationLogoReset);
 
     schemaSectionSettings();
-    sectionToggler(customSchemaSection);
+    groupToggler(customSchemaSection);
 
     toggleCheckbox();
     toggleAllOptions();
