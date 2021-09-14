@@ -7,8 +7,8 @@
  *
  * @link       https://github.com/Mironezes
  *
- * @package    Wd_Satellites_Snippets
- * @subpackage Wd_Satellites_Snippets/admin/templates
+ * @package    Wd_Satellites
+ * @subpackage Wd_Satellites/admin/templates
  */
 
   require_once('includes/input-handler.php');

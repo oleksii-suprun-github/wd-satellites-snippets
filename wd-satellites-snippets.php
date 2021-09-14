@@ -14,7 +14,7 @@
  * Domain Path: /languages
  * 
  * @link https://github.com/Mironezes
- * @package Wd_Satellites_Snippets
+ * @package Wd_Satellites
  */
 
 // If this file is called directly, abort.
@@ -26,7 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Currently plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.6b' );
+define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.6b8' );
 
 /**
  * The code that runs during plugin activation.
@@ -64,10 +64,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wd-satellites-snippets.php
  *
  *
  */
-function run_wd_satellites_snippets() {
+function run_wd_satellites() {
 
-	$plugin = new Wd_Satellites_Snippets();
+	$plugin = new Wd_Satellites();
 	$plugin->run();
 
 }
-run_wd_satellites_snippets();
+run_wd_satellites();

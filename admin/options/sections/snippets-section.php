@@ -278,6 +278,73 @@
     }
 
 
+    // Auto width/height attributes
+    if( get_option('wdss_auto_widght_height_attr', '0') ) {
+      if( !is_admin()) {
+
+
+        add_filter('the_content', 'remove_image_dimesion', 10);
+        function remove_image_dimesion($content) {
+            if( is_single() ) {
+  
+                $pattern1 = '/(<img.*)(?=.*width="(\d+)")(?=.*height="(\d+)")(.*>)/i';
+                $pattern2 = '/(<img.*)((?=.*width="(\d+)")|(?=.*height="(\d+)"))(.*>)/i';
+  
+                $content = preg_replace(array($pattern1, $pattern2), "$1>", $content );
+            }
+            return $content;
+        }
+    
+    
+        add_filter('the_content', 'set_image_dimension', 20);
+        function set_image_dimension($content) {
+            if( is_single() ) {
+        
+                $buffer = $content;
+                
+                // Get all images without width or height attribute
+                $pattern1 = '/<img(?:[^>](?!(height|width)=))*+>/i';
+                $pattern2 = '/<img(?:(\s*(height|width)\s*=\s*"([^"]+)"\s*)+|[^>]+?)*>/i';
+  
+                preg_match_all($pattern1, $content, $first_match );
+                preg_match_all($pattern2, $content, $second_match );
+                
+                $all_images = array_merge($first_match[0], $second_match[0]);
+                foreach ( $all_images as $image ) {
+                
+                $tmp = $image;
+                
+            
+                // Get link of the file
+                preg_match( '/src=[\'"]([^\'"]+)/', $image, $src_match );
+                
+                // Get image url
+                $image_url = site_url().$src_match[1];
+            
+                if(!mb_strpos($image_url, 'wp-content') ) {
+                    continue;
+                }
+            
+                //get image dimension
+                list($width, $height) = wp_getimagesize($image_url );
+                $dimension = 'width="'.$width.'" height="'.$height.'" ';
+                
+                // Add width and width attribute
+                $image = str_replace( '<img', '<img ' . $dimension, $image );
+                
+                // Replace image with new attributes
+                $buffer = str_replace( $tmp, $image, $buffer );
+                }
+                
+                return $buffer;
+            }
+            return $content; 
+        }
+      }
+    }
+
+
+
     // Autoptimize Lazyload Fix Snippet
     if( function_exists('autoptimize') && get_option('wdss_autoptimize_lazy_fix', '0') ) {
       add_filter( 'autoptimize_filter_imgopt_lazyload_cssoutput', '__return_false' );

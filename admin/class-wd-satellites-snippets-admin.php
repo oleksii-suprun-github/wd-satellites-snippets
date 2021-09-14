@@ -5,8 +5,8 @@
  *
  * @link       https://github.com/Mironezes
  *
- * @package    Wd_Satellites_Snippets
- * @subpackage Wd_Satellites_Snippets/admin
+ * @package    Wd_Satellites
+ * @subpackage Wd_Satellites/admin
  */
 
 
@@ -23,8 +23,8 @@ require_once('options/wd-satellites-snippets-admin-options.php');
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Wd_Satellites_Snippets
- * @subpackage Wd_Satellites_Snippets/admin
+ * @package    Wd_Satellites
+ * @subpackage Wd_Satellites/admin
  * @author     Alexey Suprun <mironezes@gmail.com>
  */
 class Wd_Satellites_Snippets_Admin {

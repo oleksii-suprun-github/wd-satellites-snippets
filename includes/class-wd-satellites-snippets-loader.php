@@ -5,8 +5,8 @@
  *
  * @link       https://github.com/Mironezes
  *
- * @package    Wd_Satellites_Snippets
- * @subpackage Wd_Satellites_Snippets/includes
+ * @package    Wd_Satellites
+ * @subpackage Wd_Satellites/includes
  */
 
 /**
@@ -16,8 +16,8 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Wd_Satellites_Snippets
- * @subpackage Wd_Satellites_Snippets/includes
+ * @package    Wd_Satellites
+ * @subpackage Wd_Satellites/includes
  * @author     Alexey Suprun <mironezes@gmail.com>
  */
 class Wd_Satellites_Snippets_Loader {

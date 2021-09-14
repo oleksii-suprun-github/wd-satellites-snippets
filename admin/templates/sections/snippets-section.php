@@ -65,6 +65,16 @@
                       </label>
                     </div>
 
+                    <div id="wdss-auto-width-height-attr" class="wdss-setting-item">
+                        <label>
+                          <span>Auto Width/Height Attributes</span>
+                          <?php 
+                            checkbox_handler_html(['field_name' => 'wdss_auto_widght_height_attr']); 
+                            if( get_option('wdss_auto_widght_height_attr') == '' ) update_option( 'wdss_auto_widght_height_attr', '0' );               
+                          ?>    
+                      </label>
+                    </div>
+
                     <div id="wdss-comments-passive-listener-fix" class="wdss-setting-item">
                         <label>
                           <span title="Fixes *Remove passive event listener* Pagespeed warning">WP Comments Fix <sup>?</sup></span>
@@ -173,8 +183,6 @@
                     </div>
                     <?php } ?>
 
-
-                  <div class="wdss-col-4">
                     <div id="wdss-lowercase-urls" class="wdss-setting-item">
                         <label>
                           <span>Force Lowercase URLs</span>
@@ -184,7 +192,6 @@
                           ?>    
                       </label>
                     </div>
-                  </div>
                 </div>
             </div>
         </section>

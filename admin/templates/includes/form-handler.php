@@ -32,6 +32,8 @@ function wdss_form_handler() {
       isset_option('wdss_disable_admin_notices');
       isset_option('wdss_disable_rss');      
       
+      isset_option('wdss_auto_widght_height_attr');    
+
       isset_option('wdss_auto_featured_image');   
       
       isset_option('wdss_auto_alt_attribute');

@@ -313,15 +313,29 @@ function mediaFileChooser(obj) {
       });
 
       image_frame.on('close', function() {
+        let is_featured_image_section = btn.closest('#wdss-featured-images-list');
         let selection = image_frame.state().get('selection');
+
         let gallery_ids = new Array();
-        let my_index = 0;
-        selection.forEach(function(attachment) {
-            gallery_ids[my_index] = attachment['id'];
-            my_index++;
-        });
-        let ids = gallery_ids.join(",");
-        document.querySelector(obj.target).value = ids;
+        let gallery_urls = new Array();
+        let index = 0;
+
+        if(is_featured_image_section) {
+          selection.forEach(function(attachment) {
+            gallery_ids[index] = attachment['id'];
+            index++;
+          });
+          let ids = gallery_ids.join(",");
+          document.querySelector(obj.target).value = ids;
+        }
+        else {
+          selection.forEach(function(attachment) {
+            gallery_urls[index] = attachment.attributes['url'];
+            index++;
+          });
+          let urls = gallery_urls.join(",");
+          document.querySelector(obj.target).value = urls;         
+        }
       });
 
       image_frame.on('open', function() {

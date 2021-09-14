@@ -9,7 +9,7 @@
  * that starts the plugin.
  *
  * @link              https://github.com/Mironezes
- * @package           Wd_Satellites_Snippets
+ * @package           Wd_Satellites
  *
  * @wordpress-plugin
  * Plugin Name:       WD Satellite 
@@ -71,10 +71,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wd-satellites-snippets.php
  *
  *
  */
-function run_wd_satellites_snippets() {
+function run_wd_satellites() {
 
-	$plugin = new Wd_Satellites_Snippets();
+	$plugin = new Wd_Satellites();
 	$plugin->run();
 
 }
-run_wd_satellites_snippets();
+run_wd_satellites();

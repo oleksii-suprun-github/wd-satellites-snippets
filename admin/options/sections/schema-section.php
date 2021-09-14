@@ -5,8 +5,7 @@ if( get_option('wdss_advanced_jsonld_schema') != '1' ) {
 	function json_ld_schema_template() {
 		global $post;
 
-		$logo = wp_get_attachment_image_src(get_option('wdss_jsonld_schema_logo'), 'medium');
-		$logo_url = $logo[0];
+		$logo_url = get_option('wdss_jsonld_schema_logo', '');
 		
 		if(is_singular() && get_the_post_thumbnail_url($post->ID)) {
 			$image_url = get_the_post_thumbnail_url($post->ID);

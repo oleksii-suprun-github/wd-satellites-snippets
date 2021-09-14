@@ -669,6 +669,9 @@ button#wdss-toggle-options {
 #wdss-advanced-jsonld-schema-group .wp-editor-wrap {
   width: 100%;
 }
+#wdss-jsonld-schema-logo input[type="text"] {
+  pointer-events: none;
+}
 @media screen and (max-width:550px) {
   .wdss-jsonld-schema-predifined-settings label {
     width: 95%;
