@@ -282,19 +282,6 @@
     if( get_option('wdss_auto_widght_height_attr', '0') ) {
       if( !is_admin()) {
 
-
-        add_filter('the_content', 'remove_image_dimesion', 10);
-        function remove_image_dimesion($content) {
-            if( is_single() ) {
-  
-                $pattern1 = '/(<img.*)(?=.*width="(\d+)")(?=.*height="(\d+)")(.*>)/i';
-                $pattern2 = '/(<img.*)((?=.*width="(\d+)")|(?=.*height="(\d+)"))(.*>)/i';
-  
-                $content = preg_replace(array($pattern1, $pattern2), "$1>", $content );
-            }
-            return $content;
-        }
-    
     
         add_filter('the_content', 'set_image_dimension', 20);
         function set_image_dimension($content) {
@@ -313,29 +300,37 @@
                 foreach ( $all_images as $image ) {
                 
                 $tmp = $image;
-                
             
                 // Get link of the file
                 preg_match( '/src=[\'"]([^\'"]+)/', $image, $src_match );
-                
+
                 // Get image url
-                $image_url = site_url().$src_match[1];
-            
-                if(!mb_strpos($image_url, 'wp-content') ) {
-                    continue;
+                if( !empty($src_match) ) {
+
+                  // If url contains full address
+                  if(!empty(strpos($src_match[0], site_url()))) {
+                    $image_url = $src_match[1];
+                  }
+                  // If url contains relative address then adds domain
+                  else {
+                    $image_url = site_url().$src_match[1];
+                  }
+
+                  if(!mb_strpos($image_url, 'wp-content') ) {
+                      continue;
+                  }
+              
+                  // Get image dimension
+                  list($width, $height) = wp_getimagesize($image_url );
+                  $dimension = 'width="'.$width.'" height="'.$height.'" ';
+                  
+                  // Add width and width attribute
+                  $image = str_replace( '<img', '<img ' . $dimension, $image );
+                  
+                  // Replace image with new attributes
+                  $buffer = str_replace( $tmp, $image, $buffer );
+                  }
                 }
-            
-                //get image dimension
-                list($width, $height) = wp_getimagesize($image_url );
-                $dimension = 'width="'.$width.'" height="'.$height.'" ';
-                
-                // Add width and width attribute
-                $image = str_replace( '<img', '<img ' . $dimension, $image );
-                
-                // Replace image with new attributes
-                $buffer = str_replace( $tmp, $image, $buffer );
-                }
-                
                 return $buffer;
             }
             return $content; 

@@ -67,7 +67,7 @@
 
                     <div id="wdss-auto-width-height-attr" class="wdss-setting-item">
                         <label>
-                          <span>Auto Width/Height Attributes</span>
+                          <span title="Only for single posts & local loaded images">Auto Width/Height Attributes <sup>?</sup></span>
                           <?php 
                             checkbox_handler_html(['field_name' => 'wdss_auto_widght_height_attr']); 
                             if( get_option('wdss_auto_widght_height_attr') == '' ) update_option( 'wdss_auto_widght_height_attr', '0' );               
