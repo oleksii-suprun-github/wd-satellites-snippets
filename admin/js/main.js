@@ -57,13 +57,6 @@ const organizationLogoChooser = {
 
 
 
-
-
-
-
-
-
-
 // Resets value attr in target input
 function resetValue(item) {
   const button = document.querySelector(item.button);
@@ -76,6 +69,7 @@ function resetValue(item) {
   });
 }
 
+// Show/hide section on click helper
 function sectionToggler() {
   const sectionsList = document.querySelectorAll('.wdss-section:not(#wdss-snippets-settings) > .wdss-row');
   sectionsList.forEach((section) => {
@@ -94,7 +88,7 @@ function sectionToggler() {
 }
 
 
-// Show/hide section on-condition helper
+// Show/hide group on-condition helper
 function groupToggler(section) {  
   const toggler = document.querySelector(section.toggler);
   const is_enabled = toggler.hasAttribute('checked');
@@ -200,13 +194,31 @@ function getPostsModal() {
 
   function init() {
 
-    modalHandler.call(context, wdss_localize.show_modal);
+    jQuery.ajax({
+        url : wdss_localize.url,
+        type : 'post',
+        data : {
+          action : 'fetch_modal_content',
+          security : wdss_localize.nonce,
+        },
+        success : function(response) {
+          modalHandler.call(context, response);
+        
+        }
+    });
+  }
 
+  function modalHandler($content) {
+
+    const html = document.querySelector('html'); 
+    html.classList.add('fixed');
+
+    this.insertAdjacentHTML('beforeend', $content);
     
     const posts = Array.from(document.querySelectorAll('.wdss-table-row.post'));
     posts.forEach(post => {
         post.addEventListener('click', () => {
-          let checkbox = post.querySelector('.wdss-table-post__select input');
+          let checkbox = post.querySelector('.wdss-table-post__select input[type="checkbox"]');
           if(checkbox.hasAttribute('checked')) {
             uncheck(checkbox);
           }
@@ -225,15 +237,8 @@ function getPostsModal() {
       input.removeAttribute('checked');
       input.checked = false;
     }
-  }
 
-  function modalHandler($content) {
 
-    const html = document.querySelector('html'); 
-    html.classList.add('fixed');
-
-    this.insertAdjacentHTML('beforeend', $content);
-     
     const modal = this.querySelector('.wdss-modal');
     const close_btn = modal.querySelector('.wdss-modal-header i');
     const save_btn = modal.querySelector('.wdss-button.submit');
@@ -241,7 +246,7 @@ function getPostsModal() {
   
     if(input.value !== '') {
       let inputIdsArr = input.value.split(',');
-      let checkboxes = Array.from(modal.querySelectorAll('input[type="checkbox"]'));
+      let checkboxes = Array.from(modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]'));
       checkboxes.forEach(checkbox => {
         if(inputIdsArr.includes(checkbox.value)) {
           checkbox.setAttribute('checked', 'checked');
@@ -265,6 +270,9 @@ function getPostsModal() {
     save_btn.addEventListener('click', () => {
       
       const posts = modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]:checked');
+
+      console.log(posts);
+
       let idsArr = [];
       let ids;
   
@@ -279,6 +287,7 @@ function getPostsModal() {
     });
   }
 }
+
 
 // Built-in WP.media popup for Featured Images Settings
 function mediaFileChooser(obj) {
