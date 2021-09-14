@@ -9,10 +9,10 @@
  * that starts the plugin.
  *
  * @link              https://github.com/Mironezes
- * @package           Wd_Satellites_Snippets
+ * @package           Wd_Satellites
  *
  * @wordpress-plugin
- * Plugin Name:       WD Sattelites Snippets
+ * Plugin Name:       WD Satellite 
  * Plugin URI:        https://github.com/Mironezes
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
  * Version:           0.5
@@ -71,10 +71,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wd-satellites-snippets.php
  *
  *
  */
-function run_wd_satellites_snippets() {
+function run_wd_satellites() {
 
-	$plugin = new Wd_Satellites_Snippets();
+	$plugin = new Wd_Satellites();
 	$plugin->run();
 
 }
-run_wd_satellites_snippets();
+run_wd_satellites();

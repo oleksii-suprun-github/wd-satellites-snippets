@@ -4,13 +4,19 @@
 <section id="wdss-410-settings" class="wdss-section">
   <div class="wdss-section-header">
     <h2>410 Status for Category Pages</h2>
+    <div class="wdss-section-header-togglers">
+      <i title="Pin this section as open" class="fas fa-lock"></i>
+      <i class="fas fa-chevron-down"></i>
+    </div>
   </div>
-  <div class="wdss-row">
-    <div id="wdss-category-410" class="wdss-setting-item">
-      <label>
-      <span>Enable</span>
-      <?php checkbox_handler_html(['field_name' => 'wdss_410_rules']); ?>
-      </label>
+    <div class="wdss-row">
+      <div class="wdss-section-content">
+      <div id="wdss-category-410" class="wdss-setting-item">
+        <label>
+        <span>Enable</span>
+        <?php checkbox_handler_html(['field_name' => 'wdss_410_rules']); ?>
+        </label>
+      </div>
     </div>
   </div>
 </section>

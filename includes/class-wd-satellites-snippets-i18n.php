@@ -8,8 +8,8 @@
  *
  * @link       https://github.com/Mironezes
  *
- * @package    Wd_Satellites_Snippets
- * @subpackage Wd_Satellites_Snippets/includes
+ * @package    Wd_Satellites
+ * @subpackage Wd_Satellites/includes
  */
 
 /**
@@ -18,8 +18,8 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @package    Wd_Satellites_Snippets
- * @subpackage Wd_Satellites_Snippets/includes
+ * @package    Wd_Satellites
+ * @subpackage Wd_Satellites/includes
  * @author     Alexey Suprun <mironezes@gmail.com>
  */
 class Wd_Satellites_Snippets_i18n {

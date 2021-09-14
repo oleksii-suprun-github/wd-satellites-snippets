@@ -1,30 +1,6 @@
 <?php
 
-    // Removes homepage pagination
-    if( get_option('wdss_disable_homepage_pagination', '0') ) {
-      
-      add_action( 'template_redirect', 'wdss_disable_homepage_pagination', 1 );
-      function wdss_disable_homepage_pagination() {
-        global $post, $wp_query;
-        if ( (is_home() || is_front_page()) && (is_paged()) ) {
-         $wp_query->set_404();
-         status_header(404);
-         include( get_query_template( '404' ) );
-         exit;
-        }
-       }
-  
-       add_filter( 'wpseo_next_rel_link', 'wdss_remove_homepage_rel_links' );
-       function wdss_remove_homepage_rel_links( $link ) {
-          if ( is_front_page() ) {
-            $link = '';
-          }
-          return $link;
-       }
-    }
-
-
-    // Disables jQuery and Migration script for Frontend
+// Disables jQuery and Migration script for Frontend
     if( get_option('wdss_disable_jquery', '0') ) {
       function wdss_disable_jquery() {
         if( !is_admin() ) {
@@ -32,7 +8,7 @@
           wp_deregister_script( 'jquery-migrate' );
         }
       }
-      add_action('wp_loaded', 'wdss_disable_jquery');
+      add_action('wp_enqueue_scripts', 'wdss_disable_jquery');
     }
 
 		// Force Lowercase URLs Snippet
@@ -148,43 +124,40 @@
 
     // Fixes WP Comments Passive Listener Issue 
     if( get_option('wdss_comments_passive_listener_fix', '0') ) {
-
-      function wdss_dereg_script_comment_reply(){wp_deregister_script( 'comment-reply' );}
-      add_action('init','wdss_dereg_script_comment_reply');
-      
-      add_action('wp_head', 'wdss_reload_script_comment_reply');
-      function wdss_reload_script_comment_reply() {
-          ?>
-      <script>
-
-      //Function checks if a given script is already loaded
-      function isScriptLoaded(src){
-          return document.querySelector('script[src="' + src + '"]') ? true : false;
+      if( is_single() ) {      
+        function wp_dereg_script_comment_reply(){wp_deregister_script( 'comment-reply' );}
+          add_action('init','wp_dereg_script_comment_reply');
+          add_action('wp_head', 'wp_reload_script_comment_reply');
+        function wp_reload_script_comment_reply() {
+        ?>
+        <script>
+          //Function checks if a given script is already loaded
+          function isScriptLoaded(src){
+              return document.querySelector('script[src="' + src + '"]') ? true : false;
+          }
+          //When a reply link is clicked, check if reply-script is loaded. If not, load it and emulate the click
+          document.getElementsByClassName("comment-reply-link").onclick = function() { 
+              if(!(isScriptLoaded("/wp-includes/js/comment-reply.min.js"))){
+                  var script = document.createElement('script');
+                  script.src = "/wp-includes/js/comment-reply.min.js"; 
+              script.onload = emRepClick($(this).attr('data-commentid'));        
+                  document.head.appendChild(script);
+              } 
+          }
+          //Function waits 50 ms before it emulates a click on the relevant reply link now that the reply script is loaded
+          function emRepClick(comId) {
+          sleep(50).then(() => {
+          document.querySelectorAll('[data-commentid="'+comId+'"]')[0].dispatchEvent(new Event('click'));
+          });
+          }
+          //Function does nothing, for a given amount of time
+          function sleep (time) {
+            return new Promise((resolve) => setTimeout(resolve, time));
+          }
+        </script>
+        <?php
+        }  
       }
-
-      //When a reply link is clicked, check if reply-script is loaded. If not, load it and emulate the click
-      document.getElementsByClassName("comment-reply-link").onclick = function() { 
-          if(!(isScriptLoaded("/wp-includes/js/comment-reply.min.js"))){
-            let script = document.createElement('script');
-            script.src = "/wp-includes/js/comment-reply.min.js"; 
-            script.onload = emRepClick($(this).attr('data-commentid'));        
-            document.head.appendChild(script);
-          } 
-      }
-
-      //Function waits 50 ms before it emulates a click on the relevant reply link now that the reply script is loaded
-      function emRepClick(comId) {
-        sleep(50).then(() => {
-        document.querySelectorAll('[data-commentid="'+comId+'"]')[0].dispatchEvent(new Event('click'));
-      });
-      }
-      //Function does nothing, for a given amount of time
-      function sleep (time) {
-        return new Promise((resolve) => setTimeout(resolve, time));
-      }
-      </script>
-      <?php
-      }  
     }
 
     // AMP Template Fix
@@ -277,7 +250,10 @@
       remove_action( 'wp_head', 'start_post_rel_link', 10, 0 ); 
       remove_action( 'wp_head', 'adjacent_posts_rel_link', 10, 0 ); 
       remove_action( 'wp_head', 'wp_generator' );
-    
+      remove_action( 'wp_head', 'wp_resource_hints', 2, 99 ); 
+
+      remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
+
       remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
       remove_action( 'wp_head', 'wp_oembed_add_host_js' );
       remove_action( 'rest_api_init', 'wp_oembed_register_route' );
@@ -300,6 +276,73 @@
     if( function_exists('wpseo_init') && get_option('wdss_yoast_schema', '0') ) {
       add_filter( 'wpseo_json_ld_output', '__return_false' );
     }
+
+
+    // Auto width/height attributes
+    if( get_option('wdss_auto_widght_height_attr', '0') ) {
+      if( !is_admin()) {
+
+
+        add_filter('the_content', 'remove_image_dimesion', 10);
+        function remove_image_dimesion($content) {
+            if( is_single() ) {
+  
+                $pattern1 = '/(<img.*)(?=.*width="(\d+)")(?=.*height="(\d+)")(.*>)/i';
+                $pattern2 = '/(<img.*)((?=.*width="(\d+)")|(?=.*height="(\d+)"))(.*>)/i';
+  
+                $content = preg_replace(array($pattern1, $pattern2), "$1>", $content );
+            }
+            return $content;
+        }
+    
+    
+        add_filter('the_content', 'set_image_dimension', 20);
+        function set_image_dimension($content) {
+            if( is_single() ) {
+        
+                $buffer = $content;
+                
+                // Get all images without width or height attribute
+                $pattern1 = '/<img(?:[^>](?!(height|width)=))*+>/i';
+                $pattern2 = '/<img(?:(\s*(height|width)\s*=\s*"([^"]+)"\s*)+|[^>]+?)*>/i';
+  
+                preg_match_all($pattern1, $content, $first_match );
+                preg_match_all($pattern2, $content, $second_match );
+                
+                $all_images = array_merge($first_match[0], $second_match[0]);
+                foreach ( $all_images as $image ) {
+                
+                $tmp = $image;
+                
+            
+                // Get link of the file
+                preg_match( '/src=[\'"]([^\'"]+)/', $image, $src_match );
+                
+                // Get image url
+                $image_url = site_url().$src_match[1];
+            
+                if(!mb_strpos($image_url, 'wp-content') ) {
+                    continue;
+                }
+            
+                //get image dimension
+                list($width, $height) = wp_getimagesize($image_url );
+                $dimension = 'width="'.$width.'" height="'.$height.'" ';
+                
+                // Add width and width attribute
+                $image = str_replace( '<img', '<img ' . $dimension, $image );
+                
+                // Replace image with new attributes
+                $buffer = str_replace( $tmp, $image, $buffer );
+                }
+                
+                return $buffer;
+            }
+            return $content; 
+        }
+      }
+    }
+
 
 
     // Autoptimize Lazyload Fix Snippet
@@ -494,7 +537,7 @@
     }
 
     // Custom Excerpts for imported articles
-    function wpss_custom_excerpts( $excerpt, $raw_excerpt ) {
+    function custom_excerpts( $excerpt, $raw_excerpt ) {
       if ( is_admin() ||  '' !== $raw_excerpt) {
         return $excerpt;
       }
@@ -513,25 +556,27 @@
       return $excerpt;
     
     }
-    add_filter( 'wp_trim_excerpt', 'wpss_custom_excerpts', 99, 2 );
+    add_filter( 'wp_trim_excerpt', 'custom_excerpts', 99, 2 );
     
     
     // Custom Descriptions for imported articles
-    function wpss_custom_post_descriptions($meta_description, $presentation)  {
+    function custom_post_descriptions($meta_description, $presentation)  {
        
-      $condition = '#<div[^>]*id="toc"[^>]*>.*?</div>#is';
-      $content = apply_filters( 'the_content', get_the_content() );
-    
-      if( preg_match($condition, $content) ) {
-        $raw = apply_filters( 'the_content', get_the_content() );
-        $clear = preg_replace('#<div[^>]*id="toc"[^>]*>.*?</div>#is', '', $raw);	
-        $stripped = strip_tags($clear);
-        $meta_description = mb_substr($stripped, 0, 150, 'UTF-8') . ' [...]';
+      if( is_single() ) {
+        $condition = '#<div[^>]*id="toc"[^>]*>.*?</div>#is';
+        $content = apply_filters( 'the_content', get_the_content() );
+      
+        if( preg_match($condition, $content) ) {
+          $raw = apply_filters( 'the_content', get_the_content() );
+          $clear = preg_replace('#<div[^>]*id="toc"[^>]*>.*?</div>#is', '', $raw);	
+          $stripped = strip_tags($clear);
+          $meta_description = mb_substr($stripped, 0, 150, 'UTF-8') . ' [...]';
+        }
       }
-    
+
       return $meta_description;
     
     }
-    add_filter('wpseo_metadesc', 'wpss_custom_post_descriptions', 10, 2 );
-    add_filter('wpseo_opengraph_desc', 'wpss_custom_post_descriptions', 10, 2);
+    add_filter('wpseo_metadesc', 'custom_post_descriptions', 10, 2 );
+    add_filter('wpseo_opengraph_desc', 'custom_post_descriptions', 10, 2);
     

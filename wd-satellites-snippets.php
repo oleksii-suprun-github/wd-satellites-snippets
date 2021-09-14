@@ -1,18 +1,24 @@
 <?php
 /**
- * Plugin Name: WD Sattelites Snippets
- * Description: Bulk of usefull snippets for our sattelites.
- * Version: 0.5.2
+ * Plugin Name: WD Satellite 
+ * Plugin URI: https://github.com/Mironezes
+ * Description: Bulk of usefull snippets & tweaks for satellites.
+ * Version: 0.6b
  * Author: Alexey Suprun
  * Author URI: https://github.com/Mironezes
- * License: GPL3
- * Text Domain: wdss
+ * Requires at least: 5.5
+ * Requires PHP: 7.0
+ * Tested up to: 5.8
+ * License: GPL-2.0+
+ * Text Domain: wd-satellites-snippets
  * Domain Path: /languages
- *
- * @package wd-satellites-snippets
-*/
+ * 
+ * @link https://github.com/Mironezes
+ * @package Wd_Satellites
+ */
 
-if ( ! defined( 'ABSPATH' ) ) {
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
@@ -20,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Currently plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.5.2' );
+define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.6b8' );
 
 /**
  * The code that runs during plugin activation.
@@ -58,10 +64,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-wd-satellites-snippets.php
  *
  *
  */
-function run_wd_satellites_snippets() {
+function run_wd_satellites() {
 
-	$plugin = new Wd_Satellites_Snippets();
+	$plugin = new Wd_Satellites();
 	$plugin->run();
 
 }
-run_wd_satellites_snippets();
+run_wd_satellites();

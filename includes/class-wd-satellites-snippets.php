@@ -8,8 +8,8 @@
  *
  * @link       https://github.com/Mironezes
  *
- * @package    Wd_Satellites_Snippets
- * @subpackage Wd_Satellites_Snippets/includes
+ * @package    Wd_Satellites
+ * @subpackage Wd_Satellites/includes
  */
 
 /**
@@ -21,11 +21,11 @@
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  *
- * @package    Wd_Satellites_Snippets
- * @subpackage Wd_Satellites_Snippets/includes
+ * @package    Wd_Satellites
+ * @subpackage Wd_Satellites/includes
  * @author     Alexey Suprun <mironezes@gmail.com>
  */
-class Wd_Satellites_Snippets {
+class Wd_Satellites {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power

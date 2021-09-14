@@ -22,7 +22,7 @@
  * @link       https://github.com/Mironezes
 
  *
- * @package    Wd_Satellites_Snippets
+ * @package    Wd_Satellites
  */
 
 // If uninstall not called from WordPress, then exit.

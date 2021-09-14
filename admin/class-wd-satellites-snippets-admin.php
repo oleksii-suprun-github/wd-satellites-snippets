@@ -5,8 +5,8 @@
  *
  * @link       https://github.com/Mironezes
  *
- * @package    Wd_Satellites_Snippets
- * @subpackage Wd_Satellites_Snippets/admin
+ * @package    Wd_Satellites
+ * @subpackage Wd_Satellites/admin
  */
 
 
@@ -23,8 +23,8 @@ require_once('options/wd-satellites-snippets-admin-options.php');
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  *
- * @package    Wd_Satellites_Snippets
- * @subpackage Wd_Satellites_Snippets/admin
+ * @package    Wd_Satellites
+ * @subpackage Wd_Satellites/admin
  * @author     Alexey Suprun <mironezes@gmail.com>
  */
 class Wd_Satellites_Snippets_Admin {
@@ -63,23 +63,24 @@ class Wd_Satellites_Snippets_Admin {
       $options->wdss_last_modified();
     }
 
+		add_action( 'wp_ajax_fetch_modal_content',  array($this, 'wdss_get_posts_modal') );
+		add_action( 'wp_ajax_nopriv_fetch_modal_content',  array($this, 'wdss_get_posts_modal') );
 	}
 
 
 	// Add Admin Menu
 	public function wdss_admin_menu() {
-		add_menu_page('WD Sattelites Snippets', 'WD Sattelites Snippets', 'manage_options', 'wd-sattelites-snippets', 'wdss_settings_template', 'dashicons-admin-tools', 100 );
+		add_options_page('WD Satellite Settings', 'WD Satellite', 'manage_options', 'wd-sattelites-snippets', 'wdss_settings_template', null, 100 );
 	}
-
 
 	// Add Adminbar Quick Link
 	public function wdss_add_adminbar_link($admin_bar) {
 		$admin_bar->add_menu([
 			'id'    => 'wdss',
-			'title' => 'Satellites Snippets',
-			'href'  =>  admin_url('admin.php?page=wd-sattelites-snippets'),
+			'title' => 'WD Satellite',
+			'href'  =>  admin_url('options-general.php?page=wd-sattelites-snippets'),
 			'meta'  => array(
-					'title' => 'WD Satellites Snippets'
+					'title' => 'WD Satellite Settings'
 			),
 		]);
 	}
@@ -93,19 +94,17 @@ class Wd_Satellites_Snippets_Admin {
 
 
 	// Get Posts Modal window
-	public function wdss_get_posts() {
-    $args = array(  
+	public function wdss_get_posts_modal() {
+		check_ajax_referer( 'ajax-nonce', 'security' );
+		$args = array(
 			'post_type' => 'post',
 			'post_status' => 'any',
 			'numberposts' => -1,
 			'orderby' => 'date', 
 			'order' => 'DESC', 
 		);
-
-		$posts = get_posts($args);	
-		ob_start(); 
-		?>
-
+		$loop = new WP_Query( $args );
+	?>
 		<div id="exclude-posts-modal" class="wdss-modal">
 			<div class="wdss-modal-header">
 				<i class="fas fa-times"></i>
@@ -120,41 +119,43 @@ class Wd_Satellites_Snippets_Admin {
 							<th class="wdss-table-post__status">Status</th>
 							<th class="wdss-table-post__date">Date</th>
 						</tr>
-					<?php
-						foreach($posts as $post) : ?>
-							<tr id="post-<?= $post->ID?>" class="wdss-table-row post">
-								<td class="wdss-table-post__select"><input name="wdss_exclude_post" value="<?= $post->ID?>" type="checkbox"></td>
-								<td class="wdss-table-post__id"><?= $post->ID?></td>
-								<td class="wdss-table-post__title"><?= $post->post_title?></td>
-								<td class="wdss-table-post__status"><?= $post->post_status?></td>
-								<td class="wdss-table-post__date"><?= $post->post_date?></td>							
-							</tr>
-					<?php 
-						endforeach;
-						wp_reset_postdata(); 
-					?>
-					</table>
+			<?php
+				if ( $loop->have_posts() ) :
+				while ( $loop->have_posts() ) : $loop->the_post();
+			?>
+						<tr class="wdss-table-row post">
+							<td class="wdss-table-post__select"><input type="checkbox" value="<?= get_the_id();?>"></td>
+							<td><?= get_the_id();?></td>
+							<td><?= get_the_title();?></td>
+							<td><?= get_post_status();?></td>
+							<td><?= get_the_date();?></td>				
+						</tr>
+			<?php
+				endwhile;
+				endif;
+				wp_reset_postdata();
+			?> 
+		</table>
 				</div>
 			</div>
 			<div class="wdss-modal-footer">
 				<button type="button" class="wdss-button submit">Save</button>
 			</div>
 		</div>
-
-		<?php return ob_get_clean();
+		<?php
+		die();
 	}
 
-	
+
 	//Register the JavaScript for the admin area
 	public function wdss_enqueue_scripts($page) {
-
-		if( get_current_screen()->id == 'toplevel_page_wd-sattelites-snippets' ) {
+		if( get_current_screen()->id == 'settings_page_wd-sattelites-snippets' ) {
 			wp_enqueue_media();
 		
 			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/main.js', array(), $this->version, true );
 			
-			$get_title_separator;
-			if(YoastSEO()->helpers->options->get_title_separator() !== null) {
+			$get_title_separator = '';
+			if(function_exists('YoastSEO') && YoastSEO()->helpers->options->get_title_separator() !== null) {
 				$get_title_separator = YoastSEO()->helpers->options->get_title_separator();
 			}
 
@@ -162,10 +163,10 @@ class Wd_Satellites_Snippets_Admin {
 				'site_title' => $get_title_separator . ' ' . get_bloginfo('name'),
 				'total_post_count' => wp_count_posts('post')->publish,
 				'is_polylang_exists' => function_exists('pll_languages_list'),
-				'posts_list' => $this->wdss_get_posts()
+				'url' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'ajax-nonce' )
 			];
 			wp_localize_script($this->plugin_name, 'wdss_localize', $wdss_localize_script);
 		}
 	}
 }
-
