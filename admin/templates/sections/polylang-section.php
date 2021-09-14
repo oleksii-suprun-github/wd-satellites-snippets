@@ -4,7 +4,10 @@
 <section id="polylang-settings" class="wdss-section">
   <div class="wdss-section-header">
     <h2>Multilang Settings</h2>
-    <i class="fas fa-chevron-down"></i>
+    <div class="wdss-section-header-togglers">
+      <i title="Pin this section as open" class="fas fa-lock"></i>
+      <i class="fas fa-chevron-down"></i>
+    </div>
   </div>
   <div class="wdss-row">
     <div class="wdss-section-content">

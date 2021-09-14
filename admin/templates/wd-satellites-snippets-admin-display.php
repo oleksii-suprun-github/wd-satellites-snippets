@@ -19,7 +19,7 @@
     <div id="wdss-settings-page">
       <div class="container">
 
-        <h1>Satellites Snippets <small>ver <?= WD_SATELLITES_SNIPPETS_VERSION ?></small></h1>
+        <h1>WD Satellite  <small>ver <?= WD_SATELLITES_SNIPPETS_VERSION ?></small></h1>
 
         <?php 
           if(!empty($_POST['wdss_form_submitted'])) {
