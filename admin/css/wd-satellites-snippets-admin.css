@@ -2,7 +2,7 @@
   Admin Toolbar Icon 
 =====================*/
 #wpadminbar #wp-admin-bar-wdss>.ab-item:before {
-  content: "\f107";
+  content: "\f108";
   top: 2px;  
 }
 
@@ -144,12 +144,25 @@ div.disabled:before {
 #wdss-snippets-settings .wdss-section-header {
   cursor: unset;
 }
-#wdss-settings-page .wdss-section-header i {
-  transition: transform 500ms;
-  font-size: 1.25rem;
+.wdss-section-header-togglers {
+  position: relative;
+  width: 65px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.wdss-section-header-togglers i {
   color: #fff;
 }
-#wdss-settings-page .wdss-section-header.active i {
+.wdss-section-header-togglers i.fa-lock { 
+  font-size: 1rem;
+  color: #666;
+}
+.wdss-section-header-togglers i.fa-chevron-down {
+  transition: transform 500ms;
+  font-size: 1.25rem;
+}
+#wdss-settings-page .wdss-section-header.active i.fa-chevron-down {
   transform: rotate(180deg);
   transition: transform 500ms;
 }
@@ -162,6 +175,7 @@ div.disabled:before {
 @media screen and (max-width: 550px) {
   #wdss-settings-page .wdss-section-header h2,
   #wdss-settings-page .wdss-section-header h3 {
+    max-width: 75%;
     font-size: 1rem;
   } 
 }
@@ -329,13 +343,15 @@ div.disabled:before {
   transition: all 300ms;
 }
 .wdss-button.submit {
-  margin-top: 35px;
   color: #fff;
   border-color: green;
   background: green;
 }
 .wdss-button.submit:hover {
   background: #1ea71e;
+}
+#submit.wdss-button.submit {
+  margin-top: 35px;
 }
 #wdss-featured-images__reset {
   background: none;

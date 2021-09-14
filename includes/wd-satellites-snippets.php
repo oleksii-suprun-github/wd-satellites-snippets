@@ -12,7 +12,7 @@
  * @package           Wd_Satellites_Snippets
  *
  * @wordpress-plugin
- * Plugin Name:       WD Sattelites Snippets
+ * Plugin Name:       WD Satellite 
  * Plugin URI:        https://github.com/Mironezes
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
  * Version:           0.5
