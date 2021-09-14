@@ -95,11 +95,7 @@ class Wd_Satellites_Snippets_Admin {
 
 	// Get Posts Modal window
 	public function wdss_get_posts_modal() {
-		// verifies the AJAX request
 		check_ajax_referer( 'ajax-nonce', 'security' );
-		// Get post id from script
-		$post_id = $_POST['post_id'];
-		// Arguments for query
 		$args = array(
 			'post_type' => 'post',
 			'post_status' => 'any',
@@ -123,22 +119,22 @@ class Wd_Satellites_Snippets_Admin {
 							<th class="wdss-table-post__status">Status</th>
 							<th class="wdss-table-post__date">Date</th>
 						</tr>
-	<?php
-		if ( $loop->have_posts() ) :
-			while ( $loop->have_posts() ) : $loop->the_post();
-				?>
-				<tr class="wdss-table-row post">
-					<td class="wdss-table-post__select"><input type="checkbox" value="<?= get_the_id();?>"></td>
-					<td><?= get_the_id();?></td>
-					<td><?= get_the_title();?></td>
-					<td><?= get_post_status();?></td>
-					<td><?= get_the_date();?></td>				
-				</tr>
-				<?php
-			endwhile;
-		endif;
-		wp_reset_postdata();
-	?> 
+			<?php
+				if ( $loop->have_posts() ) :
+				while ( $loop->have_posts() ) : $loop->the_post();
+			?>
+						<tr class="wdss-table-row post">
+							<td class="wdss-table-post__select"><input type="checkbox" value="<?= get_the_id();?>"></td>
+							<td><?= get_the_id();?></td>
+							<td><?= get_the_title();?></td>
+							<td><?= get_post_status();?></td>
+							<td><?= get_the_date();?></td>				
+						</tr>
+			<?php
+				endwhile;
+				endif;
+				wp_reset_postdata();
+			?> 
 		</table>
 				</div>
 			</div>
@@ -146,8 +142,8 @@ class Wd_Satellites_Snippets_Admin {
 				<button type="button" class="wdss-button submit">Save</button>
 			</div>
 		</div>
-	<?php
-	die();
+		<?php
+		die();
 	}
 
 

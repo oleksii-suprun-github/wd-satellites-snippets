@@ -1,7 +1,7 @@
 <?php
 
     // Set title`s length of posts/pages
-    if( function_exists('wpseo_init') && get_option('wdss_enable_title_clipping', '0') ) {
+    if( function_exists('wpseo_init') && is_singular() && get_option('wdss_enable_title_clipping', '0') ) {
       add_filter('wpseo_title', 'yoast_trim_title');
       function yoast_trim_title($post_title) {
         global $post;

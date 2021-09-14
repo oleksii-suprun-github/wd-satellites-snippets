@@ -8,7 +8,7 @@ if( get_option('wdss_advanced_jsonld_schema') != '1' ) {
 		$logo = wp_get_attachment_image_src(get_option('wdss_jsonld_schema_logo'), 'medium');
 		$logo_url = $logo[0];
 		
-		if(get_the_post_thumbnail_url($post->ID)) {
+		if(is_singular() && get_the_post_thumbnail_url($post->ID)) {
 			$image_url = get_the_post_thumbnail_url($post->ID);
 		}
 		else {
