@@ -285,55 +285,59 @@
     
         add_filter('the_content', 'wdss_set_image_dimension', 20);
         function wdss_set_image_dimension($content) {
-            if( is_single() ) {
+          if( is_single() ) {
         
-                $buffer = $content;
-                
-                // Get all images without width or height attribute
-                $pattern1 = '/<img(?:[^>](?!(height|width)=))*+>/i';
-                $pattern2 = '/<img(?:(\s*(height|width)\s*=\s*"([^"]+)"\s*)+|[^>]+?)*>/i';
-  
-                preg_match_all($pattern1, $content, $first_match );
-                preg_match_all($pattern2, $content, $second_match );
-                
-                $all_images = array_merge($first_match[0], $second_match[0]);
-                foreach ( $all_images as $image ) {
-                
-                $tmp = $image;
+            $buffer = $content;
             
-                // Get link of the file
-                preg_match( '/src=[\'"]([^\'"]+)/', $image, $src_match );
+            // Get all images without width or height attribute
+            $pattern1 = '/<img(?:[^>](?!(height|width)=))*+>/i'; // if no width & height
+            $pattern2 = '/<img(?:(\s*(height|width)\s*=\s*"([^"]+)"\s*)+|[^>]+?)*>/i'; // if width OR height is present
 
-                // Get image url
-                if( !empty($src_match) ) {
+            preg_match_all($pattern1, $content, $first_match );
+            preg_match_all($pattern2, $content, $second_match );
+            
+            $all_images = array_merge($first_match[0], $second_match[0]);
+            foreach ( $all_images as $image ) {
 
-                  // If url contains full address
-                  if(!empty(strpos($src_match[0], site_url()))) {
-                    $image_url = $src_match[1];
-                  }
-                  // If url contains relative address then adds domain
-                  else {
-                    $image_url = site_url().$src_match[1];
-                  }
+            $tmp = $image;
+        
+            // Trying to get width attr (last-stand filter)
+            preg_match( '/width="(\d+)"/', $image, $width_match );
+            // Trying to get height attr (last-stand filter)
+            preg_match( '/height="(\d+)"/', $image, $height_match );
+            // Get link of the file
+            preg_match( '/src=[\'"]([^\'"]+)/', $image, $src_match );
 
-                  if(!mb_strpos($image_url, 'wp-content') ) {
-                      continue;
-                  }
+            // Last check - if both width/height are present  then skip this file
+            if( !empty($src_match) && empty($height_match) ) {
+
+              // If url contains full address
+              if(!empty(strpos($src_match[0], site_url()))) {
+                $image_url = $src_match[1];
+              }
+              // If url contains relative address then adds domain
+              else {
+                $image_url = site_url().$src_match[1];
+              }
+
+              if(!mb_strpos($image_url, 'wp-content') ) {
+                  continue;
+              }
+          
+              // Get image dimension
+              list($width, $height) = wp_getimagesize($image_url );
+              $dimension = 'width="'.$width.'" height="'.$height.'" ';
               
-                  // Get image dimension
-                  list($width, $height) = wp_getimagesize($image_url );
-                  $dimension = 'width="'.$width.'" height="'.$height.'" ';
-                  
-                  // Add width and width attribute
-                  $image = str_replace( '<img', '<img ' . $dimension, $image );
-                  
-                  // Replace image with new attributes
-                  $buffer = str_replace( $tmp, $image, $buffer );
-                  }
-                }
-                return $buffer;
+              // Add width and width attribute
+              $image = str_replace( '<img', '<img ' . $dimension, $image );
+              
+              // Replace image with new attributes
+              $buffer = str_replace( $tmp, $image, $buffer );
+              }
             }
-            return $content; 
+            return $buffer;
+        }
+        return $content; 
         }
       }
     }
