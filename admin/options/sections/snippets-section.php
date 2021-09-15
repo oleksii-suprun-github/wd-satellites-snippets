@@ -555,7 +555,7 @@
     
     
     // Custom Descriptions for imported articles
-    function custom_post_descriptions($meta_description, $presentation)  {
+    function custom_post_descriptions($meta_description)  {
        
       if( is_single() ) {
         $condition = '#<div[^>]*id="toc"[^>]*>.*?</div>#is';
