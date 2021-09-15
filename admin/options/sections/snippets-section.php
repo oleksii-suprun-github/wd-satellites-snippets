@@ -283,8 +283,8 @@
       if( !is_admin()) {
 
     
-        add_filter('the_content', 'set_image_dimension', 20);
-        function set_image_dimension($content) {
+        add_filter('the_content', 'wdss_set_image_dimension', 20);
+        function wdss_set_image_dimension($content) {
             if( is_single() ) {
         
                 $buffer = $content;
@@ -469,14 +469,14 @@
     // Disable Feeds
     if( get_option('wdss_disable_rss', '0') )  {
 
-      function remove_feed_links()
+      function wdss_remove_feed_links()
       {
         remove_action( 'wp_head', 'feed_links', 2 ); 
         remove_action( 'wp_head', 'feed_links_extra', 3 );       
         remove_action( 'wp_head', 'rsd_link', 4 ); 
       }
 
-      function disabled_feed_behaviour()
+      function wdss_disabled_feed_behaviour()
       {
         global $wp_rewrite, $wp_query;
 
@@ -507,17 +507,17 @@
           }
       }    
       
-      function filter_feeds()
+      function wdss_filter_feeds()
       {
         if( !is_feed() || is_404() ) {
           return;
         }
 
-        disabled_feed_behaviour();
+        wdss_disabled_feed_behaviour();
       }
 
-      add_action('wp_loaded', 'remove_feed_links');
-      add_action('template_redirect', 'filter_feeds', 1);
+      add_action('wp_loaded', 'wdss_remove_feed_links');
+      add_action('template_redirect', 'wdss_filter_feeds', 1);
 
     }
 
@@ -532,7 +532,7 @@
     }
 
     // Custom Excerpts for imported articles
-    function custom_excerpts( $excerpt, $raw_excerpt ) {
+    function wdss_custom_excerpts( $excerpt, $raw_excerpt ) {
       if ( is_admin() ||  '' !== $raw_excerpt) {
         return $excerpt;
       }
@@ -551,11 +551,11 @@
       return $excerpt;
     
     }
-    add_filter( 'wp_trim_excerpt', 'custom_excerpts', 99, 2 );
+    add_filter( 'wp_trim_excerpt', 'wdss_custom_excerpts', 99, 2 );
     
     
     // Custom Descriptions for imported articles
-    function custom_post_descriptions($meta_description)  {
+    function wdss_custom_post_descriptions($meta_description)  {
        
       if( is_single() ) {
         $condition = '#<div[^>]*id="toc"[^>]*>.*?</div>#is';
@@ -572,6 +572,5 @@
       return $meta_description;
     
     }
-    add_filter('wpseo_metadesc', 'custom_post_descriptions', 10, 2 );
-    add_filter('wpseo_opengraph_desc', 'custom_post_descriptions', 10, 2);
-    
+    add_filter('wpseo_metadesc', 'wdss_custom_post_descriptions', 10, 2 );
+    add_filter('wpseo_opengraph_desc', 'wdss_custom_post_descriptions', 10, 2);
