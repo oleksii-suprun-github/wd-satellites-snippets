@@ -60,23 +60,15 @@
               <div class="wdss-polylang-author-block">
                 <h4><i class="fas fa-user"></i> <?= $author->display_name; ?></h4>
                 <div class="wdss-polylang-textarea-blocks">
-                  <?php foreach($polylang_lang_list as $lang) : ?>
-                  <div class="wdss-polylang-textarea-block">
-                    <strong><?= $lang->name; ?></strong>
-                      <?php 
-                        textarea_handler_html(['field_name' => 'wdss_polylang_author_desc_' . $author->user_nicename . '_'. $lang->slug . '']);       
-                      ?>
-                  </div>
-                  <?php endforeach;  ?>
                 </div>
+              </div>
               <?php endforeach; ?>   
-            </div>
+            </div>  
+          </div>
           <?php endif; ?>
-        </div>
       </div>
-    </div>
 
-    <div id="wdss-multilang-sitemap-condition" class="wdss-setting-item">
+      <div id="wdss-multilang-sitemap-condition" class="wdss-setting-item">
         <label>
             <span>Use Multilang Sitemap<br> instead of Yoast</span>
             <?php 
@@ -84,6 +76,7 @@
               if( get_option('wdss_multilang_sitemap') == '' ) update_option( 'wdss_multilang_sitemap', '0' );               
             ?>    
         </label>
+    </div>
     </div>
   </div>
 </section>

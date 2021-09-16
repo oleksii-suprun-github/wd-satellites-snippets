@@ -1,9 +1,9 @@
 <section id="wdss-snippets-settings" class="wdss-section">
-              <div class="wdss-section-header">
-                <h2>Snippets List</h2>
-                <button type="button" id="wdss-toggle-options">Toggle Options</button>
-              </div>
-              <div class="wdss-row">
+    <div class="wdss-section-header">
+      <h2>Snippets List</h2>
+      <button type="button" id="wdss-toggle-options">Toggle Options</button>
+    </div>
+    <div class="wdss-row">
                 <div class="wdss-section-content">
                     <div id="wdss-last-modified" class="wdss-setting-item">
                         <label>
@@ -35,7 +35,7 @@
                       </label>
                     </div>
 
-                    <div id="wdss-last-modified" class="wdss-setting-item">
+                    <div id="410-status-for-categories" class="wdss-setting-item">
                         <label>
                           <span title="Sets 410 Gone status code for standard category">Set 410 for empty categories <sup>?</sup></span>
                           <?php 
@@ -44,8 +44,6 @@
                           ?>    
                       </label>
                     </div>
-
-                    
 
                     <div id="wdss-redundant-links" class="wdss-setting-item">
                         <label>
@@ -205,5 +203,5 @@
                       </label>
                     </div>
                 </div>
-            </div>
-        </section>
+  </div>
+</section>
