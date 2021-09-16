@@ -37,8 +37,6 @@
 
           <?php include_once('sections/title-clipping-section.php') ?>
 
-          <?php include_once('sections/410-status-section.php') ?>
-
           <?php include_once('sections/featured-images-section.php') ?>
 
           <?php include_once('sections/polylang-section.php') ?>

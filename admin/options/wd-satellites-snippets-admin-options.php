@@ -120,7 +120,6 @@ class Wd_Satellites_Snippets_Admin_Options {
     include_once('sections/title-clipping-section.php');
     include_once('sections/featured-images-section.php');
     include_once('sections/polylang-section.php');
-    include_once('sections/410-status-section.php');
 		include_once('sections/schema-section.php');
   }
 }

@@ -35,6 +35,18 @@
                       </label>
                     </div>
 
+                    <div id="wdss-last-modified" class="wdss-setting-item">
+                        <label>
+                          <span title="Sets 410 Gone status code for standard category">Set 410 for empty categories <sup>?</sup></span>
+                          <?php 
+                            checkbox_handler_html(['field_name' => 'wdss_410_rules']); 
+                            if( get_option('wdss_410_rules') == '' ) update_option( 'wdss_410_rules', '0' );               
+                          ?>    
+                      </label>
+                    </div>
+
+                    
+
                     <div id="wdss-redundant-links" class="wdss-setting-item">
                         <label>
                           <span title="Removes different links from head section (e.g. rest-api, wp_generator etc)">Remove Redundant Links <sup>?</sup></span>
