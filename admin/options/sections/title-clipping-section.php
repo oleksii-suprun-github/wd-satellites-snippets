@@ -21,22 +21,22 @@
           $ending_exists = boolval(strpos($post_title, $ending));
           $title_less_than_count = boolval(mb_strlen($post_title) < $symbols_limit);
           $is_excluded = null;
+
           $is_already_exists = $title_less_than_count && $ending_exists;
   
           if( get_option('wdss_title_clipping_excluded', '') !== '' ) {
             $excluded_arr =  explode(',', get_option('wdss_title_clipping_excluded'));
             $is_excluded = in_array($post->ID, $excluded_arr);
           }
-  
-          
+            
           if ( !is_single()  || $is_already_exists || $is_old_post ||  $is_excluded )   { // where`s title trimming shouldn`t be implemented
             return $post_title;
           }	
           
           $title_arr = explode(' ', $post_title);
+
           // small words counter; if there`is none of them then don't extend words limit
           $words_limit_ext = 0;
-  
           foreach($title_arr as $word) {
             if(mb_strlen($word) < 2) {
               $words_limit_ext++;
@@ -45,7 +45,14 @@
   
           array_splice($title_arr, $words_limit + $words_limit_ext);
           $post_title = implode(' ', $title_arr);
-  
+
+          // detects broken ends
+          $is_yoast_divider_double = YoastSEO()->helpers->options->get_title_separator(); // get current yoast divider
+          $is_full_ending_double = get_option('wdss_title_ending'); // get current title ending option value
+          $is_sitename_double = get_bloginfo('name'); // get current sitename
+
+          $post_title = str_replace(array($is_sitename_double, $is_yoast_divider_double, $is_sitename_double), '', $post_title);
+           
           return $post_title . $ending;
         }
         return $post_title; 
