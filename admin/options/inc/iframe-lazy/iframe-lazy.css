@@ -1,0 +1,43 @@
+.youtube-wrapper {
+  max-width: 680px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.lazy-embed {
+  background-color: #000;
+  width: 563px;
+  height: 319px;
+  margin: auto;
+  margin-bottom: 30px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: center;
+  background-position: center;
+  background-size: cover;
+}
+
+@media screen and (max-width: 600px) {
+  .lazy-embed {
+      width: 100%;
+      height: 210px;
+  }
+  .lazy-embed embed {
+      width: 100% !important;
+      height: 100% !important;
+  }
+}
+
+.lazy-embed.inactive:before {
+  content: url('./yt-play-btn.png');
+  width: 100px;
+  height: 72px;
+  position: absolute;
+  z-index: 1;
+  opacity: 0.8;
+  top: calc(50% - 28px);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}

@@ -86,13 +86,6 @@ class Wd_Satellites_Snippets_Admin {
 	}
 
 
-	// Register the stylesheets for the admin area
-	public function wdss_enqueue_styles() {
-    wp_enqueue_style('font-awesome', plugin_dir_url( __FILE__ ) . 'css/font-awesome/css/all.min.css', array(), $this->version, 'all');
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wd-satellites-snippets-admin.css', array(), $this->version, 'all' );
-	}
-
-
 	// Get Posts Modal window
 	public function wdss_get_posts_modal() {
 		check_ajax_referer( 'ajax-nonce', 'security' );
@@ -104,7 +97,7 @@ class Wd_Satellites_Snippets_Admin {
 			'order' => 'DESC', 
 		);
 		$loop = new WP_Query( $args );
-	?>
+		?>
 		<div id="exclude-posts-modal" class="wdss-modal">
 			<div class="wdss-modal-header">
 				<i class="fas fa-times"></i>
@@ -146,9 +139,15 @@ class Wd_Satellites_Snippets_Admin {
 		die();
 	}
 
+	
+	// Register the stylesheets for the admin area
+	public function wdss_admin_enqueue_styles() {
+    wp_enqueue_style('font-awesome', plugin_dir_url( __FILE__ ) . 'css/font-awesome/css/all.min.css', array(), $this->version, 'all');
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wd-satellites-snippets-admin.css', array(), $this->version, 'all' );
+	}
 
 	//Register the JavaScript for the admin area
-	public function wdss_enqueue_scripts($page) {
+	public function wdss_admin_enqueue_scripts() {
 		if( get_current_screen()->id == 'settings_page_wd-sattelites-snippets' ) {
 			wp_enqueue_media();
 		
@@ -169,4 +168,20 @@ class Wd_Satellites_Snippets_Admin {
 			wp_localize_script($this->plugin_name, 'wdss_localize', $wdss_localize_script);
 		}
 	}
+
+	//Register the stylesheets for the frontend area
+	public function wdss_front_enqueue_styles() {
+		if( is_singular() ) {
+			wp_enqueue_style('lazy-iframes', plugin_dir_url( __FILE__ ) . 'options/inc/iframe-lazy/iframe-lazy.css', array(), $this->version, 'all');
+
+		}
+	}
+
+	//Register the JavaScript for the frontend area
+	public function wdss_front_enqueue_scripts() {
+		if( is_singular() ) {
+			wp_enqueue_script('lazy-iframes', plugin_dir_url( __FILE__ ) . 'options/inc/iframe-lazy/iframe-lazy.js', array(), $this->version, true );
+		}
+	}
+
 }

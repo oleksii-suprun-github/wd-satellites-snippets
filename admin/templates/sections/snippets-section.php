@@ -55,6 +55,36 @@
                       </label>
                     </div>
 
+                    <div id="wdss-disable-pingbacks" class="wdss-setting-item">
+                        <label>
+                          <span>Remove Pingbacks</span>
+                          <?php 
+                            checkbox_handler_html(['field_name' => 'wdss_disable_pingbacks']); 
+                            if( get_option('wdss_disable_pingbacks') == '' ) update_option( 'wdss_disable_pingbacks', '0' );               
+                          ?>    
+                      </label>
+                    </div>
+                    
+                    <div id="wdss-disable-emojis" class="wdss-setting-item">
+                        <label>
+                          <span>Disable Emojis</span>
+                          <?php 
+                            checkbox_handler_html(['field_name' => 'wdss_disable_emojis']); 
+                            if( get_option('wdss_disable_emojis') == '' ) update_option( 'wdss_disable_emojis', '0' );               
+                          ?>    
+                      </label>
+                    </div>
+
+                    <div id="wdss-disable-emojis" class="wdss-setting-item">
+                        <label>
+                          <span>Lazy Load for Iframes</span>
+                          <?php 
+                            checkbox_handler_html(['field_name' => 'lazy_load_for_iframes']); 
+                            if( get_option('lazy_load_for_iframes') == '' ) update_option( 'lazy_load_for_iframes', '0' );               
+                          ?>    
+                      </label>
+                    </div>
+
                     <div id="wdss-remove-hentry" class="wdss-setting-item">
                         <label>
                           <span>Remove Hentry</span>

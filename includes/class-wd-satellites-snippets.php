@@ -145,8 +145,12 @@ class Wd_Satellites {
 
 		$plugin_admin = new Wd_Satellites_Snippets_Admin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'wdss_enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'wdss_enqueue_scripts' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'wdss_admin_enqueue_styles' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'wdss_admin_enqueue_scripts' );
+
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'wdss_front_enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'wdss_front_enqueue_scripts' );
+		
 		$this->loader->add_action( 'init', $plugin_admin, 'wdss_init');
 	}
 
