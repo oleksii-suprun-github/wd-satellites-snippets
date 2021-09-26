@@ -65,6 +65,18 @@
                       </label>
                     </div>
                     
+                    <?php if( function_exists('wpcf7_enqueue_scripts') ) { ?>    
+                      <div id="wdss-cf-on-demand" class="wdss-setting-item">
+                        <label>
+                          <span>CF7 Scripts on Demand</span>
+                          <?php 
+                            checkbox_handler_html(['field_name' => 'wdss_cf_on_demand_only']); 
+                            if( get_option('wdss_cf_on_demand_only') == '' ) update_option( 'wdss_cf_on_demand_only', '0' );               
+                          ?>    
+                      </label>
+                      </div>
+                    <?php } ?>
+                    
                     <div id="wdss-disable-emojis" class="wdss-setting-item">
                         <label>
                           <span>Disable Emojis</span>
@@ -75,7 +87,7 @@
                       </label>
                     </div>
 
-                    <div id="wdss-disable-emojis" class="wdss-setting-item">
+                    <div id="wdss-lazy-load-iframes" class="wdss-setting-item">
                         <label>
                           <span>Lazy Load for Iframes</span>
                           <?php 

@@ -1,6 +1,6 @@
 <?php
 
-// Disables jQuery and Migration script for Frontend
+    // Disables jQuery and Migration script for Frontend
     if( get_option('wdss_disable_jquery', '0') ) {
       function wdss_disable_jquery() {
         if( !is_admin() ) {
@@ -9,6 +9,24 @@
         }
       }
       add_action('wp_enqueue_scripts', 'wdss_disable_jquery');
+    }
+
+
+    // Contact Form 7 Scripts on demand-only
+		if( get_option('wdss_cf_on_demand_only', '0') ) {
+      add_action('wp_loaded', 'wdss_cf7_scripts_handler');
+      function wdss_cf7_scripts_handler() {
+          add_filter( 'wpcf7_load_js', '__return_false' );
+          add_filter( 'wpcf7_load_css', '__return_false' );
+  
+          if ( function_exists( 'wpcf7_enqueue_scripts' ) ) {
+              wpcf7_enqueue_scripts();
+          }
+            
+          if ( function_exists( 'wpcf7_enqueue_styles' ) ) {
+              wpcf7_enqueue_styles();
+          }
+      }
     }
 
 		// Force Lowercase URLs Snippet
@@ -421,7 +439,7 @@
               else {
                 $image_url = site_url().$src_match[1];
               }
-
+              // If image doesn`t lay in wp-content folder then skip it 
               if(!mb_strpos($image_url, 'wp-content') ) {
                   continue;
               }
