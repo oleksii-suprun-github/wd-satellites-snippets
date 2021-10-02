@@ -107,7 +107,7 @@
 
                     <div id="wdss-disable-admin-notices" class="wdss-setting-item">
                         <label>
-                          <span>Disable Admin Notices</span>
+                          <span title="For more deep configuration use *Custom Disabled Admin Notices* panel">Disable Basic Admin Notices <sup>?</sup></span>
                           <?php 
                             checkbox_handler_html(['field_name' => 'wdss_disable_admin_notices']); 
                             if( get_option('wdss_disable_admin_notices') == '' ) update_option( 'wdss_disable_admin_notices', '0' );               
@@ -153,7 +153,7 @@
 
                     <div id="wdss-gutenberg-styles" class="wdss-setting-item">
                         <label>
-                          <span>Remove Gutenberg stylesheets</span>
+                          <span>Remove Gutenberg Stylesheets</span>
                           <?php 
                             checkbox_handler_html(['field_name' => 'wdss_gutenberg_styles']); 
                             if( get_option('wdss_gutenberg_styles') == '' ) update_option( 'wdss_gutenberg_styles', '0' );               

@@ -4,7 +4,7 @@
 ?>
 <section id="wdss-title-clipping-settings" class="wdss-section">
   <div class="wdss-section-header">
-    <h2 class="section-toggler">Long Title Clipping Settings <small>(posts only)</small></h2>
+    <h2 class="section-toggler">Long Title Clipping  <small>(posts only)</small></h2>
     <div class="wdss-section-header-togglers">
       <i title="Pin this section as open" class="fas fa-lock section-pin"></i>
       <i class="fas fa-chevron-down section-toggler"></i>

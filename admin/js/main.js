@@ -55,6 +55,28 @@ const organizationLogoChooser = {
 }
 
 
+// Deep array comparison helper
+const areArrsEqual = (first, second) => {
+  if(first.length !== second.length){
+     return false;
+  };
+  for(let i = 0; i < first.length; i++){
+     if(!second.includes(first[i])){
+        return false;
+     };
+  };
+  return true;
+};
+
+
+// Hide notices with time helper
+const hideMessage = (element, timeout) => {
+  setTimeout(function() {
+    element.remove();
+}, timeout);
+};
+ 
+
 // Pin section as open even after page reload (localStorage based)
 function sectionPinner() {
   const triggers = document.querySelectorAll('.wdss-section .section-pin');
