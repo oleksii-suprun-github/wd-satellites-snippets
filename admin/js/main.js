@@ -59,17 +59,17 @@ const organizationLogoChooser = {
 function sectionPinner() {
   const triggers = document.querySelectorAll('.wdss-section .section-pin');
   const sections_list = document.querySelectorAll('.wdss-section:not(#wdss-snippets-settings)');
-  let pinned_section_list;
-  
-  if(localStorage.getItem('PINNED_WDS_SECTIONS')) {
-    pinned_section_list = localStorage.getItem('PINNED_WDS_SECTIONS');
-  }
-  else {
-    pinned_section_list = [];
-    localStorage.setItem('PINNED_WDS_SECTIONS', JSON.stringify(pinned_section_list));
-  }
-
   function setPinnedSection() {
+    let pinned_section_list;
+  
+    if(localStorage.getItem('PINNED_WDS_SECTIONS')) {
+      pinned_section_list = localStorage.getItem('PINNED_WDS_SECTIONS');
+    }
+    else {
+      pinned_section_list = [];
+      localStorage.setItem('PINNED_WDS_SECTIONS', JSON.stringify(pinned_section_list));
+    }
+
     const sections_ids = pinned_section_list;
     sections_list.forEach(section => {
       let id = section.getAttribute('id');
@@ -99,6 +99,7 @@ function sectionPinner() {
 
   function removePinnedSection(data) {
     let temp_arr = JSON.parse(localStorage.getItem('PINNED_WDS_SECTIONS')) || [];
+
     let index = temp_arr.indexOf(data);
     if (index !== -1) {
       temp_arr.splice(index, 1);
@@ -109,6 +110,8 @@ function sectionPinner() {
   function init() {
     let header = this.closest('.wdss-section-header');
     let current_section = header.closest('.wdss-section').getAttribute('id');
+
+    let pinned_section_list = JSON.parse(localStorage.getItem('PINNED_WDS_SECTIONS')) || [];
 
     if(pinned_section_list.includes(current_section)) {
       this.classList.remove('active');
