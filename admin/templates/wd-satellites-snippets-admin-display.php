@@ -45,6 +45,10 @@
 
           <?php include_once('sections/schema-section.php') ?>
 
+          <?php include_once('sections/custom-410s-section.php') ?>
+
+          <?php include_once('sections/blocked-notices-section.php') ?>
+
           <input type="submit" name="submit" id="submit" class="wdss-button submit" value="<?= __('Save changes', 'wdss_domain') ?>">
         </form>
       </div>

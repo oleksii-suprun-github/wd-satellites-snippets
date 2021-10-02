@@ -3,10 +3,10 @@
 ?>
 <section id="polylang-settings" class="wdss-section">
   <div class="wdss-section-header">
-    <h2>Multilang Settings</h2>
+    <h2 class="section-toggler">Multilang Settings</h2>
     <div class="wdss-section-header-togglers">
-      <i title="Pin this section as open" class="fas fa-lock"></i>
-      <i class="fas fa-chevron-down"></i>
+      <i title="Pin this section as open" class="fas fa-lock section-pin"></i>
+      <i class="fas fa-chevron-down section-toggler"></i>
     </div>
   </div>
   <div class="wdss-row">
@@ -25,7 +25,7 @@
         <div id="wdss-polylang-homepage-description" class="wdss-setting-item">
           <div class="wdss-setting-item-accordion">
             <h3>Homepage description</h3>
-            <i class="fas fa-chevron-down"></i>
+            <i class="fas fa-chevron-down section-toggler"></i>
           </div>
 
           <?php $polylang_lang_list = pll_languages_list(['fields' => []]);  ?>
@@ -49,7 +49,7 @@
           <div id="wdss-polylang-author-description" class="wdss-setting-item">
             <div class="wdss-setting-item-accordion">
               <h3>Author`s page description</h3>
-              <i class="fas fa-chevron-down"></i>
+              <i class="fas fa-chevron-down section-toggler"></i>
             </div>
 
             <div class="wdss-setting-item-accordion-content">

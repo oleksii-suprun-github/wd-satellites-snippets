@@ -4,10 +4,10 @@
 ?>
 <section id="featured-images-settings" class="wdss-section">
   <div class="wdss-section-header">
-    <h2>Featured Images Settings</h2>
+    <h2 class="section-toggler">Featured Images Settings</h2>
     <div class="wdss-section-header-togglers">
-      <i title="Pin this section as open" class="fas fa-lock"></i>
-      <i class="fas fa-chevron-down"></i>
+      <i title="Pin this section as open" class="fas fa-lock section-pin"></i>
+      <i class="fas fa-chevron-down section-toggler"></i>
     </div>
   </div>
   <div class="wdss-row">
