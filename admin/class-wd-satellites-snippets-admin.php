@@ -64,7 +64,6 @@ class Wd_Satellites_Snippets_Admin {
     }
 
 		add_action( 'wp_ajax_fetch_modal_content',  array($this, 'wdss_get_posts_modal') );
-		add_action( 'wp_ajax_nopriv_fetch_modal_content',  array($this, 'wdss_get_posts_modal') );
 	}
 
 
@@ -88,8 +87,7 @@ class Wd_Satellites_Snippets_Admin {
 
 	// Register the stylesheets for the admin area
 	public function wdss_enqueue_styles() {
-    wp_enqueue_style('font-awesome', plugin_dir_url( __FILE__ ) . 'css/font-awesome/css/all.min.css', array(), $this->version, 'all');
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wd-satellites-snippets-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../assets/css/main.css', array(), $this->version, 'all' );
 	}
 
 
@@ -150,13 +148,13 @@ class Wd_Satellites_Snippets_Admin {
 	//Register the JavaScript for the admin area
 	public function wdss_enqueue_scripts($page) {
 
-		wp_enqueue_script('disable-admin-notices', plugin_dir_url( __FILE__ ) . 'js/disable-admin-notices.js', array(), $this->version, true);
+		wp_enqueue_script('disable-admin-notices', plugin_dir_url( __FILE__ ) . '../assets/js/disable-admin-notices.js', array(), $this->version, true);
 
 
 		if( get_current_screen()->id == 'settings_page_wd-sattelites-snippets' ) {
 			wp_enqueue_media();
 		
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/main.js', array(), $this->version, true );
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../assets/js/main.js', array(), $this->version, true );
 			
 			$get_title_separator = '';
 			if(function_exists('YoastSEO') && YoastSEO()->helpers->options->get_title_separator() !== null) {

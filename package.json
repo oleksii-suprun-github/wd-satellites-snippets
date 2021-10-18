@@ -1,9 +1,16 @@
 {
   "name": "wd-satellites-snippets",
-  "version": "0.7b",
+  "version": "0.7.0",
   "description": "Bulk of usefull snippets for our sattelites",
   "main": "index.php",
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
   "scripts": {
+    "watch": "webpack --mode=development --watch --config webpack-config.js",
+    "build": "webpack --mode=production --config webpack-config.js"
   },
   "keywords": [
     "wordpress",
@@ -12,5 +19,22 @@
   ],
   "author": "Alexey Suprun",
   "license": "GPL v3",
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^6.4.0",
+    "css-minimizer-webpack-plugin": "^3.1.1",
+    "file-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^2.4.2",
+    "sass": "^1.43.2",
+    "sass-loader": "^12.2.0",
+    "style-loader": "^3.3.0",
+    "webpack": "^5.58.2",
+    "webpack-cli": "^4.9.0"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4"
+  }
 }
