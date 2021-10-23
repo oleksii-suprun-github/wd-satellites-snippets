@@ -253,6 +253,8 @@
       remove_action( 'wp_head', 'wp_resource_hints', 2, 99 ); 
 
       remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
+      remove_action( 'template_redirect', 'wp_shortlink_header', 11 );
+      remove_action( 'template_redirect', 'rest_output_link_header', 11 );
 
       remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
       remove_action( 'wp_head', 'wp_oembed_add_host_js' );
@@ -270,8 +272,109 @@
       add_filter( 'rest_enabled', '__return_false' );
       add_filter( 'rest_jsonp_enabled', '__return_false' );
     }
-  
-    
+      
+
+    //Lazy load for iframes
+    if( get_option('lazy_load_for_iframes', '0') ) {
+      add_filter( 'the_content', 'wdss_filter_the_content_in_the_main_loop', 1 );
+      function wdss_filter_the_content_in_the_main_loop( $string ) {
+      
+        $regex = "/<(iframe)(.*?)>(<\/(iframe)>)?/i";
+        preg_match_all($regex, $string, $matches);
+      
+        $regex_new = '/src="([^"]*)"/';
+        $regex_url_new = '/(.*?)\?/i';
+        if (!empty($matches[2])) {
+          foreach ($matches[2] as $key => $elem) {
+            preg_match_all($regex_new, $matches[0][$key], $matches_url);
+            $img_link_array = explode('/',$matches_url[1][0]);
+            $img_link = end($img_link_array);
+            preg_match_all($regex_url_new, $img_link, $matches_url_new);
+      
+            if (isset($matches_url_new[1][0]) && !empty($matches_url_new[1][0])) {
+              $new_img_link = "https://img.youtube.com/vi/". $matches_url_new[1][0] ."/sddefault.jpg";
+              if (!file_get_contents( $new_img_link)) {
+                $new_img_link = "https://i.ytimg.com/vi_webp/". $matches_url_new[1][0] ."/hqdefault.webp";
+              }
+            } else {
+              $new_img_link = "https://img.youtube.com/vi/". $img_link ."/sddefault.jpg";
+              if (!file_get_contents( $new_img_link)) {
+                $new_img_link = "https://i.ytimg.com/vi_webp/". $img_link ."/hqdefault.webp";
+              }
+            }
+      
+            $newAttributes = preg_replace('/allowfullscreen(=".*?")?/s','',$elem);
+            $newAttributes = preg_replace('/(\w+)\=((\'|").*?(\'|"))/i', "data-$1=$2", $newAttributes);
+            $newAttributes = $newAttributes . ' data-img-src="'.$new_img_link.'"';
+            $string = str_replace($matches[0][$key], "<div{$newAttributes} class='lazy-embed inactive'></div>", $string);
+          }
+        }
+        return $string;
+      }  
+    }
+
+    // Disable the emoji's
+    if( get_option( 'wdss_disable_emojis', '0' ) ) {
+      function wdss_disable_emojis() {
+        remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+        remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+        remove_action( 'wp_print_styles', 'print_emoji_styles' );
+        remove_action( 'admin_print_styles', 'print_emoji_styles' ); 
+        remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+        remove_filter( 'comment_text_rss', 'wp_staticize_emoji' ); 
+        remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+        add_filter( 'tiny_mce_plugins', 'wdss_disable_emojis_tinymce' );
+        add_filter( 'wp_resource_hints', 'wdss_disable_emojis_remove_dns_prefetch', 10, 2 );
+      }
+      add_action( 'init', 'wdss_disable_emojis' );
+      
+      // Filter function used to remove the tinymce emoji plugin.
+      function wdss_disable_emojis_tinymce( $plugins ) {
+        if ( is_array( $plugins ) ) {
+          return array_diff( $plugins, array( 'wpemoji' ) );
+        } else {
+          return array();
+        }
+      }
+      
+      function wdss_disable_emojis_remove_dns_prefetch( $urls, $relation_type ) {
+        if ( 'dns-prefetch' == $relation_type ) {
+          /** This filter is documented in wp-includes/formatting.php */
+          $emoji_svg_url = apply_filters( 'emoji_svg_url', 'https://s.w.org/images/core/emoji/2/svg/' );
+      
+          $urls = array_diff( $urls, array( $emoji_svg_url ) );
+        }
+      
+      return $urls;
+      }
+    }
+
+    // 410 Category Rules
+    if( get_option('wdss_410_rules', '0') ) {
+      function wdss_force_410()
+      {
+          $requestUri = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+          $requestUri = urldecode($requestUri);
+          switch ($requestUri) {
+              case 'https://'.$_SERVER['HTTP_HOST'].'/uncategorized/':
+              case 'https://'.$_SERVER['HTTP_HOST'].'/uncategorized':
+              case 'https://'.$_SERVER['HTTP_HOST'].'/bez-kategorii/':
+              case 'https://'.$_SERVER['HTTP_HOST'].'/bez-kategorii':
+              case 'https://'.$_SERVER['HTTP_HOST'].'/без-категории/':
+              case 'https://'.$_SERVER['HTTP_HOST'].'/без-категории':
+                  global $post, $wp_query;
+                  $wp_query->set_404();
+                  status_header(404);
+                  header("HTTP/1.0 410 Gone");                
+                  if ( get_query_template( '404' ) ) {
+                    include(get_query_template('404'));
+                  }
+                  exit;
+          }
+      }
+      add_action( 'wp', 'wdss_force_410' );
+    }
+
     // Remove Yoast Schema Snippet
     if( function_exists('wpseo_init') && get_option('wdss_yoast_schema', '0') ) {
       add_filter( 'wpseo_json_ld_output', '__return_false' );
@@ -282,63 +385,62 @@
     if( get_option('wdss_auto_widght_height_attr', '0') ) {
       if( !is_admin()) {
 
-
-        add_filter('the_content', 'remove_image_dimesion', 10);
-        function remove_image_dimesion($content) {
-            if( is_single() ) {
-  
-                $pattern1 = '/(<img.*)(?=.*width="(\d+)")(?=.*height="(\d+)")(.*>)/i';
-                $pattern2 = '/(<img.*)((?=.*width="(\d+)")|(?=.*height="(\d+)"))(.*>)/i';
-  
-                $content = preg_replace(array($pattern1, $pattern2), "$1>", $content );
-            }
-            return $content;
-        }
     
-    
-        add_filter('the_content', 'set_image_dimension', 20);
-        function set_image_dimension($content) {
-            if( is_single() ) {
+        add_filter('the_content', 'wdss_set_image_dimension', 20);
+        function wdss_set_image_dimension($content) {
+          if( is_single() ) {
         
-                $buffer = $content;
-                
-                // Get all images without width or height attribute
-                $pattern1 = '/<img(?:[^>](?!(height|width)=))*+>/i';
-                $pattern2 = '/<img(?:(\s*(height|width)\s*=\s*"([^"]+)"\s*)+|[^>]+?)*>/i';
-  
-                preg_match_all($pattern1, $content, $first_match );
-                preg_match_all($pattern2, $content, $second_match );
-                
-                $all_images = array_merge($first_match[0], $second_match[0]);
-                foreach ( $all_images as $image ) {
-                
-                $tmp = $image;
-                
+            $buffer = $content;
             
-                // Get link of the file
-                preg_match( '/src=[\'"]([^\'"]+)/', $image, $src_match );
-                
-                // Get image url
+            // Get all images without width or height attribute
+            $pattern1 = '/<img(?:[^>](?!(height|width)=))*+>/i'; // if no width & height
+            $pattern2 = '/<img(?:(\s*(height|width)\s*=\s*"([^"]+)"\s*)+|[^>]+?)*>/i'; // if width OR height is present
+
+            preg_match_all($pattern1, $content, $first_match );
+            preg_match_all($pattern2, $content, $second_match );
+            
+            $all_images = array_merge($first_match[0], $second_match[0]);
+            foreach ( $all_images as $image ) {
+
+            $tmp = $image;
+        
+            // Trying to get width attr (last-stand filter)
+            preg_match( '/width="(\d+)"/', $image, $width_match );
+            // Trying to get height attr (last-stand filter)
+            preg_match( '/height="(\d+)"/', $image, $height_match );
+            // Get link of the file
+            preg_match( '/src=[\'"]([^\'"]+)/', $image, $src_match );
+
+            // Last check - if both width/height are present  then skip this file
+            if( !empty($src_match) && empty($height_match) ) {
+
+              // If url contains full address
+              if(!empty(strpos($src_match[0], site_url()))) {
+                $image_url = $src_match[1];
+              }
+              // If url contains relative address then adds domain
+              else {
                 $image_url = site_url().$src_match[1];
-            
-                if(!mb_strpos($image_url, 'wp-content') ) {
-                    continue;
-                }
-            
-                //get image dimension
-                list($width, $height) = wp_getimagesize($image_url );
-                $dimension = 'width="'.$width.'" height="'.$height.'" ';
-                
-                // Add width and width attribute
-                $image = str_replace( '<img', '<img ' . $dimension, $image );
-                
-                // Replace image with new attributes
-                $buffer = str_replace( $tmp, $image, $buffer );
-                }
-                
-                return $buffer;
+              }
+
+              if(!mb_strpos($image_url, 'wp-content') ) {
+                  continue;
+              }
+          
+              // Get image dimension
+              list($width, $height) = wp_getimagesize($image_url );
+              $dimension = 'width="'.$width.'" height="'.$height.'" ';
+              
+              // Add width and width attribute
+              $image = str_replace( '<img', '<img ' . $dimension, $image );
+              
+              // Replace image with new attributes
+              $buffer = str_replace( $tmp, $image, $buffer );
+              }
             }
-            return $content; 
+            return $buffer;
+        }
+        return $content; 
         }
       }
     }
@@ -471,17 +573,29 @@
     }
 
 
+    // Disable pingbacks
+    if( get_option('wdss_disable_pingbacks', '0') ) {
+
+      add_action( 'pre_ping', 'wdss_no_self_ping' );
+      function wdss_no_self_ping( &$links ) {
+        $home = get_option( 'home' );
+        foreach ( $links as $l => $link ) {
+          if ( 0 === strpos( $link, $home ) ) {
+            unset($links[$l]);
+          }
+        }
+      }
+    }
+
+
     // Disable Feeds
     if( get_option('wdss_disable_rss', '0') )  {
 
-      function remove_feed_links()
-      {
-        remove_action( 'wp_head', 'feed_links', 2 ); 
-        remove_action( 'wp_head', 'feed_links_extra', 3 );       
-        remove_action( 'wp_head', 'rsd_link', 4 ); 
-      }
-
-      function disabled_feed_behaviour()
+      remove_action( 'wp_head', 'feed_links', 2 ); 
+      remove_action( 'wp_head', 'feed_links_extra', 3 );       
+      remove_action( 'wp_head', 'rsd_link', 4 ); 
+      
+      function wdss_disabled_feed_behaviour()
       {
         global $wp_rewrite, $wp_query;
 
@@ -512,17 +626,16 @@
           }
       }    
       
-      function filter_feeds()
+      function wdss_filter_feeds()
       {
         if( !is_feed() || is_404() ) {
           return;
         }
 
-        disabled_feed_behaviour();
+        wdss_disabled_feed_behaviour();
       }
 
-      add_action('wp_loaded', 'remove_feed_links');
-      add_action('template_redirect', 'filter_feeds', 1);
+      add_action('template_redirect', 'wdss_filter_feeds', 1);
 
     }
 
@@ -537,7 +650,7 @@
     }
 
     // Custom Excerpts for imported articles
-    function custom_excerpts( $excerpt, $raw_excerpt ) {
+    function wdss_custom_excerpts( $excerpt, $raw_excerpt ) {
       if ( is_admin() ||  '' !== $raw_excerpt) {
         return $excerpt;
       }
@@ -556,11 +669,11 @@
       return $excerpt;
     
     }
-    add_filter( 'wp_trim_excerpt', 'custom_excerpts', 99, 2 );
+    add_filter( 'wp_trim_excerpt', 'wdss_custom_excerpts', 99, 2 );
     
     
     // Custom Descriptions for imported articles
-    function custom_post_descriptions($meta_description, $presentation)  {
+    function wdss_custom_post_descriptions($meta_description)  {
        
       if( is_single() ) {
         $condition = '#<div[^>]*id="toc"[^>]*>.*?</div>#is';
@@ -577,6 +690,5 @@
       return $meta_description;
     
     }
-    add_filter('wpseo_metadesc', 'custom_post_descriptions', 10, 2 );
-    add_filter('wpseo_opengraph_desc', 'custom_post_descriptions', 10, 2);
-    
+    add_filter('wpseo_metadesc', 'wdss_custom_post_descriptions', 10, 2 );
+    add_filter('wpseo_opengraph_desc', 'wdss_custom_post_descriptions', 10, 2);

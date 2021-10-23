@@ -1,6 +1,6 @@
 <section id="wdss-jsonld-schema-settings" class="wdss-section">
   <div class="wdss-section-header">
-    <h2 class="section-toggler">JSON-LD Schema </h2>
+    <h2 class="section-toggler">JSON-LD Schema Settings </h2>
     <div class="wdss-section-header-togglers">
       <i title="Pin this section as open" class="fas fa-lock section-pin"></i>
       <i class="fas fa-chevron-down section-toggler"></i>
@@ -101,12 +101,22 @@
             </label>
         </div>      
       
-      <div id="wdss-jsonld-schema-enail" class="wdss-setting-item">
+        <div id="wdss-jsonld-schema-author" class="wdss-setting-item">
             <label>
                 <span>Author</span>
                 <?php 
                   text_handler_html(['field_name' => 'wdss_jsonld_schema_author']); 
                   if( get_option('wdss_jsonld_schema_author') == '' ) update_option( 'wdss_jsonld_schema_author', '' );               
+                ?>    
+            </label>
+        </div>      
+
+        <div id="wdss-jsonld-schema-author-email" class="wdss-setting-item">
+            <label>
+                <span>Author URL</span>
+                <?php 
+                  text_handler_html(['field_name' => 'wdss_jsonld_schema_author_url']); 
+                  if( get_option('wdss_jsonld_schema_author_url') == '' ) update_option( 'wdss_jsonld_schema_author_url', '' );               
                 ?>    
             </label>
         </div>      

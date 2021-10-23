@@ -49,6 +49,8 @@
 
           <?php include_once('sections/blocked-notices-section.php') ?>
 
+          <?php include_once('sections/other-section.php') ?>
+
           <input type="submit" name="submit" id="submit" class="wdss-button submit" value="<?= __('Save changes', 'wdss_domain') ?>">
         </form>
       </div>

@@ -15,7 +15,7 @@ const configuration = {
 
   plugins: [
 		new MiniCssExtractPlugin({
-      filename: "css/[name].css",
+      filename: "css/style.css",
       chunkFilename: "[id].css",
       ignoreOrder: false,
     }),

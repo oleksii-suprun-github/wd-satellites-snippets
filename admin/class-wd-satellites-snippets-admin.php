@@ -63,7 +63,9 @@ class Wd_Satellites_Snippets_Admin {
       $options->wdss_last_modified();
     }
 
-		add_action( 'wp_ajax_fetch_modal_content',  array($this, 'wdss_get_posts_modal') );
+		if( wp_doing_ajax() ) {
+			add_action( 'wp_ajax_fetch_modal_content',  array($this, 'wdss_get_posts_modal') );
+		}
 	}
 
 

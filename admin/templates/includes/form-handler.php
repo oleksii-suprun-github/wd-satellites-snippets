@@ -27,6 +27,9 @@ function wdss_form_handler() {
       isset_option('wdss_disable_jquery'); 
       
       isset_option('wdss_redundant_links');   
+      isset_option('wdss_disable_emojis');   
+      isset_option('wdss_disable_pingbacks');   
+      
 
       isset_option('wdss_disable_autoupdates');
       isset_option('wdss_disable_admin_notices');
@@ -40,6 +43,8 @@ function wdss_form_handler() {
 
       isset_option('wdss_comments_passive_listener_fix');
     
+      isset_option('lazy_load_for_iframes');
+
       isset_option('wdss_remove_hentry');
       isset_option('wdss_yoast_schema');   
       isset_option('wdss_yoast_canonical_fix');   
@@ -77,8 +82,11 @@ function wdss_form_handler() {
       isset_option('wdss_jsonld_schema_telephone');
       isset_option('wdss_jsonld_schema_email');
       isset_option('wdss_jsonld_schema_author');
+      isset_option('wdss_jsonld_schema_author_url');
 
       isset_option('wdss_advanced_jsonld_schema');
+
+      isset_option('wdss_gtm_id');
 
       isset_editor_content('wdss_advanced_jsonld_schema_homepage');
       isset_editor_content('wdss_advanced_jsonld_schema_category');

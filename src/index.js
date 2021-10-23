@@ -3,7 +3,7 @@ import schemaSectionSettings from "./js/schema-settings";
 import mediaFileChooser from "./js/media-file-chooser";
 import getPostsModal from "./js/posts-modal";
 import sectionPinner from "./js/section-pinner";
-import './scss/styles.css';
+import './css/styles.css';
 
 // Condition for calling our functions
 const pluginPage = document.querySelector('#wdss-settings-page');
