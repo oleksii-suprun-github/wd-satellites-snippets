@@ -40,7 +40,6 @@
                     </div>
                   <?php endforeach;  ?>
             </div>
-        </div>   
 
         <?php 
           $total_posts = wp_count_posts('post')->publish;
@@ -73,10 +72,7 @@
             </div>
           <?php endif; ?>
         </div>
-      </div>
-    </div>
-
-    <div id="wdss-multilang-sitemap-condition" class="wdss-setting-item">
+      </div>      <div id="wdss-multilang-sitemap-condition" class="wdss-setting-item">
         <label>
             <span>Use Multilang Sitemap<br> instead of Yoast</span>
             <?php 

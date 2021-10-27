@@ -32,12 +32,9 @@
           <input type="hidden" name="wdss_form_submitted" value='true'>
           <?php wp_nonce_field('wdss_save_settings', 'wfp_nonce'); ?>
 
-
           <?php include_once('sections/snippets-section.php') ?>
 
           <?php include_once('sections/title-clipping-section.php') ?>
-
-          <?php include_once('sections/410-status-section.php') ?>
 
           <?php include_once('sections/featured-images-section.php') ?>
 

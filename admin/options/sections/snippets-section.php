@@ -11,6 +11,27 @@
       add_action('wp_enqueue_scripts', 'wdss_disable_jquery');
     }
 
+
+    // Sets correct redirect link on comment submit
+    add_filter( 'comment_post_redirect', 'wdss_redirect_comments', 10, 2 );
+    function wdss_redirect_comments( $location, $commentdata ) {
+      if(!isset($commentdata) || empty($commentdata->comment_post_ID) ){
+        return $location;
+      }
+      $post_id = $commentdata->comment_post_ID;
+      return $location;
+    }
+
+    
+    // Removes Website field from comment form
+    add_filter('comment_form_default_fields', 'wdss_unset_url_field');
+    function wdss_unset_url_field($fields){
+      if(isset($fields['url']))
+        unset($fields['url']);
+        return $fields;
+    }
+
+
 		// Force Lowercase URLs Snippet
 		if( get_option('wdss_force_lowercase', '0') ) {
 			function wdss_force_lowercase() {
@@ -349,32 +370,6 @@
       }
     }
 
-    // 410 Category Rules
-    if( get_option('wdss_410_rules', '0') ) {
-      function wdss_force_410()
-      {
-          $requestUri = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-          $requestUri = urldecode($requestUri);
-          switch ($requestUri) {
-              case 'https://'.$_SERVER['HTTP_HOST'].'/uncategorized/':
-              case 'https://'.$_SERVER['HTTP_HOST'].'/uncategorized':
-              case 'https://'.$_SERVER['HTTP_HOST'].'/bez-kategorii/':
-              case 'https://'.$_SERVER['HTTP_HOST'].'/bez-kategorii':
-              case 'https://'.$_SERVER['HTTP_HOST'].'/без-категории/':
-              case 'https://'.$_SERVER['HTTP_HOST'].'/без-категории':
-                  global $post, $wp_query;
-                  $wp_query->set_404();
-                  status_header(404);
-                  header("HTTP/1.0 410 Gone");                
-                  if ( get_query_template( '404' ) ) {
-                    include(get_query_template('404'));
-                  }
-                  exit;
-          }
-      }
-      add_action( 'wp', 'wdss_force_410' );
-    }
-
     // Remove Yoast Schema Snippet
     if( function_exists('wpseo_init') && get_option('wdss_yoast_schema', '0') ) {
       add_filter( 'wpseo_json_ld_output', '__return_false' );
@@ -445,7 +440,26 @@
       }
     }
 
-
+    // 410 Category Rules
+    function wdss_force_410() {
+        $requestUri = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        $requestUri = urldecode($requestUri);
+        switch ($requestUri) {
+            case 'https://'.$_SERVER['HTTP_HOST'].'/uncategorized/':
+            case 'https://'.$_SERVER['HTTP_HOST'].'/uncategorized':
+            case 'https://'.$_SERVER['HTTP_HOST'].'/bez-kategorii/':
+            case 'https://'.$_SERVER['HTTP_HOST'].'/bez-kategorii':
+            case 'https://'.$_SERVER['HTTP_HOST'].'/без-категории/':
+            case 'https://'.$_SERVER['HTTP_HOST'].'/без-категории':
+                global $post, $wp_query;
+                $wp_query->set_404();
+                status_header(404);
+                header("HTTP/1.0 410 Gone");
+                include(get_query_template('404'));
+                exit;
+        }
+    }
+    add_action( 'wp', 'wdss_force_410' );
 
     // Autoptimize Lazyload Fix Snippet
     if( function_exists('autoptimize') && get_option('wdss_autoptimize_lazy_fix', '0') ) {
@@ -549,6 +563,18 @@
           wp_redirect(site_url('/'), 301);
           exit();
         }
+
+        if(function_exists('pll_languages_list')) {
+          $langs = count(pll_languages_list());
+          if( 
+            function_exists('pll_current_language') && $langs > 0 &&
+            $url == '/' . pll_current_language() . '/index.php' ||
+            $url == '/' . pll_current_language() . '/index.html' 
+            ) {
+            wp_redirect(site_url('/'), 301);
+            exit();
+          }
+        }        
       }
     }
 
