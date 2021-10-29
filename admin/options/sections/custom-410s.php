@@ -3,10 +3,12 @@
 function wdss_custom_410() {
   $requestUri = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
   $requestUri = urldecode($requestUri);
-  $e410s_urls_list = get_option('wdss_410s_dictionary');
+  $e410s_rules_list = get_option('wdss_410s_dictionary');
 
-  foreach($e410s_urls_list as $url) {
-    if($requestUri === 'https://'.$_SERVER['HTTP_HOST'].'/'.$url) {
+  foreach($e410s_rules_list as $rule) {
+    $url = 'https://'.$_SERVER['HTTP_HOST'].$rule;
+
+    if($requestUri ==  $url) {
       global $post, $wp_query;
       $wp_query->set_404();
       status_header(404);

@@ -148,8 +148,9 @@ class Wd_Satellites {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'wdss_admin_enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'wdss_admin_enqueue_scripts' );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'wdss_front_enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'wdss_front_enqueue_scripts' );
+		// Currently NOT in use
+		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'wdss_front_enqueue_styles' );
+		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'wdss_front_enqueue_scripts' );
 		
 		$this->loader->add_action( 'init', $plugin_admin, 'wdss_init');
 	}
