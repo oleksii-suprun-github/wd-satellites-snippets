@@ -1,4 +1,4 @@
-import {hideMessage} from "./helpers";
+import {hideMessage, areArrsEqual} from "./helpers";
 
 // Title Dictionary Handler
 export default function E410_DictionaryHandler() {
