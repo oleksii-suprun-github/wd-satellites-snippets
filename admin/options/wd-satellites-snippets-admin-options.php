@@ -34,7 +34,7 @@ class Wd_Satellites_Snippets_Admin_Options {
 				}
 
 				function last_modified_polylang() {
-					if ( ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || ( is_admin() ) ) {
+					if ( wp_doing_ajax() || ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || ( is_admin() ) ) {
 						return;
 					}
 				
@@ -121,5 +121,7 @@ class Wd_Satellites_Snippets_Admin_Options {
     include_once('sections/featured-images-section.php');
     include_once('sections/polylang-section.php');
 		include_once('sections/schema-section.php');
+		include_once('sections/custom-410s.php');
+		include_once('sections/other-section.php');
   }
 }

@@ -63,15 +63,18 @@ class Wd_Satellites_Snippets_Admin {
       $options->wdss_last_modified();
     }
 
-		add_action( 'wp_ajax_fetch_modal_content',  array($this, 'wdss_get_posts_modal') );
-		add_action( 'wp_ajax_nopriv_fetch_modal_content',  array($this, 'wdss_get_posts_modal') );
+		if( wp_doing_ajax() ) {
+			add_action( 'wp_ajax_fetch_modal_content',  array($this, 'wdss_get_posts_modal') );
+			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
+		}
 	}
 
 
 	// Add Admin Menu
 	public function wdss_admin_menu() {
-		add_options_page('WD Satellite Settings', 'WD Satellite', 'manage_options', 'wd-sattelites-snippets', 'wdss_settings_template', null, 100 );
+		add_options_page( 'WD Satellite Settings', 'WD Satellite', 'manage_options', 'wd-sattelites-snippets', 'wdss_settings_template', null, 100 );
 	}
+
 
 	// Add Adminbar Quick Link
 	public function wdss_add_adminbar_link($admin_bar) {
@@ -86,9 +89,24 @@ class Wd_Satellites_Snippets_Admin {
 	}
 
 
+	// Register the stylesheets for the admin area
+	public function wdss_enqueue_styles() {
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../assets/css/main.css', array(), $this->version, 'all' );
+	}
+
+
+	// Errors 410 Dictionary Handler
+	public function wdss_e410_dictionary_handler() {
+		check_ajax_referer( 'e410-dictionary-nonce', 'security', false );
+
+    $e410_dictionary = $_POST["e410_dictionary"];
+    update_option('wdss_410s_dictionary', $e410_dictionary);
+	}
+
+
 	// Get Posts Modal window
 	public function wdss_get_posts_modal() {
-		check_ajax_referer( 'ajax-nonce', 'security' );
+		check_ajax_referer( 'ajax-nonce', 'security', false );
 		$args = array(
 			'post_type' => 'post',
 			'post_status' => 'any',
@@ -97,7 +115,7 @@ class Wd_Satellites_Snippets_Admin {
 			'order' => 'DESC', 
 		);
 		$loop = new WP_Query( $args );
-		?>
+	?>
 		<div id="exclude-posts-modal" class="wdss-modal">
 			<div class="wdss-modal-header">
 				<i class="fas fa-times"></i>
@@ -139,49 +157,32 @@ class Wd_Satellites_Snippets_Admin {
 		die();
 	}
 
-	
-	// Register the stylesheets for the admin area
-	public function wdss_admin_enqueue_styles() {
-    wp_enqueue_style('font-awesome', plugin_dir_url( __FILE__ ) . 'css/font-awesome/css/all.min.css', array(), $this->version, 'all');
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wd-satellites-snippets-admin.css', array(), $this->version, 'all' );
-	}
 
 	//Register the JavaScript for the admin area
-	public function wdss_admin_enqueue_scripts() {
+	public function wdss_enqueue_scripts($page) {
+
+		wp_enqueue_script( 'disable-admin-notices', plugin_dir_url( __FILE__ ) . '../assets/js/disable-admin-notices.js', array(), $this->version, true );
+
 		if( get_current_screen()->id == 'settings_page_wd-sattelites-snippets' ) {
 			wp_enqueue_media();
 		
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/main.js', array(), $this->version, true );
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../assets/js/main.js', array(), $this->version, true );
 			
 			$get_title_separator = '';
-			if(function_exists('YoastSEO') && YoastSEO()->helpers->options->get_title_separator() !== null) {
+			if( function_exists( 'YoastSEO' ) && YoastSEO()->helpers->options->get_title_separator() !== null ) {
 				$get_title_separator = YoastSEO()->helpers->options->get_title_separator();
 			}
 
 			$wdss_localize_script = [
-				'site_title' => $get_title_separator . ' ' . get_bloginfo('name'),
-				'total_post_count' => wp_count_posts('post')->publish,
-				'is_polylang_exists' => function_exists('pll_languages_list'),
+				'site_title' => $get_title_separator . ' ' . get_bloginfo( 'name' ),
+				'total_post_count' => wp_count_posts( 'post' )->publish,
+				'is_polylang_exists' => function_exists( 'pll_languages_list' ),
+				'wp_rand' => wp_rand(),
 				'url' => admin_url( 'admin-ajax.php' ),
-				'nonce' => wp_create_nonce( 'ajax-nonce' )
+				'nonce' => wp_create_nonce( 'ajax-nonce' ),
+				'e410_dictionary_nonce' => wp_create_nonce( 'e410-dictionary-nonce' ),
 			];
-			wp_localize_script($this->plugin_name, 'wdss_localize', $wdss_localize_script);
+			wp_localize_script( $this->plugin_name, 'wdss_localize', $wdss_localize_script );
 		}
 	}
-
-	//Register the stylesheets for the frontend area
-	public function wdss_front_enqueue_styles() {
-		if( is_singular() ) {
-			wp_enqueue_style('lazy-iframes', plugin_dir_url( __FILE__ ) . 'options/inc/iframe-lazy/iframe-lazy.css', array(), $this->version, 'all');
-
-		}
-	}
-
-	//Register the JavaScript for the frontend area
-	public function wdss_front_enqueue_scripts() {
-		if( is_singular() ) {
-			wp_enqueue_script('lazy-iframes', plugin_dir_url( __FILE__ ) . 'options/inc/iframe-lazy/iframe-lazy.js', array(), $this->version, true );
-		}
-	}
-
 }

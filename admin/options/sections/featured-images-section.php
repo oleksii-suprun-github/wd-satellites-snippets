@@ -3,7 +3,7 @@
     // Random Featured Image from the list
     if( get_option('wdss_auto_featured_image','0') ) {
       function wdss_random_featured_image() {
-
+        
         global $post;
         require_once ABSPATH . 'wp-admin/includes/file.php';
     
