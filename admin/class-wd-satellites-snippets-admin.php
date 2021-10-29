@@ -90,7 +90,7 @@ class Wd_Satellites_Snippets_Admin {
 
 
 	// Register the stylesheets for the admin area
-	public function wdss_enqueue_styles() {
+	public function wdss_admin_enqueue_styles() {
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../assets/css/main.css', array(), $this->version, 'all' );
 	}
 
@@ -159,7 +159,7 @@ class Wd_Satellites_Snippets_Admin {
 
 
 	//Register the JavaScript for the admin area
-	public function wdss_enqueue_scripts($page) {
+	public function wdss_admin_enqueue_scripts($page) {
 
 		wp_enqueue_script( 'disable-admin-notices', plugin_dir_url( __FILE__ ) . '../assets/js/disable-admin-notices.js', array(), $this->version, true );
 
