@@ -550,7 +550,18 @@
       if( !is_admin() ) {
         $url = $_SERVER['REQUEST_URI'];
 
-        if (
+        if(function_exists('pll_languages_list')) {
+          $langs = count(pll_languages_list());
+          if( 
+            function_exists('pll_current_language') && $langs > 0 &&
+            $url == '/' . pll_current_language() . '/index.php' ||
+            $url == '/' . pll_current_language() . '/index.html' 
+            ) {
+            wp_redirect(site_url('/' . pll_current_language()), 301);
+            exit();
+          }
+        } 
+        elseif (
           $url == "/index.html"  || 
           $url == "/index.php"   || 
           $url == "/feed"        || 
@@ -562,19 +573,7 @@
         ) {
           wp_redirect(site_url('/'), 301);
           exit();
-        }
-
-        if(function_exists('pll_languages_list')) {
-          $langs = count(pll_languages_list());
-          if( 
-            function_exists('pll_current_language') && $langs > 0 &&
-            $url == '/' . pll_current_language() . '/index.php' ||
-            $url == '/' . pll_current_language() . '/index.html' 
-            ) {
-            wp_redirect(site_url('/'), 301);
-            exit();
-          }
-        }        
+        }       
       }
     }
 

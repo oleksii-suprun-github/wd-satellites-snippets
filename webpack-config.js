@@ -4,8 +4,7 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 const configuration = {
 	entry: {
-		'main': './src/index.js',
-		'disable-admin-notices': './src/js/disable-admin-notices.js'
+		'main': './src/index.js'
 	},
 
 	output: {
@@ -15,7 +14,7 @@ const configuration = {
 
   plugins: [
 		new MiniCssExtractPlugin({
-      filename: "css/style.css",
+      filename: "css/main.css",
       chunkFilename: "[id].css",
       ignoreOrder: false,
     }),

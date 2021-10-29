@@ -1,8 +1,9 @@
-import {getSiteTitle, accordionToggler, checkboxToggler, sectionToggler, groupToggler, resetValue, toggleAllOptions} from "./js/helpers";
-import schemaSectionSettings from "./js/schema-settings";
-import mediaFileChooser from "./js/media-file-chooser";
-import getPostsModal from "./js/posts-modal";
-import sectionPinner from "./js/section-pinner";
+import {getSiteTitle, accordionToggler, checkboxToggler, sectionToggler, groupToggler, resetValue, toggleAllOptions} from "./modules/helpers";
+import schemaSectionSettings from "./modules/schema-settings";
+import mediaFileChooser from "./modules/media-file-chooser";
+import getPostsModal from "./modules/posts-modal";
+import sectionPinner from "./modules/section-pinner";
+import E410_DictionaryHandler from "./modules/e410-handler";
 import './css/styles.css';
 
 // Condition for calling our functions
@@ -78,13 +79,14 @@ function Init() {
       resetValue(cutTitleSinceReset);
       resetValue(featuredImagesListReset);
 
-
       getPostsModal();
     }
 
     if(wdss_localize.is_polylang_exists) {
       groupToggler(polylangSection);  
     }
+
+    E410_DictionaryHandler();
 
     mediaFileChooser(organizationLogoChooser);
     resetValue(organizationLogoReset);

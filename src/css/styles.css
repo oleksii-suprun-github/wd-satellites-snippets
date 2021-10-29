@@ -80,6 +80,12 @@ html.fixed::before {
   justify-content: flex-start;
   align-items: flex-start;
 }
+#wdss-settings-page .wdss-section-content-description {
+  margin-bottom: 25px;
+}
+#wdss-settings-page .wdss-section-content-description span {
+  font-size: .85;
+}
 #wdss-snippets-settings .wdss-setting-item {
   width: calc(33.33% - 25px);
 }
@@ -131,6 +137,21 @@ h2.pinned, .disabled {
 }
 
 
+/* Notifications */
+.msg {
+  display: block;
+  margin: 0 auto;
+  margin-top: 10px;
+  width: fit-content;
+  font-weight: bold;
+  text-align: center;
+}
+.msg.successful {
+  color: green;
+}
+.msg.error {
+  color: red;
+}
 
 /* Headings */
 #wdss-settings-page h1 > small {
@@ -675,6 +696,123 @@ button#wdss-toggle-options {
   }
   .wdss-polylang-textarea-block:last-of-type {
     margin-bottom: 0;
+  }
+}
+
+
+/* Panels & tables */
+.wdp-add-item-panel {
+  display: flex;
+  width: 100%;
+  margin-bottom: 25px;
+}
+.wdss-list-item {
+  display: flex;
+  align-items: center;
+  margin-right: 25px;
+}
+.wdss-list-item:first-of-type {
+  margin-right: 25px;
+}
+.wdss-list-item span {
+  margin-right: 15px;
+}
+.wdss-list-item input {
+  width: 195px;
+}
+.wdss-list-item-handlers {
+  display: flex;
+  align-items: center;
+}
+.wdss-list-item-handler {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  padding: 0 15px;
+  border-radius: 4px;
+  color: #fff;
+  background-color: #000;
+  cursor: pointer;
+  transition: all 300ms;
+}
+.wdss-list-item-handler:hover {
+  transition: all 300ms;
+}
+.wdss-list-item-handler.add {
+  background-color:green;
+}
+.wdss-list-item-handler.add:hover {
+  background-color: #1ea71e;
+}
+.wdss-list-table-wrapper {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+}
+.wdss-list-table {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.wdss-list-table thead {
+  background-color: #ccc;
+}
+.wdss-list-table thead tr th:first-of-type {
+  width: 75%;
+}
+.wdss-list-table tr:nth-of-type(even) {
+  background-color: #f0f0f1;
+}
+.wdss-list-table td {
+  text-align: center;
+}
+.wdss-list-table-wrapper button {
+  display: block;
+  height: 25px;
+  margin: 0 auto;
+  padding: 0 25px;
+  background: #3c434a!important;
+  color: #fff;
+  border-radius: 3px;
+  border: 0;
+}
+.wdss-list-table__remove-item i {
+  cursor: pointer;
+}
+.wdss-list-table__remove-item i:hover {
+  color: #cc2020;
+}
+@media screen and (max-width: 767px) {
+  .wdp-add-item-panel {
+    flex-direction: column;
+  }
+  .wdss-list-item:first-of-type {
+    margin: 0;
+  }
+  .wdp-setting-item-accordion,
+  .wdp-setting-item-accordion-content.active {
+    width: -webkit-fill-available;
+  }
+  .wdp-setting-item-accordion-content strong {
+    margin-bottom: 10px;
+  }
+  .wdss-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  .wdss-list-item:last-of-type {
+    margin-bottom: 20px;
+  }
+  .wdss-list-item input {
+    width: 100%;
+  }
+  .wdss-list-item-handlers {
+    width: fit-content;
+    margin-left: auto;
   }
 }
 

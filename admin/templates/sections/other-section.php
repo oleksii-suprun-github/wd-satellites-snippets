@@ -1,4 +1,4 @@
-<section id="custom-410s-list-settings" class="wdss-section">
+<section id="other-settings" class="wdss-section">
   <div class="wdss-section-header">
     <h2 class="section-toggler">Other</h2>
     <div class="wdss-section-header-togglers">
@@ -6,7 +6,7 @@
       <i class="fas fa-chevron-down section-toggler"></i>
     </div>
   </div>
-  <div class="wdss-row">
+  <div class="wdss-row hidden">
     <div class="wdss-section-content">
       <div id="gtm-identifier" class="wdss-setting-item">
           <label>

@@ -44,7 +44,7 @@
 
           <?php include_once('sections/custom-410s-section.php') ?>
 
-          <?php include_once('sections/blocked-notices-section.php') ?>
+          <!-- <?php include_once('sections/blocked-notices-section.php') ?> -->
 
           <?php include_once('sections/other-section.php') ?>
 

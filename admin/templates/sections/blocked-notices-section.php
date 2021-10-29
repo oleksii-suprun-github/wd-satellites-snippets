@@ -6,7 +6,7 @@
       <i class="fas fa-chevron-down section-toggler"></i>
     </div>
   </div>
-  <div class="wdss-row">
+  <div class="wdss-row hidden">
     <div class="wdss-section-content">
       
     </div>
