@@ -273,6 +273,7 @@
       remove_action( 'wp_head', 'wp_generator' );
       remove_action( 'wp_head', 'wp_resource_hints', 2, 99 ); 
 
+      remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
       remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
       remove_action( 'template_redirect', 'wp_shortlink_header', 11 );
       remove_action( 'template_redirect', 'rest_output_link_header', 11 );
@@ -451,6 +452,8 @@
             case 'https://'.$_SERVER['HTTP_HOST'].'/bez-kategorii':
             case 'https://'.$_SERVER['HTTP_HOST'].'/без-категории/':
             case 'https://'.$_SERVER['HTTP_HOST'].'/без-категории':
+            case 'https://'.$_SERVER['HTTP_HOST'].'/без-рубрики/':
+            case 'https://'.$_SERVER['HTTP_HOST'].'/без-рубрики':
                 global $post, $wp_query;
                 $wp_query->set_404();
                 status_header(404);

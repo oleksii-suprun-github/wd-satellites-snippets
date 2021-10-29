@@ -87,6 +87,7 @@ function wdss_form_handler() {
       isset_option('wdss_advanced_jsonld_schema');
 
       isset_option('wdss_gtm_id');
+      isset_option('wdss_yoast_posts_exclude');
 
       isset_editor_content('wdss_advanced_jsonld_schema_homepage');
       isset_editor_content('wdss_advanced_jsonld_schema_category');

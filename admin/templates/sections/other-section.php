@@ -16,6 +16,17 @@
               if( get_option('wdss_gtm_id') == '' ) update_option( 'wdss_gtm_id', '' );               
             ?>    
           </label>
-      </div>      
+      </div> 
+      
+      <div id="wdss-yoast-posts-exclude" class="wdss-setting-item">
+          <label>
+            <span>Exclude posts of specific categories from Yoast Sitemap</span>
+            <?php 
+              text_handler_html(['field_name' => 'wdss_yoast_posts_exclude']); 
+              if( get_option('wdss_yoast_posts_exclude') == '' ) update_option( 'wdss_yoast_posts_exclude', '' );               
+            ?>    
+          </label>
+      </div> 
+
     </div>
 </section>
