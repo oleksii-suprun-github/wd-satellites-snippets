@@ -111,10 +111,10 @@ div.disabled:before {
   position: absolute;
   border-radius: 5px;
 }
-.hidden {
+#wdss-settings-page .hidden {
   visibility: hidden;
 }
-h2.pinned, .disabled {
+#wdss-settings-page h2.pinned, .disabled {
   pointer-events: none;
 }
 
