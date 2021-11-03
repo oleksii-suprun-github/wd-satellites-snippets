@@ -77,6 +77,16 @@
                       </div>
                     <?php } ?>
                     
+                    <div id="wdss-disable-homepage-pagination" class="wdss-setting-item">
+                        <label>
+                          <span>Disable Homepage Pagination</span>
+                          <?php 
+                            checkbox_handler_html(['field_name' => 'wdss_remove_homepage_pagination']); 
+                            if( get_option('wdss_remove_homepage_pagination') == '' ) update_option( 'wdss_remove_homepage_pagination', '0' );               
+                          ?>    
+                      </label>
+                    </div>
+
                     <div id="wdss-disable-emojis" class="wdss-setting-item">
                         <label>
                           <span>Disable Emojis</span>

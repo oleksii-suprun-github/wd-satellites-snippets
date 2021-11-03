@@ -55,7 +55,8 @@ function wdss_form_handler() {
       isset_option('wdss_force_lowercase');  
       
       isset_option('wdss_enable_title_clipping');   
-      
+      isset_option('wdss_remove_homepage_pagination');
+
       isset_option('wdss_title_clipping_excluded');   
       isset_option('wdss_title_clipping_by_date');         
       

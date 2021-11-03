@@ -10,7 +10,7 @@
     <div class="wdss-section-content">
       <div id="gtm-identifier" class="wdss-setting-item">
           <label>
-            <span>GTM Identifier</span>
+            <span title="e.g. GTM-XXXX...">GTM Identifier <strong>*</strong></span>
             <?php 
               text_handler_html(['field_name' => 'wdss_gtm_id']); 
               if( get_option('wdss_gtm_id') == '' ) update_option( 'wdss_gtm_id', '' );               
@@ -20,7 +20,7 @@
       
       <div id="wdss-yoast-posts-exclude" class="wdss-setting-item">
           <label>
-            <span>Exclude posts of specific categories from Yoast Sitemap</span>
+            <span title="By category`s id, coma-separated">Exclude posts of categories from Yoast Sitemap <strong>*</strong></span>
             <?php 
               text_handler_html(['field_name' => 'wdss_yoast_posts_exclude']); 
               if( get_option('wdss_yoast_posts_exclude') == '' ) update_option( 'wdss_yoast_posts_exclude', '' );               

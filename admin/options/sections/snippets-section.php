@@ -441,6 +441,22 @@
       }
     }
 
+
+    // Removes homepage pagination
+    if( get_option('wdss_remove_homepage_pagination', '0') ) {
+      function wdss_remove_homepage_pagination() {
+        global $post, $wp_query;
+        if ((is_home() || is_front_page()) && (is_paged())) {
+        $wp_query->set_404();
+        status_header(404);
+        include( get_query_template( '404' ) );
+        exit;
+        }
+      }
+      add_action( 'template_redirect', 'wdss_remove_homepage_pagination', 1 );
+    }
+
+
     // 410 Category Rules
     function wdss_force_410() {
         $requestUri = 'https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
@@ -700,6 +716,18 @@
     add_filter( 'wp_trim_excerpt', 'wdss_custom_excerpts', 99, 2 );
     
     
+    // Removes Yoast`s Rel Next link from homepage
+    if( get_option('wdss_remove_homepage_pagination', '0') ) {
+      add_filter( 'wpseo_next_rel_link', 'wdss_remove_wpseo_next_home' );
+      function wdss_remove_wpseo_next_home( $link ) {
+          if ( is_front_page() ) {
+              $link = '';
+          }
+          return $link;
+      }
+    }
+    
+
     // Custom Descriptions for imported articles
     function wdss_custom_post_descriptions($meta_description)  {
        
