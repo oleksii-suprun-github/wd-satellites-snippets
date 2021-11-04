@@ -82,7 +82,7 @@ function wdss_form_handler() {
       isset_option('wdss_jsonld_schema_country');
       isset_option('wdss_jsonld_schema_telephone');
       isset_option('wdss_jsonld_schema_email');
-      isset_option('wdss_jsonld_schema_author');
+      isset_option('wdss_jsonld_schema_author_name');
 
       isset_option('wdss_advanced_jsonld_schema');
 

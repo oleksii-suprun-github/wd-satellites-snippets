@@ -1,4 +1,12 @@
+
+    
 <section id="wdss-jsonld-schema-settings" class="wdss-section">
+
+  <?php
+    $count_posts = wp_count_posts();
+    $published_posts = $count_posts->publish;
+  ?>
+
   <div class="wdss-section-header">
     <h2 class="section-toggler">JSON-LD Schema</h2>
     <div class="wdss-section-header-togglers">
@@ -31,6 +39,8 @@
             </label>
         </div>
 
+        <?php if ($published_posts > 1) : ?>
+
         <div id="wdss-jsonld-schema-locality" class="wdss-setting-item">
             <label>
                 <span title="addressLocality field">Locality <sup>?<sup></span>
@@ -40,6 +50,7 @@
                 ?>    
             </label>
         </div>
+
 
         <div id="wdss-jsonld-schema-region" class="wdss-setting-item">
             <label>
@@ -91,7 +102,7 @@
             </label>
         </div>
 
-        <div id="wdss-jsonld-schema-enail" class="wdss-setting-item">
+        <div id="wdss-jsonld-schema-email" class="wdss-setting-item">
             <label>
                 <span>Email</span>
                 <?php 
@@ -99,7 +110,21 @@
                   if( get_option('wdss_jsonld_schema_email') == '' ) update_option( 'wdss_jsonld_schema_email', '' );               
                 ?>    
             </label>
-        </div>                
+        </div>
+        <?php elseif($published_posts <= 1): ?>
+          
+        <div id="wdss-jsonld-schema-author" class="wdss-setting-item">
+            <label>
+                <span>Author Name</span>
+                <?php 
+                  text_handler_html(['field_name' => 'wdss_jsonld_schema_author_name']); 
+                  if( get_option('wdss_jsonld_schema_author_name') == '' ) update_option( 'wdss_jsonld_schema_author_name', '' );               
+                ?>    
+            </label>
+        </div>
+
+
+        <?php endif; ?>            
       </div>
 
       <!-- Custom schema editor field -->

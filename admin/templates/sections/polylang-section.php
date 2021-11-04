@@ -1,5 +1,6 @@
 <?php 
-  if( function_exists('pll_languages_list') )  : 
+  $langs = count(pll_languages_list());
+  if( function_exists('pll_languages_list') &&  $langs)  : 
 ?>
 <section id="polylang-settings" class="wdss-section">
   <div class="wdss-section-header">
@@ -72,8 +73,6 @@
             </div>
           <?php endif; ?>
         </div>
-      </div>
-      </div>
       <div id="wdss-multilang-sitemap-condition" class="wdss-setting-item">
         <label>
             <span>Use Multilang Sitemap<br> instead of Yoast</span>
