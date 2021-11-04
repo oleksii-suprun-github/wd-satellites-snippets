@@ -1,6 +1,6 @@
 <?php 
-  $langs = count(pll_languages_list());
-  if( function_exists('pll_languages_list') &&  $langs)  : 
+  $polylang = function_exists('pll_languages_list') ? count(pll_languages_list()) : false;
+  if($polylang)  : 
 ?>
 <section id="polylang-settings" class="wdss-section">
   <div class="wdss-section-header">
