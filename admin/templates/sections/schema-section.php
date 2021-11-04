@@ -99,27 +99,7 @@
                   if( get_option('wdss_jsonld_schema_email') == '' ) update_option( 'wdss_jsonld_schema_email', '' );               
                 ?>    
             </label>
-        </div>      
-      
-        <div id="wdss-jsonld-schema-author" class="wdss-setting-item">
-            <label>
-                <span>Author</span>
-                <?php 
-                  text_handler_html(['field_name' => 'wdss_jsonld_schema_author']); 
-                  if( get_option('wdss_jsonld_schema_author') == '' ) update_option( 'wdss_jsonld_schema_author', '' );               
-                ?>    
-            </label>
-        </div>      
-
-        <div id="wdss-jsonld-schema-author-email" class="wdss-setting-item">
-            <label>
-                <span>Author URL</span>
-                <?php 
-                  text_handler_html(['field_name' => 'wdss_jsonld_schema_author_url']); 
-                  if( get_option('wdss_jsonld_schema_author_url') == '' ) update_option( 'wdss_jsonld_schema_author_url', '' );               
-                ?>    
-            </label>
-        </div>      
+        </div>                
       </div>
 
       <!-- Custom schema editor field -->

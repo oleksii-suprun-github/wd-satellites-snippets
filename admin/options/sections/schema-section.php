@@ -57,7 +57,7 @@ if( get_option('wdss_advanced_jsonld_schema') != '1' ) {
 				"image": "<?= $image_url; ?>",
 				"author": {
 					"@type": "Person",
-					"name": "<?= get_option('wdss_jsonld_schema_author'); ?>"
+					"name": "<?= get_the_author(); ?>"
 				},
 				"publisher": {
 					"@type": "Organization",
@@ -192,8 +192,6 @@ elseif(get_option('wdss_advanced_jsonld_schema') === '1') {
 		}
 		if(is_category()) {
 			echo get_option('wdss_advanced_jsonld_schema_category', '');
-		} elseif(is_author()) {
-			echo get_option('wdss_advanced_jsonld_schema_author', '');
 		}
 		if(is_page() && !is_front_page()) {
 			echo get_option('wdss_advanced_jsonld_schema_page', '');
