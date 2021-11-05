@@ -17,7 +17,7 @@
   <div class="wdss-row hidden">
     <div class="wdss-section-content">
       <div class="wdss-jsonld-schema-predifined-settings">
-        <div id="wdss-jsonld-schema-logo" class="wdss-setting-item image-chooser ">
+        <div id="wdss-jsonld-schema-logo" class="wdss-setting-item image-chooser logo">
             <label>
                 <span>Organization Logo</span>
                 <?php 

@@ -113,13 +113,15 @@
 
   // Resets value attr in target input
   export function resetValue(item) {
-    const button = document.querySelector(item.button);
-    const target = document.querySelector(item.target);
+    const buttons = Array.from(document.querySelectorAll(item.button));
 
-    button.addEventListener('click', () => {
-      if( target.value !== "" && confirm('Are you sure?') ) {
-        target.value = "";
-      }
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        let parent = button.closest('div');
+        let target = parent.querySelector(item.target);
+
+        if( target.value !== "" && confirm('Are you sure?') ) target.value = "";
+      });
     });
   }
 

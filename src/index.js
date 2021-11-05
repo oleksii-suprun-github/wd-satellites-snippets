@@ -51,15 +51,17 @@ const organizationLogoReset = {
 };
 
 const featuredImagesChooser = {
-  select: '#wdss-featured-images__choose',
-  target: '#wdss-featured-images-list input',
-  is_multiple: true
+  select: '.image-chooser.featured button.choose',
+  target: '.image-chooser.featured input',
+  is_multiple: true,
+  title: 'Select Featured Images'
 };
 
 const organizationLogoChooser = {
-  select: '#wdss_jsonld_schema_logo__choose',
-  target: '#wdss-jsonld-schema-logo input',
-  is_multiple: false
+  select: '.image-chooser.logo button.choose',
+  target: '.image-chooser.logo input',
+  is_multiple: false,
+  title: 'Select Organization Logo'
 }
 
 

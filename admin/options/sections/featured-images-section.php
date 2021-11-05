@@ -7,7 +7,7 @@
         global $post;
         require_once ABSPATH . 'wp-admin/includes/file.php';
     
-        if (!has_post_thumbnail($post->ID)) {
+        if (isset($post->ID) && !has_post_thumbnail($post->ID)) {
     
             $attached_image = get_children( "post_parent=$post->ID&amp;post_type=attachment&amp;post_mime_type=image&amp;numberposts=1" );
     
@@ -17,13 +17,23 @@
                 }
             }
             else {
-              if( get_option('wdss_featured_images_list', '' )) {
-                $images_ids_arr = explode(',', get_option('wdss_featured_images_list'));
-                $rand_index = array_rand($images_ids_arr);
-                $image_id = intval($images_ids_arr[$rand_index]);
-                set_post_thumbnail($post->ID, $image_id);
-              }
-              return;
+                $category = get_the_category(); 
+
+                if( !empty($category) ) {
+                  $needle = preg_replace('/\-+/', '_', $category[0]->slug);
+
+                  $option_postfix = preg_replace('/\s+/', '_', strtolower($category[0]->name));
+                  $option = get_option('wdss_featured_images_list_' . $option_postfix, '');
+              
+                  if($option_postfix === $needle && $option ) {
+                      $images_ids_arr = explode(',', $option);
+                      $rand_index = array_rand($images_ids_arr);
+                      $image_id = intval($images_ids_arr[$rand_index]);
+                      set_post_thumbnail($post->ID, $image_id);
+                  }
+                }
+
+                return;
             }
         }
       }

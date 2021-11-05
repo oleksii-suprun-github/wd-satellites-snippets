@@ -322,7 +322,7 @@ div.disabled:before {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-#wdss-featured-images__choose,
+.wdss-setting-item.image-chooser button,
 #wdss_jsonld_schema_logo__choose,
 #wdss-title-clipping-excluded__choose {
   margin-right: 15px;
@@ -616,8 +616,15 @@ button#wdss-toggle-options {
 #wdss-featured-images-group  > div {
   margin-left: 15px;
 }
-#wdss-featured-images-list {
+#wdss-featured-images-group > span {
+  margin: 15px;
+  font-style: italic;  
+}
+#wdss-featured-images-group .wdss-setting-item.image-chooser {
   margin-bottom: 20px;
+}
+#wdss-featured-images-group .wdss-setting-item.image-chooser > span {
+  width: unset;
 }
 
 

@@ -67,10 +67,16 @@ function wdss_form_handler() {
       isset_option('wdss_410_rules');
 
       isset_option('wdss_featured_images_add_column');
-      isset_option('wdss_featured_images_list');
+
+      $categories = get_categories();
+      foreach($categories as $category) {
+        $category_name = $category->name;
+        $category_option = preg_replace('/\s+/', '_', strtolower($category_name));
+  
+        isset_option('wdss_featured_images_list_' . $category_option . '');
+      }
     
       isset_option('wdss_polylang_meta_data');   
-
       isset_option('wdss_multilang_sitemap');
       
       isset_option('wdss_jsonld_schema_logo');
