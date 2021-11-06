@@ -39,7 +39,7 @@
            ?>
 
             <div id="<?= $category_id;?>-category-featured" class="wdss-setting-item image-chooser featured">
-              <span>-- For category`s *<?= $category_name?>*</span>
+              <span>-- For *<?= $category_name?>*</span>
               <?php 
                 text_handler_html(['field_name' => 'wdss_featured_images_list_'. $category_option . '']);            
               ?>  

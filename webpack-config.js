@@ -4,7 +4,8 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 const configuration = {
 	entry: {
-		'main': './src/index.js'
+		'main': './src/index.js',
+		'global': './src/global.js'
 	},
 
 	output: {

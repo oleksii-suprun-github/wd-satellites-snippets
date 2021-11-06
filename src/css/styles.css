@@ -624,7 +624,7 @@ button#wdss-toggle-options {
   margin-bottom: 20px;
 }
 #wdss-featured-images-group .wdss-setting-item.image-chooser > span {
-  width: unset;
+  width: 250px;
 }
 
 

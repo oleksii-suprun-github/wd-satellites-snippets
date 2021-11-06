@@ -161,7 +161,7 @@ class Wd_Satellites_Snippets_Admin {
 	//Register the JavaScript for the admin area
 	public function wdss_admin_enqueue_scripts($page) {
 
-		wp_enqueue_script( 'disable-admin-notices', plugin_dir_url( __FILE__ ) . '../assets/js/disable-admin-notices.js', array(), $this->version, true );
+		wp_enqueue_script( 'global', plugin_dir_url( __FILE__ ) . '../assets/js/global.js', array(), $this->version, true );
 
 		if( get_current_screen()->id == 'settings_page_wd-sattelites-snippets' ) {
 			wp_enqueue_media();
