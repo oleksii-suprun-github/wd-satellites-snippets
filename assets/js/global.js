@@ -1,1 +1,1 @@
-document.addEventListener("DOMContentLoaded",(function(){!function(){var t=document.querySelector(".wp-list-table.posts, .wp-list-table.pages");if(t){var e=t.querySelectorAll("a.row-title, .row-actions .edit a");console.log(e),e.forEach((function(t){t.setAttribute("target","_blank")}))}}()}));
+document.addEventListener("DOMContentLoaded",(function(){var t;(t=document.querySelector(".wp-list-table.posts, .wp-list-table.pages"))&&t.querySelectorAll("a.row-title, .row-actions .edit a").forEach((function(t){t.setAttribute("target","_blank")}))}));

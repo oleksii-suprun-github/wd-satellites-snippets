@@ -410,21 +410,30 @@
             // Last check - if both width/height are present  then skip this file
             if( !empty($src_match) && empty($height_match) ) {
 
-              // If url contains full address
-              if(!empty(strpos($src_match[0], site_url()))) {
+              // If image is BLOB encoded
+              if(!empty(strpos($src_match[0], 'data:image'))) {
                 $image_url = $src_match[1];
+                $binary = base64_decode(explode(',', $image_url)[1]);
+                $image_data = getimagesizefromstring($binary);
+                
+                $width = $image_data[0];
+                $height = $image_data[1];
               }
-              // If url contains relative address then adds domain
+              // If image has standard url
               else {
-                $image_url = site_url().$src_match[1];
+                // If url contains full address
+                if(!empty(strpos($src_match[0], site_url()))) {
+                  $image_url = $src_match[1];
+                }
+                // If url contains relative address then adds domain
+                else {
+                  $image_url = site_url().$src_match[1];
+                }
+                    
+                // Get image dimension
+                list($width, $height) = wp_getimagesize($image_url );
               }
 
-              if(!mb_strpos($image_url, 'wp-content') ) {
-                  continue;
-              }
-          
-              // Get image dimension
-              list($width, $height) = wp_getimagesize($image_url );
               $dimension = 'width="'.$width.'" height="'.$height.'" ';
               
               // Add width and width attribute
@@ -432,6 +441,7 @@
               
               // Replace image with new attributes
               $buffer = str_replace( $tmp, $image, $buffer );
+
               }
             }
             return $buffer;
