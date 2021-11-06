@@ -409,22 +409,27 @@
 
             // Last check - if both width/height are present  then skip this file
             if( !empty($src_match) && empty($height_match) ) {
-
+              
               // If image is BLOB encoded
               if(!empty(strpos($src_match[0], 'data:image'))) {
+
                 $image_url = $src_match[1];
                 $binary = base64_decode(explode(',', $image_url)[1]);
-                $image_data = getimagesizefromstring($binary);
-                
-                $width = $image_data[0];
-                $height = $image_data[1];
+                $image_data = getimagesizefromstring($binary) ? getimagesizefromstring($binary) : false;
+              
+                if($image_data) {
+                  $width = $image_data[0];
+                  $height = $image_data[1];
+                }
               }
               // If image has standard url
               else {
+
                 // If url contains full address
                 if(!empty(strpos($src_match[0], site_url()))) {
                   $image_url = $src_match[1];
                 }
+
                 // If url contains relative address then adds domain
                 else {
                   $image_url = site_url().$src_match[1];
@@ -434,11 +439,15 @@
                 list($width, $height) = wp_getimagesize($image_url );
               }
 
-              $dimension = 'width="'.$width.'" height="'.$height.'" ';
-              
-              // Add width and width attribute
-              $image = str_replace( '<img', '<img ' . $dimension, $image );
-              
+              // Checks if width & height are defined
+              if(!empty($width) && !empty($height)) {
+                $dimension = 'width="'.$width.'" height="'.$height.'" ';
+
+                // Add width and width attribute
+                $image = str_replace( '<img', '<img ' . $dimension, $image );
+
+              }
+          
               // Replace image with new attributes
               $buffer = str_replace( $tmp, $image, $buffer );
 
