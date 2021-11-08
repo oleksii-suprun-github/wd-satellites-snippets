@@ -47,6 +47,7 @@ if( get_option('wdss_polylang_meta_data', '0') ) {
             }     
             return $meta_description;
         }
+        return $meta_description;
     }
   }
   add_filter('wpseo_metadesc', 'polylang_meta_description', 99);

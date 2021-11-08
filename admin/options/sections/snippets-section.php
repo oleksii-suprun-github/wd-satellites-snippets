@@ -408,7 +408,7 @@
             preg_match( '/src=[\'"]([^\'"]+)/', $image, $src_match );
 
             // Last check - if both width/height are present  then skip this file
-            if( !empty($src_match) && empty($height_match) ) {
+            if( !empty($src_match) ) {
               
               // If image is BLOB encoded
               if(!empty(strpos($src_match[0], 'data:image'))) {
@@ -438,14 +438,18 @@
                 // Add width and width attribute
                 $image = str_replace( '<img', '<img ' . $dimension, $image );
 
+                // Replace image with new attributes
+                $buffer = str_replace( $tmp, $image, $buffer );
               }
-          
-              // Replace image with new attributes
-              $buffer = str_replace( $tmp, $image, $buffer );
-
+              else {
+                $buffer = str_replace( $tmp, '', $buffer );
               }
             }
-            return $buffer;
+            else {
+              $buffer = str_replace( $tmp, '', $buffer );
+            }
+          }
+          return $buffer;
         }
         return $content; 
         }
