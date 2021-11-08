@@ -425,16 +425,8 @@
               // If image has standard url
               else {
 
-                // If url contains full address
-                if(!empty(strpos($src_match[0], site_url()))) {
-                  $image_url = $src_match[1];
-                }
-
-                // If url contains relative address then adds domain
-                else {
-                  $image_url = site_url().$src_match[1];
-                }
-                    
+                $image_url = $src_match[1];
+              
                 // Get image dimension
                 list($width, $height) = wp_getimagesize($image_url );
               }
