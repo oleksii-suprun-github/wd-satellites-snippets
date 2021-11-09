@@ -26,7 +26,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Currently plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.7.5.2' );
+define( 'WD_SATELLITES_SNIPPETS_VERSION', '0.7.5.3' );
 
 /**
  * The code that runs during plugin activation.

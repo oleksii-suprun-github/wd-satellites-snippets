@@ -1,5 +1,20 @@
 <?php
 
+// Get URL Status code
+function check_url_status($url) {
+  // Use get_headers() function
+  $headers = @get_headers($url);
+              
+  // Use condition to check the existence of URL
+  if($headers && strpos( $headers[0], '200')) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+
 // Disables jQuery and Migration script for Frontend
     if( get_option('wdss_disable_jquery', '0') ) {
       function wdss_disable_jquery() {
@@ -298,6 +313,13 @@
 
     //Lazy load for iframes
     if( get_option('lazy_load_for_iframes', '0') ) {
+
+      add_action('wp_enqueue_scripts', 'wdss_lazy_iframe_enqueue');
+      function wdss_lazy_iframe_enqueue() {
+        wp_enqueue_script('iframe-lazy', plugin_dir_url( __FILE__ ) . '../inc/iframe-lazy/index.js', array(), '1.0', true);
+        wp_enqueue_style('iframe-lazy', plugin_dir_url( __FILE__ ) . '../inc/iframe-lazy/index.css', array(), '1.0');
+      }
+
       add_filter( 'the_content', 'wdss_filter_the_content_in_the_main_loop', 1 );
       function wdss_filter_the_content_in_the_main_loop( $string ) {
       
@@ -315,12 +337,12 @@
       
             if (isset($matches_url_new[1][0]) && !empty($matches_url_new[1][0])) {
               $new_img_link = "https://img.youtube.com/vi/". $matches_url_new[1][0] ."/sddefault.jpg";
-              if (!file_get_contents( $new_img_link)) {
+              if (check_url_status($new_img_link) && !file_get_contents( $new_img_link)) {
                 $new_img_link = "https://i.ytimg.com/vi_webp/". $matches_url_new[1][0] ."/hqdefault.webp";
               }
             } else {
               $new_img_link = "https://img.youtube.com/vi/". $img_link ."/sddefault.jpg";
-              if (!file_get_contents( $new_img_link)) {
+              if (check_url_status($new_img_link) && !file_get_contents( $new_img_link)) {
                 $new_img_link = "https://i.ytimg.com/vi_webp/". $img_link ."/hqdefault.webp";
               }
             }
@@ -380,8 +402,7 @@
     // Auto width/height attributes
     if( get_option('wdss_auto_widght_height_attr', '0') ) {
       if( !is_admin()) {
-
-    
+  
         add_filter('the_content', 'wdss_set_image_dimension', 20);
         function wdss_set_image_dimension($content) {
           if( is_single() ) {
@@ -415,6 +436,9 @@
 
                 $image_url = $src_match[1];
                 $binary = base64_decode(explode(',', $image_url)[1]);
+
+                if(!getimagesizefromstring($binary)) return;
+
                 $image_data = getimagesizefromstring($binary) ? getimagesizefromstring($binary) : false;
               
                 if($image_data) {
@@ -423,12 +447,14 @@
                 }
               }
               // If image has standard url
-              else {
+              elseif(!empty(strpos($src_match[0], 'http'))) {
 
                 $image_url = $src_match[1];
               
                 // Get image dimension
-                list($width, $height) = wp_getimagesize($image_url );
+                if(check_url_status($image_url)) {
+                  list($width, $height) = getimagesize($image_url );
+                }
               }
 
               // Checks if width & height are defined
