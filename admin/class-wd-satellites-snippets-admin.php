@@ -179,7 +179,7 @@ class Wd_Satellites_Snippets_Admin {
 				'site_email' => 'info@' . $_SERVER['SERVER_NAME'],
 				'total_post_count' => wp_count_posts( 'post' )->publish,
 				'is_polylang_exists' => function_exists( 'pll_languages_list' ),
-				'is_polylang_setup' => count(pll_languages_list()) > 0,
+				'is_polylang_setup' => function_exists( 'pll_languages_list' ) && count(pll_languages_list()) > 0,
 				'wp_rand' => wp_rand(),
 				'url' => admin_url( 'admin-ajax.php' ),
 				'nonce' => wp_create_nonce( 'ajax-nonce' ),
