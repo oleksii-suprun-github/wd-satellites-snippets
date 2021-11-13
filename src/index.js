@@ -1,4 +1,4 @@
-import {getSiteInfo, accordionToggler, checkboxToggler, sectionToggler, groupToggler, resetValue, toggleAllOptions} from "./modules/helpers";
+import {getSiteInfo, accordionToggler, checkboxToggler, sectionToggler, groupToggler, resetValues, toggleAllOptions} from "./modules/helpers";
 import schemaSectionSettings from "./modules/schema-settings";
 import mediaFileChooser from "./modules/media-file-chooser";
 import getPostsModal from "./modules/posts-modal";
@@ -90,15 +90,11 @@ function Init() {
       groupToggler(titleClippingSection);
       groupToggler(featuredImageSection);
 
-      document.querySelector(getOgranizationName.selector).addEventListener('click', () => {
-        getSiteInfo(getOgranizationName.input);
-      });
+      getSiteInfo(getOgranizationName);
 
       mediaFileChooser(featuredImagesChooser);
 
-      resetValue(cutTitleClippingReset);
-      resetValue(cutTitleSinceReset);
-      resetValue(featuredImagesListReset);
+      resetValues(cutTitleClippingReset, cutTitleSinceReset, featuredImagesListReset);
 
       getPostsModal();
     }
@@ -110,17 +106,12 @@ function Init() {
     E410_DictionaryHandler();
 
     mediaFileChooser(organizationLogoChooser);
-    resetValue(organizationLogoReset);
+    resetValues(organizationLogoReset);
 
     schemaSectionSettings();
 
-    document.querySelector(getSiteYoastEnding.selector).addEventListener('click', () => {
-      getSiteInfo(getSiteYoastEnding.input);
-    });
-
-    document.querySelector(getSiteEmail.selector).addEventListener('click', () => {
-      getSiteInfo(getSiteEmail.input);
-    });
+    getSiteInfo(getSiteYoastEnding);
+    getSiteInfo(getSiteEmail);
 
     groupToggler(customSchemaSection);
 
