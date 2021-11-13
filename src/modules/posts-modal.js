@@ -83,9 +83,6 @@ export default function getPostsModal() {
     save_btn.addEventListener('click', () => {
       
       const posts = modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]:checked');
-
-      console.log(posts);
-
       let idsArr = [];
       let ids;
   

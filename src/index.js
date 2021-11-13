@@ -1,4 +1,4 @@
-import {getSiteTitle, accordionToggler, checkboxToggler, sectionToggler, groupToggler, resetValue, toggleAllOptions} from "./modules/helpers";
+import {getSiteInfo, accordionToggler, checkboxToggler, sectionToggler, groupToggler, resetValue, toggleAllOptions} from "./modules/helpers";
 import schemaSectionSettings from "./modules/schema-settings";
 import mediaFileChooser from "./modules/media-file-chooser";
 import getPostsModal from "./modules/posts-modal";
@@ -64,16 +64,35 @@ const organizationLogoChooser = {
   title: 'Select Organization Logo'
 }
 
+const getOgranizationName = {
+  selector: '#wdss-generate-orgname',
+  input: '#wdss-jsonld-schema-orgname input',
+}
+
+const getSiteYoastEnding = {
+  selector: '#wdss-get-title',
+  input: '#wdss-title-ending input',
+}
+
+const getSiteEmail = {
+  selector: '#wdss-generate-email',
+  input: '#wdss-jsonld-schema-email input',
+}
+
 
 function Init() {
   if(pluginPage) {
+
     sectionToggler();
     sectionPinner();
 
     if(wdss_localize.total_post_count > 0) {
       groupToggler(titleClippingSection);
       groupToggler(featuredImageSection);
-      getSiteTitle();
+
+      document.querySelector(getOgranizationName.selector).addEventListener('click', () => {
+        getSiteInfo(getOgranizationName.input);
+      });
 
       mediaFileChooser(featuredImagesChooser);
 
@@ -84,7 +103,7 @@ function Init() {
       getPostsModal();
     }
 
-    if(wdss_localize.is_polylang_exists) {
+    if(wdss_localize.is_polylang_exists && wdss_localize.is_polylang_setup) {
       groupToggler(polylangSection);  
     }
 
@@ -94,6 +113,15 @@ function Init() {
     resetValue(organizationLogoReset);
 
     schemaSectionSettings();
+
+    document.querySelector(getSiteYoastEnding.selector).addEventListener('click', () => {
+      getSiteInfo(getSiteYoastEnding.input);
+    });
+
+    document.querySelector(getSiteEmail.selector).addEventListener('click', () => {
+      getSiteInfo(getSiteEmail.input);
+    });
+
     groupToggler(customSchemaSection);
 
     checkboxToggler();

@@ -37,6 +37,7 @@
                   if( get_option('wdss_jsonld_schema_orgname') == '' ) update_option( 'wdss_jsonld_schema_orgname', '' );               
                 ?>    
             </label>
+            <button type="button" id="wdss-generate-orgname" class="wdss-button">Generate</button>
         </div>
 
         <?php if ($published_posts > 1) : ?>
@@ -110,6 +111,7 @@
                   if( get_option('wdss_jsonld_schema_email') == '' ) update_option( 'wdss_jsonld_schema_email', '' );               
                 ?>    
             </label>
+            <button type="button" id="wdss-generate-email" class="wdss-button">Generate</button>
         </div>
         <?php elseif($published_posts <= 1): ?>
           

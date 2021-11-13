@@ -10,7 +10,7 @@
     <div class="wdss-section-content">
       <div id="gtm-identifier" class="wdss-setting-item">
           <label>
-            <span title="e.g. GTM-XXXX...">GTM Identifier <strong>*</strong></span>
+            <span title="e.g. GTM-WT1234">GTM Identifier for lazyload <strong>*</strong></span>
             <?php 
               text_handler_html(['field_name' => 'wdss_gtm_id']); 
               if( get_option('wdss_gtm_id') == '' ) update_option( 'wdss_gtm_id', '' );               

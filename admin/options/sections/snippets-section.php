@@ -1,21 +1,35 @@
 <?php
 
-// Get URL Status code
-function check_url_status($url) {
-  // Use get_headers() function
-  $headers = @get_headers($url);
-              
-  // Use condition to check the existence of URL
-  if($headers && strpos( $headers[0], '200')) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
+    // Get URL Status code
+    function check_url_status($url) {
+      // Use get_headers() function
+      $headers = @get_headers($url);
+                  
+      // Use condition to check the existence of URL
+      if($headers && strpos( $headers[0], '200')) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
 
 
-// Disables jQuery and Migration script for Frontend
+    // Filters post content from validation errors 
+    function wdss_regex_post_content_filters($content) {
+      if(is_single()) {
+        $preset = '/<div itemscope="" itemprop="mainEntity" itemtype="https:\/\/schema\.org\/Question">\n?
+        <div itemprop="name">\n?(<h3>.*<\/h3>?)\n?<\/div>\n?<div itemscope="" itemprop="acceptedAnswer" itemtype="https:\/\/schema\.org\/Answer">\n?<div itemprop="text">\n(<p>.*<\/p>?)\n<\/div>\n?<\/div>\n?<\/div>/';
+        
+        $content = preg_replace($preset, '${1}<br>${2}', $content);
+      }
+      
+      return $content;
+    }
+    add_filter( 'the_content', 'wdss_regex_post_content_filters', 10 );
+
+
+    // Disables jQuery and Migration script for Frontend
     if( get_option('wdss_disable_jquery', '0') ) {
       function wdss_disable_jquery() {
         if( !is_admin() ) {
@@ -196,29 +210,62 @@ function check_url_status($url) {
       }
     }
 
+
     // AMP Template Fix
     if( function_exists('amp_bootstrap_plugin') && get_option('wdss_amp_fix', '0') ) {
+		
+      // Remove Images From Content Helper
+      function remove_images_from_content($content) {
+        $content = preg_replace("/<img[^>]+>/i", "", $content);
+        return $content;
+      }
+      
+      // Remove standard layout and paste custom one
+      add_filter( 'amp_post_article_header_meta', function ( $meta_parts ) {
+        $meta_parts = [];
+  
+        global $post;
+        $category = get_the_category();
+        $first_category = $category[0];
+  
+        echo '<div class="amp-wp-post-info"><span>' . get_the_date('d.m.Y') . '</span>' . 
+        sprintf( '<a href="%s">%s</a>', get_category_link( $first_category ), $first_category->name ) . '</div>';
+  
+        return $meta_parts;
+      } );
+  
+      // Filters Template Parts
       add_filter( 'amp_post_template_data', function( $data, $post ) {
+          // Remove comments links
+          add_filter( 'amp_post_article_footer_meta', function ( $meta_parts ) {
+              $meta_parts = [];
+              return $meta_parts;
+          } );
+  
+          // Removes favicon
+          $data['site_icon_url'] = '';
+  
+          // Removes Featured Image
         if ( has_post_thumbnail( $post ) ) {
-            $data['featured_image']['amp_html'] = '<amp-img
-            src="'.wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'medium')[0].'"
-            width="'.wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'medium')[1].'"
-            height="'.wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'medium')[2].'"
-            class="img-responsive amp-wp-enforced-sizes i-amphtml-element i-amphtml-layout-intrinsic i-amphtml-layout-size-defined i-amphtml-layout"
-            alt="featured image"
-            layout="responsive"></amp-img>'; 
+          $data['featured_image']['amp_html'] = ''; 
+          $data['featured_image']['caption'] = ''; 
         }
+  
+          // Removes all images from content
+          $data['post_amp_content'] = remove_images_from_content($data['post_amp_content']);
+  
         return $data;
-      }, 10, 2 );
-
+      }, 999, 2 );
+  
+  
+      // Sets custom css for template
       add_action( 'amp_post_template_css', function() {
-        ?>
-        @media screen and (max-width: 360px) {
-            .amp-wp-article img { display: none;}
-        }
-        .wp-block-image { width: fit-content; margin: 0 auto; margin-bottom: 1rem; }
-        .amp-wp-article-featured-image amp-img { width: 300px; }
-        <?php
+      ?>
+        .back-to-top { display: none;}
+      .wp-block-image { width: fit-content; margin: 0 auto; margin-bottom: 1rem; }
+        .amp-site-title { display: block; text-align: center; font-size: 1.5rem; }
+        .amp-wp-post-info span { display:block; }
+       <?php
       } );
     }
 
@@ -428,8 +475,8 @@ function check_url_status($url) {
             // Get link of the file
             preg_match( '/src=[\'"]([^\'"]+)/', $image, $src_match );
 
-            // Last check - if both width/height are present  then skip this file
-            if( !empty($src_match) ) {
+            // If there`s no width or height is present...
+            if( (empty($width_match) || empty($height_match)) ) {
               
               // If image is BLOB encoded
               if(!empty(strpos($src_match[0], 'data:image'))) {
@@ -446,11 +493,12 @@ function check_url_status($url) {
                   $height = $image_data[1];
                 }
               }
-              // If image has standard url
-              elseif(!empty(strpos($src_match[0], 'http'))) {
+
+              // If image has valid url
+              elseif(check_url_status($src_match[1])) {
 
                 $image_url = $src_match[1];
-              
+
                 // Get image dimension
                 if(check_url_status($image_url)) {
                   list($width, $height) = getimagesize($image_url );
@@ -471,7 +519,7 @@ function check_url_status($url) {
                 $buffer = str_replace( $tmp, '', $buffer );
               }
             }
-            else {
+            elseif(!check_url_status($src_match[1])) {
               $buffer = str_replace( $tmp, '', $buffer );
             }
           }
@@ -520,6 +568,7 @@ function check_url_status($url) {
         }
     }
     add_action( 'wp', 'wdss_force_410' );
+
 
     // Autoptimize Lazyload Fix Snippet
     if( function_exists('autoptimize') && get_option('wdss_autoptimize_lazy_fix', '0') ) {
@@ -734,6 +783,7 @@ function check_url_status($url) {
       }
     }
 
+    
     // Custom Excerpts for imported articles
     function wdss_custom_excerpts( $excerpt, $raw_excerpt ) {
       if ( is_admin() ||  '' !== $raw_excerpt) {
@@ -767,7 +817,16 @@ function check_url_status($url) {
           return $link;
       }
     }
-    
+
+    // Fixes bad validation on WP Security Captcha
+    add_filter('the_content', 'wdss_wp_security_captcha_fix', 10);
+    function wdss_wp_security_captcha_fix($content) {
+        if( is_single() ) {
+          $content = preg_replace('/<p class="aiowps-captcha">/', '<div class="aiowps-captcha">',  $content);
+          $content = preg_replace('/<\/strong><\/div><\/p>/', '</strong><div></div>', $content);
+        }
+        return $content;
+    }
 
     // Custom Descriptions for imported articles
     function wdss_custom_post_descriptions($meta_description)  {

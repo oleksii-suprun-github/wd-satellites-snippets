@@ -34,7 +34,9 @@
 
             <?php 
               $category_name = $category->name;
-              $category_option = preg_replace('/\s+/', '_', strtolower($category_name));
+              $category_slug = $category->slug;
+
+              $category_option = preg_replace('/\-+/', '_', strtolower($category_slug));
               $category_id = preg_replace('/\s+/', '-', strtolower($category_name));
            ?>
 
@@ -67,8 +69,8 @@
     update_option('wdss_featured_images_add_column', '0');
 
     foreach($categories as $category) {
-      $category_name = $category->name;
-      $category_option = preg_replace('/\s+/', '_', strtolower($category_name));
+      $category_slug = $category->slug;
+      $category_option = preg_replace('/\-+/', '_', strtolower($category_slug));
 
       update_option('wdss_featured_images_list_' . $category_option . '', '');
     }

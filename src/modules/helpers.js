@@ -11,15 +11,27 @@
     return true;
   };
 
-  // Gets site title on click for Long Title Clipping Settings 
-  export function getSiteTitle() {
-    if(document.querySelector('#wdss-get-title')) {
-      const btn = document.querySelector('#wdss-get-title');
-      const input = document.querySelector('#wdss-title-ending input');
-      const siteTitle = wdss_localize.site_title;
-    
-      btn.addEventListener('click', () => input.value = siteTitle);
+  // Gets site specific info by request
+  export function getSiteInfo(input) {
+
+    let target = document.querySelector(input);
+    let action = '';
+
+    switch (input) {
+      case '#wdss-title-ending input':
+        action = wdss_localize.site_yoast_ending;
+        break;
+      case '#wdss-jsonld-schema-orgname input':
+        action = wdss_localize.site_name;
+        break;
+      case '#wdss-jsonld-schema-email input':
+        action = wdss_localize.site_email;
+        break;          
+      default:
+        break;
     }
+    
+    target.value = action;
   }
 
   // Hide notices with time helper

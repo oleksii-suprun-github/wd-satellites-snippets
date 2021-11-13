@@ -22,9 +22,6 @@ export default function E410_DictionaryHandler() {
     dictionary_rows.each((index, row) => {
       let value = row.querySelector('td:nth-of-type(1)').textContent;
       data_obj.push(value);
-
-      console.log(data_obj);
-
     });
 
     jQuery.ajax({
