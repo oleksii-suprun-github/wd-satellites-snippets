@@ -460,8 +460,8 @@
             $pattern1 = '/<img(?:[^>](?!(height|width)=))*+>/i'; // if no width & height
             $pattern2 = '/<img(?:(\s*(height|width)\s*=\s*"([^"]+)"\s*)+|[^>]+?)*>/i'; // if width OR height is present
 
-            preg_match_all($pattern1, $content, $first_match );
-            preg_match_all($pattern2, $content, $second_match );
+            preg_match_all($pattern1, $content, $first_match);
+            preg_match_all($pattern2, $content, $second_match);
             
             $all_images = array_merge($first_match[0], $second_match[0]);
             foreach ( $all_images as $image ) {
@@ -510,7 +510,7 @@
                 $dimension = 'width="'.$width.'" height="'.$height.'" ';
 
                 // Add width and width attribute
-                $image = str_replace( '<img', '<img ' . $dimension, $image );
+                $image = str_replace( '<img', '<img loading="lazy" ' . $dimension, $image );
 
                 // Replace image with new attributes
                 $buffer = str_replace( $tmp, $image, $buffer );

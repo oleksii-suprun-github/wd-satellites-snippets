@@ -32,21 +32,14 @@
           <input type="hidden" name="wdss_form_submitted" value='true'>
           <?php wp_nonce_field('wdss_save_settings', 'wfp_nonce'); ?>
 
-          <?php include_once('sections/snippets-section.php') ?>
-
-          <?php include_once('sections/title-clipping-section.php') ?>
-
-          <?php include_once('sections/featured-images-section.php') ?>
-
-          <?php include_once('sections/polylang-section.php') ?>
-
-          <?php include_once('sections/schema-section.php') ?>
-
-          <?php include_once('sections/custom-410s-section.php') ?>
-
-          <!-- <?php include_once('sections/blocked-notices-section.php') ?> -->
-
-          <?php include_once('sections/other-section.php') ?>
+          <?php 
+            include_once('sections/snippets-section.php');
+            include_once('sections/featured-images-section.php'); 
+            include_once('sections/polylang-section.php'); 
+            include_once('sections/schema-section.php');
+            include_once('sections/custom-410s-section.php'); 
+            include_once('sections/other-section.php');
+          ?>
 
           <input type="submit" name="submit" id="submit" class="wdss-button submit" value="<?= __('Save changes', 'wdss_domain') ?>">
         </form>

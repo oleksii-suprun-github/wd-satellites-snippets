@@ -87,7 +87,6 @@ function Init() {
     sectionPinner();
 
     if(wdss_localize.total_post_count > 0) {
-      groupToggler(titleClippingSection);
       groupToggler(featuredImageSection);
 
       getSiteInfo(getOgranizationName);

@@ -36,6 +36,20 @@
                 return;
             }
         }
+        elseif(isset($post->ID) && has_post_thumbnail($post->ID) && function_exists('pll_the_languages')) {
+          $langs = ['en', 'de', 'pl', 'es']; // subject to improve
+
+          foreach($langs as $lang) {
+  
+            $thumbnail_id = get_post_thumbnail_id($post->ID);
+  
+            $tr_id = pll_get_post($post->ID, $lang);
+
+            if($tr_id) {
+              set_post_thumbnail($post->tr_id, $thumbnail_id);
+            } 
+          }
+        }
       }
       add_action('the_post', 'wdss_random_featured_image');
       
