@@ -7,6 +7,7 @@
   $polylang_default_lang = null;
   $polylang_current_lang = null;
 
+  
   if( function_exists('pll_the_languages') ) {
     $polylang_default_lang = pll_default_language();
     $polylang_current_lang = $polylang_default_lang === pll_current_language();
