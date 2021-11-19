@@ -107,7 +107,6 @@ function Init() {
 
     schemaSectionSettings();
 
-    getSiteInfo(getSiteYoastEnding);
     getSiteInfo(getSiteEmail);
 
     groupToggler(customSchemaSection);
