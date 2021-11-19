@@ -117,7 +117,6 @@ class Wd_Satellites_Snippets_Admin_Options {
 	// Basic Snippets List 
   public function wdss_snippets() {
     include_once('sections/snippets-section.php');
-    include_once('sections/title-clipping-section.php');
     include_once('sections/featured-images-section.php');
     include_once('sections/polylang-section.php');
 		include_once('sections/schema-section.php');

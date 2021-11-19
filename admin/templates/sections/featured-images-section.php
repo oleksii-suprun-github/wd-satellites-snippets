@@ -4,6 +4,15 @@
   $categories = get_categories();
   $categories_count = count($categories); 
 
+  $polylang_default_lang = null;
+  $polylang_current_lang = null;
+
+  
+  if( function_exists('pll_the_languages') ) {
+    $polylang_default_lang = pll_default_language();
+    $polylang_current_lang = $polylang_default_lang === pll_current_language();
+  }
+
   if( $total_post_count > 0 )  : 
 ?>
 <section id="featured-images-settings" class="wdss-section">
@@ -18,7 +27,7 @@
     <div class="wdss-section-content">
       <div id="wdss-auto-featured-image-condition" class="wdss-setting-item">
           <label>
-              <span title="Takes featured image from the first attached image">Auto Featured Image <sup>?</sup></span>
+              <span title="Takes featured image from the first attached image in the post">Featured Image From Attachment<sup>?</sup></span>
               <?php 
                 checkbox_handler_html(['field_name' => 'wdss_auto_featured_image']); 
                 if( get_option('wdss_auto_featured_image') == '' ) update_option( 'wdss_auto_featured_image', '0' );               
@@ -27,20 +36,46 @@
       </div>
 
       <?php 
-        if( $categories_count > 0 ) : ?>
+        if( $categories_count > 0 ) { ?>
           <div id="wdss-featured-images-group" class="wdss-setting-group hidden">    
-          <span>You also can choose which images should be randomly picked for posts in each category </span>
-          <?php foreach($categories as $category) : ?>
+            
+          <?php if( $polylang_current_lang || !$polylang_default_lang ) : ?>
+             <span>You also can choose which images should be randomly picked for posts in each category </span>
+          <?php elseif(!$polylang_current_lang) : ?>
+              <span>Please change your lang to <?= strtoupper($polylang_default_lang); ?> in order to implement custom featured images</span>
+          <?php endif;
+          
+          foreach( $categories as $category ) {
 
-            <?php 
+            $category_id = $category->term_id;
+
+            if( $polylang_default_lang ) {
+
+              if( $polylang_current_lang )  {
+                $category_tr =  get_category(pll_get_term($category_id)); 
+                $category_tr_name = $category_tr->name;
+                $category_tr_slug = $category_tr->slug;
+                $category_tr_html_id = preg_replace('/\s+/', '-', strtolower($category_tr_name));
+                $category_tr_option = preg_replace('/\-+/', '_', strtolower($category_tr_slug));
+              ?>
+                <div id="<?= $category_tr_html_id;?>-category-featured" class="wdss-setting-item image-chooser featured">
+                <span>-- *<?= $category_tr_name?>*</span>
+                <?php 
+                  text_handler_html(['field_name' => 'wdss_featured_images_list_'. $category_tr_option . '']);            
+                ?>  
+                <button type="button" class="wdss-button choose">Choose</button>
+                <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>
+              </div>
+  
+              <?php 
+              }
+            }
+            else { 
               $category_name = $category->name;
               $category_slug = $category->slug;
-
-              $category_option = preg_replace('/\-+/', '_', strtolower($category_slug));
-              $category_id = preg_replace('/\s+/', '-', strtolower($category_name));
-           ?>
-
-            <div id="<?= $category_id;?>-category-featured" class="wdss-setting-item image-chooser featured">
+              $category_option = preg_replace('/\-+/', '_', strtolower($category_slug));         
+            ?>
+              <div id="<?= $category_html_id;?>-category-featured" class="wdss-setting-item image-chooser featured">
               <span>-- *<?= $category_name?>*</span>
               <?php 
                 text_handler_html(['field_name' => 'wdss_featured_images_list_'. $category_option . '']);            
@@ -48,9 +83,11 @@
               <button type="button" class="wdss-button choose">Choose</button>
               <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>
             </div>
-          <?php endforeach; ?>
+
+          <?php }
+          } ?>
         </div>
-        <?php endif; ?>
+        <?php } ?>
 
       <div id="wdss-featured-images-add-column" class="wdss-setting-item">
         <label>
@@ -68,11 +105,11 @@
     update_option('wdss_auto_featured_image', '0');
     update_option('wdss_featured_images_add_column', '0');
 
-    foreach($categories as $category) {
+    foreach( $categories as $category ) {
       $category_slug = $category->slug;
       $category_option = preg_replace('/\-+/', '_', strtolower($category_slug));
 
-      update_option('wdss_featured_images_list_' . $category_option . '', '');
+      update_option( 'wdss_featured_images_list_' . $category_option . '', '' );
     }
   endif; 
 ?>
