@@ -82,12 +82,10 @@
         // Creates a new column
         add_filter('manage_post_posts_columns', 'add_image_column', 4);
         function add_image_column( $columns ){
-          // unset($columns['author']); // deletes Author column
-  
           $out = array();
+          
           foreach($columns as $col=>$name){
-            if(++$i==2) // where we want to place our column
-              $out['featured'] = 'Featured';
+            $out['featured'] = 'Featured';
             $out[$col] = $name;
           }
   
@@ -106,7 +104,7 @@
         add_action('admin_head', 'add_images_column_css');
         function add_images_column_css(){
           if( get_current_screen()->base == 'edit')
-            echo '<style type="text/css">.column-featured{width:5%;}</style>';
+            echo '<style type="text/css">.column-featured{width:6%;}</style>';
         }
       }
     }
