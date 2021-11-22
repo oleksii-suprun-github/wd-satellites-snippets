@@ -273,6 +273,8 @@
             body.wp-admin #wp-admin-bar-updates,
             body.wp-admin .update-nag,
             .jitm-banner {display: none !important;} 
+            
+            #wd-satellite-update {display: block !important;} 
         </style>';
                       
 
