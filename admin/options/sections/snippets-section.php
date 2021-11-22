@@ -1,20 +1,4 @@
 <?php
-
-    // Get URL Status code
-    function check_url_status($url) {
-      // Use get_headers() function
-      $headers = @get_headers($url);
-                  
-      // Use condition to check the existence of URL
-      if($headers && strpos( $headers[0], '200')) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
-
-
     // Filters post content from validation errors 
     function wdss_regex_post_content_filters($content) {
       if(is_single()) {
@@ -375,7 +359,9 @@
       
         $regex_new = '/src="([^"]*)"/';
         $regex_url_new = '/(.*?)\?/i';
-        if (!empty($matches[2])) {
+
+        // Checks if iframe neither broken nor Google Maps
+        if (!empty($matches[2]) && !strpos($matches[2][0], 'maps') ) {
           foreach ($matches[2] as $key => $elem) {
             preg_match_all($regex_new, $matches[0][$key], $matches_url);
             $img_link_array = explode('/',$matches_url[1][0]);
@@ -475,9 +461,20 @@
             // Get link of the file
             preg_match( '/src=[\'"]([^\'"]+)/', $image, $src_match );
 
+
             // If there`s no width or height is present...
             if( (empty($width_match) || empty($height_match)) ) {
-              
+
+              // Compares src with banned hosts
+              $in_block_list = false;
+              $exceptions = ['chemistryland.com', 'fin.gc.ca', 'support.revelsystems.com'];
+        
+              foreach($exceptions as $exception) {
+                if( strpos($src_match[1], $exception) !== false ) {
+                  $in_block_list = true;
+                }
+              }
+
               // If image is BLOB encoded
               if(!empty(strpos($src_match[0], 'data:image'))) {
 
@@ -494,14 +491,20 @@
                 }
               }
 
-              // If image has valid url
-              elseif(check_url_status($src_match[1])) {
-
-                $image_url = $src_match[1];
-
-                // Get image dimension
-                if(check_url_status($image_url)) {
-                  list($width, $height) = getimagesize($image_url );
+              // Regular src case
+              else {
+                // If image`s host in block list then remove it
+                if($in_block_list) {
+                  $buffer = str_replace( $tmp, '', $buffer );
+                  return $buffer;
+                }
+                // If src doesn`t contains SERVER NAME then add it
+                if( strpos($src_match[1], 'wp-content') && strpos($src_match[1], 'https') === false ) {
+                  $src_match[1] = 'https://'.$_SERVER['SERVER_NAME'].$src_match[1].'';
+                }
+                // If image src returns 200 status then get image size
+                if( check_url_status($src_match[1]) ) {
+                  list($width, $height) = getimagesize($src_match[1]);
                 }
               }
 

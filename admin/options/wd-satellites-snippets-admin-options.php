@@ -116,6 +116,22 @@ class Wd_Satellites_Snippets_Admin_Options {
 
 	// Basic Snippets List 
   public function wdss_snippets() {
+
+    // URL Status Code Checker
+    function check_url_status($url) {
+
+      // Use get_headers() function
+      $headers = @get_headers($url);
+
+      // Use condition to check the existence of URL
+      if($headers && strpos( $headers[0], '200')) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+
     include_once('sections/snippets-section.php');
     include_once('sections/featured-images-section.php');
     include_once('sections/polylang-section.php');

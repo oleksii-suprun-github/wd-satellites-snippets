@@ -17,7 +17,7 @@
         require_once ABSPATH . 'wp-admin/includes/file.php';
 
         if ( isset($post->ID) ) {
-
+            // If post has no thumbnail
             if( !has_post_thumbnail($post->ID) ) {
               $attached_image = get_children( "post_parent=$post->ID&amp;post_type=attachment&amp;post_mime_type=image&amp;numberposts=1" );
 
@@ -47,6 +47,7 @@
                   return;
               }
             }
+            // Polylang case
             elseif( function_exists('pll_the_languages') && !$polylang_current_lang ) {
               $origin_post_id = pll_get_post($post->ID, $polylang_default_lang);
 
