@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: WD Satellite 
- * Plugin URI: https://github.com/Mironezes
+ * Plugin URI: https://github.com/Mironezes/wd-satellites-snippets
  * Description: Bulk of usefull snippets & tweaks for satellites.
- * Version: 1.0.0b5
+ * Version: 1.0.0b6
  * GitHub Plugin URI: https://github.com/Mironezes/wd-satellites-snippets
  * Primary Branch: Betas
  * Author: Alexey Suprun
