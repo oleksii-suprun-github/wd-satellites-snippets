@@ -3,7 +3,7 @@
  * Plugin Name: WD Satellite 
  * Plugin URI: https://github.com/Mironezes
  * Description: Bulk of usefull snippets & tweaks for satellites.
- * Version: 1.0.0b
+ * Version: 1.0.0b2
  * Author: Alexey Suprun
  * Author URI: https://github.com/Mironezes
  * Requires at least: 5.5
