@@ -274,7 +274,7 @@
             body.wp-admin .update-nag,
             .jitm-banner {display: none !important;} 
             
-            #wd-satellites-snippets-update {display: block !important;} 
+            #wd-satellites-snippets-update {display: table-row !important;} 
         </style>';
                       
 

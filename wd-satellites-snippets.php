@@ -3,14 +3,14 @@
  * Plugin Name: WD Satellite 
  * Plugin URI: https://github.com/Mironezes/wd-satellites-snippets
  * Description: Bulk of usefull snippets & tweaks for satellites.
- * Version: 1.0.0b7
+ * Version: 1.0.0b8
  * GitHub Plugin URI: https://github.com/Mironezes/wd-satellites-snippets
- * Primary Branch: Betas
+ * Primary Branch: beta
  * Author: Alexey Suprun
  * Author URI: https://github.com/Mironezes
  * Requires at least: 5.5
  * Requires PHP: 7.0
- * Tested up to: 5.8
+ * Tested up to: 5.8.2
  * License: GPL-2.0+
  * Text Domain: wd-satellites-snippets
  * Domain Path: /languages
