@@ -4,6 +4,7 @@ import mediaFileChooser from "./modules/media-file-chooser";
 import getPostsModal from "./modules/posts-modal";
 import sectionPinner from "./modules/section-pinner";
 import E410_DictionaryHandler from "./modules/e410-handler";
+import ExcludedHostsDictionaryHandler from "./modules/excluded-hosts-handler";
 import './css/styles.css';
 
 // Condition for calling our functions
@@ -95,7 +96,7 @@ function Init() {
 
       resetValues(cutTitleClippingReset, cutTitleSinceReset, featuredImagesListReset);
 
-      getPostsModal();
+      // getPostsModal();
     }
 
     if(wdss_localize.is_polylang_exists && wdss_localize.is_polylang_setup) {
@@ -103,13 +104,13 @@ function Init() {
     }
 
     E410_DictionaryHandler();
+    ExcludedHostsDictionaryHandler();
 
     mediaFileChooser(organizationLogoChooser);
     resetValues(organizationLogoReset);
 
     schemaSectionSettings();
 
-    getSiteInfo(getSiteYoastEnding);
     getSiteInfo(getSiteEmail);
 
     groupToggler(customSchemaSection);

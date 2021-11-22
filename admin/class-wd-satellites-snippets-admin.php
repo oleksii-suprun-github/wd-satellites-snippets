@@ -66,6 +66,7 @@ class Wd_Satellites_Snippets_Admin {
 		if( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_fetch_modal_content',  array($this, 'wdss_get_posts_modal') );
 			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
+			add_action( 'wp_ajax_excluded_hosts_dictionary_update', array($this, 'wdss_excluded_hosts_dictionary_handler') );		
 		}
 	}
 
@@ -101,6 +102,15 @@ class Wd_Satellites_Snippets_Admin {
 
     $e410_dictionary = $_POST["e410_dictionary"];
     update_option('wdss_410s_dictionary', $e410_dictionary);
+	}
+
+
+	// Excluded Images Hosts Dictionary Handler
+	public function wdss_excluded_hosts_dictionary_handler() {
+		check_ajax_referer( 'excluded-hosts-dictionary-nonce', 'security', false );
+
+    $excluded_hosts_dictionary = $_POST["excluded_hosts_dictionary"];
+    update_option('wdss_excluded_hosts_dictionary', $excluded_hosts_dictionary);
 	}
 
 
@@ -184,6 +194,7 @@ class Wd_Satellites_Snippets_Admin {
 				'url' => admin_url( 'admin-ajax.php' ),
 				'nonce' => wp_create_nonce( 'ajax-nonce' ),
 				'e410_dictionary_nonce' => wp_create_nonce( 'e410-dictionary-nonce' ),
+				'excluded_hosts_dictionary_nonce' => wp_create_nonce( 'excluded-hosts-dictionary-nonce' ),				
 			];
 			wp_localize_script( $this->plugin_name, 'wdss_localize', $wdss_localize_script );
 		}

@@ -469,7 +469,8 @@
 
               // Compares src with banned hosts
               $in_block_list = false;
-              $exceptions = ['chemistryland.com', 'fin.gc.ca', 'support.revelsystems.com'];
+              $exceptions = get_option('wdss_excluded_hosts_dictionary', '');
+              // chemistryland.com, fin.gc.ca, support.revelsystems.com
         
               foreach($exceptions as $exception) {
                 if( strpos($src_match[1], $exception) !== false ) {

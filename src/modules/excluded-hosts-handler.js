@@ -1,23 +1,24 @@
 import {hideMessage, areArrsEqual} from "./helpers";
 
 // Title Dictionary Handler
-export default function E410_DictionaryHandler() {
+export default function ExcludedHostsDictionaryHandler() {
   // Constants diclarations
-  const root = document.querySelector('#custom-410s-list-settings');
+  const root = document.querySelector('#images-settings');
+
   const add_item_button = root.querySelector('.wdss-list-item-handler.add');
   const save_dictionary_button = root.querySelector('.save-dictionary');
   const form = document.querySelector('#wdss-settings-page form');
   const table = root.querySelector('.wdss-list-table tbody');
-  const url = root.querySelector('#wdss-410s-dictionary-url');
+  const url = root.querySelector('#wdss-excluded-host-url');
   
   // Counts initial dictionary options
-  let table_rows = jQuery('#custom-410s-list-settings .wdss-list-table tbody tr');
+  let table_rows = jQuery('#images-settings .wdss-list-table tbody tr');
   let table_rows_ids = [];
   jQuery.each(table_rows, function() {table_rows_ids.push(this.id)});
 
   // Sends added rules to DB with wp_update_option func via ajax
   function updateDictionary() {
-    let dictionary_rows = jQuery('#custom-410s-list-settings .wdss-list-table tbody tr');
+    let dictionary_rows = jQuery('#images-settings .wdss-list-table tbody tr');
     let data_obj = [];
 
     dictionary_rows.each((index, row) => {
@@ -30,9 +31,9 @@ export default function E410_DictionaryHandler() {
       type : 'post',
       dataType: 'json',
       data : {
-        action : 'e410_dictionary_update',
-        e410_dictionary: data_obj,
-        security : wdss_localize.e410_dictionary_nonce,
+        action : 'excluded_hosts_dictionary_update',
+        excluded_hosts_dictionary: data_obj,
+        security : wdss_localize.excluded_hosts_dictionary_nonce,
       },
       success : function(response) {
         let status_msg = root.querySelector('.wdss-list-table-actions span');
@@ -83,12 +84,12 @@ export default function E410_DictionaryHandler() {
       this.closest('tr').remove();
     }
   }
-  jQuery(document).on('click','#custom-410s-list-settings .wdss-list-table__remove-item i', removeItem);
+  jQuery(document).on('click','#images-settings .wdss-list-table__remove-item i', removeItem);
 
   // Checks if no unsaved changes are left
   function onSave(e) {
     // Counts actual (on save) dictionary options
-    let current_table_rows = jQuery('#custom-410s-list-settings .wdss-list-table tbody tr');
+    let current_table_rows = jQuery('#images-settings .wdss-list-table tbody tr');
     let current_table_rows_ids = [];
     jQuery.each(current_table_rows, function() {
       current_table_rows_ids.push(this.id);
