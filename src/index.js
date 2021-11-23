@@ -1,5 +1,5 @@
 import {getSiteInfo, accordionToggler, checkboxToggler, sectionToggler, groupToggler, resetValues, toggleAllOptions} from "./modules/helpers";
-import {featuredImageSection, customSchemaSection, polylangSection, featuredImagesListReset, organizationLogoReset, featuredImagesChooser, organizationLogoChooser, getOgranizationName, getSiteEmail, e410_Dictionary, excludedHostsDictionary} from './modules/variables';
+import {featuredImageSection, polylangSection, featuredImagesListReset, organizationLogoReset, featuredImagesChooser, organizationLogoChooser, getOgranizationName, getSiteEmail, e410_Dictionary, excludedHostsDictionary} from './modules/variables';
 
 import schemaSectionSettings from "./modules/schema-settings";
 import mediaFileChooser from "./modules/media-file-chooser";
@@ -42,8 +42,6 @@ function Init() {
     schemaSectionSettings();
 
     getSiteInfo(getSiteEmail);
-
-    groupToggler(customSchemaSection);
 
     checkboxToggler();
     toggleAllOptions();

@@ -4,11 +4,6 @@
     target: '#wdss-featured-images-group'
   };
   
-  export const customSchemaSection = {
-    toggler: '#wdss-advanced-jsonld-schema-condition input',
-    target: '#wdss-advanced-jsonld-schema-group' 
-  }
-  
   export  const polylangSection = {
     toggler: '#wdss-polylang-meta-data-condition input',
     target: '#wdss-polylang-meta-data-group'  
