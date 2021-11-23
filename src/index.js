@@ -1,21 +1,15 @@
 import {getSiteInfo, accordionToggler, checkboxToggler, sectionToggler, groupToggler, resetValues, toggleAllOptions} from "./modules/helpers";
 import schemaSectionSettings from "./modules/schema-settings";
 import mediaFileChooser from "./modules/media-file-chooser";
-import getPostsModal from "./modules/posts-modal";
+// import getPostsModal from "./modules/posts-modal";
 import sectionPinner from "./modules/section-pinner";
-import E410_DictionaryHandler from "./modules/e410-handler";
-import ExcludedHostsDictionaryHandler from "./modules/excluded-hosts-handler";
+import dictionaryHandler from "./modules/dictionary-handler";
 import './css/styles.css';
 
 // Condition for calling our functions
 const pluginPage = document.querySelector('#wdss-settings-page');
 
 // Selectors for our functions
-const titleClippingSection = {
-  toggler: '#wdss-title-clipping-condition input',
-  target: '#wdss-title-clipping-group'
-};
-
 const featuredImageSection = {
   toggler: '#wdss-auto-featured-image-condition input',
   target: '#wdss-featured-images-group'
@@ -70,14 +64,23 @@ const getOgranizationName = {
   input: '#wdss-jsonld-schema-orgname input',
 }
 
-const getSiteYoastEnding = {
-  selector: '#wdss-get-title',
-  input: '#wdss-title-ending input',
-}
-
 const getSiteEmail = {
   selector: '#wdss-generate-email',
   input: '#wdss-jsonld-schema-email input',
+}
+
+const e410_Dictionary = {
+  root_el: '#custom-410s-list-settings',
+  action: 'e410_dictionary_update',
+  nonce: 'e410-dictionary-nonce',
+  name: 'e410_dictionary'
+}
+
+const excludedHostsDictionary = {
+  root_el: '#images-settings',
+  action: 'excluded_hosts_dictionary_update',
+  nonce: 'excluded-hosts-dictionary-nonce',
+  name: 'excluded_hosts_dictionary'
 }
 
 
@@ -103,8 +106,8 @@ function Init() {
       groupToggler(polylangSection);  
     }
 
-    E410_DictionaryHandler();
-    ExcludedHostsDictionaryHandler();
+    dictionaryHandler(e410_Dictionary);
+    dictionaryHandler(excludedHostsDictionary);
 
     mediaFileChooser(organizationLogoChooser);
     resetValues(organizationLogoReset);
