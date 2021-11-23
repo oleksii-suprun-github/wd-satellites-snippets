@@ -9,7 +9,7 @@
   <div class="wdss-row hidden">
     <div class="wdss-section-content">
       <div class="wdss-section-content-description">
-        <strong>Provide URLs with images which will exclude from post content</strong>
+        <strong>Provide URLs with images which will be EXCLUDED from post content</strong>
       </div>
 
       <div class="wdp-add-item-panel">

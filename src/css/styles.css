@@ -35,7 +35,7 @@ html.fixed::before {
   transition: height 0ms 0ms, opacity 600ms 0ms;
 }
 #wdss-settings-page .wdss-setting-group#wdss-featured-images-group {
-  max-height: 450px;
+  max-height: 350px;
   overflow-y: auto;
 }
 #wdss-settings-page .wdss-setting-group.hidden {
@@ -617,6 +617,12 @@ button#wdss-toggle-options {
 
 
 /* Featured Images Settings */
+#wdss-settings-page #wdss-featured-images-group {
+  border: 1px solid #1d2327;
+  margin-left: 15px;
+  width: fit-content;
+  width: -moz-fit-content;  
+}
 #wdss-featured-images-group  > div {
   margin-left: 15px;
 }
