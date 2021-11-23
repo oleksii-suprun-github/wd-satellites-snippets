@@ -1,13 +1,17 @@
-// Custom popup
+// Custom modal handler
 export default function getPostsModal() {
   const html = document.querySelector('html'); 
   const open_modal_btn = document.querySelector('#wdss-remove-broken-featured__choose');
   const close_modal_btn = document.querySelector('.wdss-modal-header i.fa-times');
   const modal = document.querySelector('.wdss-modal');
+  const table = modal.querySelector('table');
   const execute_btn = modal.querySelector('.wdss-button.submit');
   const toggle_all_btn = modal.querySelector('.wdss-button.toggle-all');
   const get_posts_btn = modal.querySelector('.wdss-button.get-posts');
   const context = document.querySelector('#wdss-exclude-posts-table tbody');
+
+  const welcome_msg = modal.querySelector('.wdss-modal-welcome-msg');
+  const loading_msg_template = '<span class="wdss-modal-loading-msg">Loading...</span>'
 
   open_modal_btn.addEventListener('click', openModal);
   function openModal() {
@@ -25,23 +29,59 @@ export default function getPostsModal() {
 
   get_posts_btn.addEventListener('click', getPostsList);
   function getPostsList() {
+
+    welcome_msg.classList.remove('active');
+    table.insertAdjacentHTML('afterend', loading_msg_template);
+
+    let fetched_posts;
+    let loading_msg = document.querySelector('.wdss-modal-loading-msg')
+    
     jQuery.ajax({
-        url : wdss_localize.url,
-        type : 'post',
-        data : {
-          action : 'fetch_broken_featured_images',
-          security : wdss_localize.broken_featured_images_nonce,
-        },
-        success : function(response) {
-          modalHandler.call(context, response);
-        }
+      url : document.location.origin + '/wp-json/wp/v2/posts?per_page=50', 
+      type: 'get',
+      success: function(response) {
+        fetched_posts = response;
+      },
+      complete: function() {
+      
+        jQuery.ajax({
+          url : wdss_localize.url,
+          type : 'post',
+          data : {
+            posts_list: JSON.stringify(fetched_posts),
+            action : 'fetch_broken_featured_images',
+            security : wdss_localize.broken_featured_images_nonce,
+          },
+          success : function(response) {
+            modalHandler.call(context, response);
+            loading_msg.remove();
+          }
+        });
+      }
     });
   }
 
   function modalHandler($content) {
     this.insertAdjacentHTML('beforeend', $content);
     
+    
     let posts_list = Array.from(document.querySelectorAll('.wdss-table-row.post'));
+    let load_more_btn;
+
+    if(posts_list.length >= 50) {
+      let load_more_button = '<button type="button" class="wdss-button load-more">Load more</button>';
+      get_posts_btn.insertAdjacentHTML('beforebegin', load_more_button);
+
+      load_more_btn = modal.querySelector('.wdss-button.load-more');
+    }
+
+    if(load_more_btn) {
+      load_more_btn.addEventListener('click', loadMorePosts);
+      function loadMorePosts() {
+        // currently not in use
+      }
+    }
+
     posts_list.forEach(post => {
         post.addEventListener('click', () => {
           let checkbox = post.querySelector('.wdss-table-post__select input[type="checkbox"]');
@@ -107,10 +147,11 @@ export default function getPostsModal() {
       console.log(ids);
 
       clearAll();
-      
       get_posts_btn.classList.remove('inactive');
       execute_btn.classList.add('inactive');
       toggle_all_btn.classList.add('inactive');
+
+      
 
     });
   }

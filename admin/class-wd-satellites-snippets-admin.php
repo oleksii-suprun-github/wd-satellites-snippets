@@ -140,27 +140,21 @@ class Wd_Satellites_Snippets_Admin {
 	// Get Posts Modal window
 	public function wdss_get_posts_modal() {
 		check_ajax_referer( 'broken-featured-images-nonce', 'security', false );
-
-		$url = get_site_url('/') . '/wp-json/wp/v2/posts?per_page=100';
-		$json = file_get_contents($url);
-		$posts = json_decode($json, TRUE);
-		
+		$posts = json_decode(stripslashes($_POST['posts_list']));
 
 		foreach($posts as $post) {
-			$id = $post['id'];
-			$post_data = get_post($id);
-			$thumbnail_url = get_the_post_thumbnail_url($id);
+			$thumbnail_url = get_the_post_thumbnail_url($post->id);
 			$is_broken = !check_url_status($thumbnail_url);
-
-			if( !$is_broken ) {
+				
+			if( !$is_broken) {
 		?>
-					<tr class="wdss-table-row post">
-						<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post_data->ID; ?>"></td>
-						<td><?= $post_data->ID;?></td>
-						<td><?= $post_data->post_title;?></td>
-						<td><?= $post_data->post_status;?></td>
-						<td><?= $post_data->post_date;?></td>				
-					</tr>
+			<tr class="wdss-table-row post">
+				<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->id; ?>"></td>
+				<td><?= $post->id;?></td>
+				<td><?= $post->title->rendered;?></td>
+				<td><?= $post->status;?></td>
+				<td><?= $post->date;?></td>				
+			</tr>
 		<?php
 			}
 		}

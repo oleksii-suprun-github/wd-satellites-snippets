@@ -13,13 +13,15 @@
 							<th class="wdss-table-post__status">Status</th>
 							<th class="wdss-table-post__date">Date</th>
 						</tr>
-
-		</table>
+					</table>
+					<span class="wdss-modal-welcome-msg active">Press "Get Posts" to start</span>
 				</div>
 			</div>
 			<div class="wdss-modal-footer">
 				<button type="button" class="wdss-button toggle-all inactive">Toggle All</button>
-        <button type="button" class="wdss-button get-posts">Get posts</button>
+        <div class="wdss-modal-footer-main">
+          <button type="button" class="wdss-button get-posts">Get posts</button>
+        </div>
 				<button type="button" class="wdss-button submit inactive">Execute</button>
 			</div>
 		</div>

@@ -375,6 +375,9 @@ div.disabled:before {
   background: #50575e;
   transition: all 300ms;
 }
+.wdss-button.load-more {
+  background: #2271b1;
+}
 .wdss-button.inactive {
   pointer-events: none !important;
   color: #2c3338 !important;
@@ -448,11 +451,25 @@ div.disabled:before {
   position: relative;
   height: 40vh;
 }
+.wdss-modal-welcome-msg,
+.wdss-modal-loading-msg {
+  position: relative;
+  display: none;
+  height: 260px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 1.5rem;
+}
+.wdss-modal-loading-msg,
+.wdss-modal-welcome-msg.active {
+  display: flex;
+}
 .wdss-modal-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 5vh;
+  height: 5.25vh;
   color: #fff;
   background: #2c3338;
 }
