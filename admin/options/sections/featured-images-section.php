@@ -68,42 +68,20 @@
       add_action('future_to_publish', 'wdss_random_featured_image');
     }
 
-    if(!is_admin() ) {
-      add_filter('wp_get_attachment_url', 'wdss_featured_images_url_fix');
-      function wdss_featured_images_url_fix($url) {
+    // 1Investing special bug fix
+    add_filter('wp_get_attachment_url', 'wdss_featured_images_url_fix');
+    function wdss_featured_images_url_fix($url) {
 
-        if(is_archive() || is_home() || is_category()) {
-          global $post;
-          $target = 'https://' . $_SERVER['SERVER_NAME'] . '/wp-content/uploads/;';
-    
-          if(str_replace($target, '', $url)) {
-            $url = str_replace($target, '', $url);
-          }
-    
-          if(check_url_status($url) && check_image_size($url)) {
-            return $url;
-          }
-          else {
-            $category = get_the_category(); 
-    
-            if( !empty($category) ) {
-              $option_postfix = preg_replace('/\-+/', '_', strtolower($category[0]->slug));
-              $option = get_option('wdss_featured_images_list_' . $option_postfix, '');
-  
-              if( $option ) {
-                  $images_ids_arr = explode(',', $option);
-                  $rand_index = array_rand($images_ids_arr);
-                  $image_id = intval($images_ids_arr[$rand_index]);
-                  set_post_thumbnail($post->ID, $image_id);
-              }
-            }
-            return;
-          }
+      if(is_archive() || is_home() || is_category()) {
+
+        $target = 'https://' . $_SERVER['SERVER_NAME'] . '/wp-content/uploads/;';
+
+        if( strpos($url, $target) !== false ) {
+          $url = str_replace($target, '', $url);
         }
-  
       }
+      return $url;
     }
-
 
     if( get_option('wdss_featured_images_add_column', '0') ) {
 

@@ -439,16 +439,20 @@ div.disabled:before {
 }
 .wdss-modal-footer {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   height: 5vh;
   color: #fff;
   background: #2c3338;
 }
+.wdss-modal-footer button.toggle-all {
+  color: #2c3338;
+  background-color: #fff;
+}
 .wdss-modal-footer button {
-  padding: 0 25px;
-  margin-bottom: 0;
-  margin-left: auto;
-  margin-right: 15px;
+  height: 25px;
+  padding: 0 15px;
+  margin: 0 15px;
 }
 @media screen and (max-width: 550px) {
   .wdss-modal {

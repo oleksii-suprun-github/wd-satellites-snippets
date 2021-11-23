@@ -64,7 +64,7 @@ class Wd_Satellites_Snippets_Admin {
     }
 
 		if( wp_doing_ajax() ) {
-			add_action( 'wp_ajax_fetch_modal_content',  array($this, 'wdss_get_posts_modal') );
+			add_action( 'wp_ajax_fetch_broken_featured_images',  array($this, 'wdss_get_posts_modal') );
 			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
 			add_action( 'wp_ajax_excluded_hosts_dictionary_update', array($this, 'wdss_excluded_hosts_dictionary_handler') );		
 		}
@@ -114,14 +114,38 @@ class Wd_Satellites_Snippets_Admin {
 	}
 
 
+
+	// 		// Subject to improve (currently is Hight Server Latency)
+	// 		if(check_url_status($url) && check_image_size($url) ) {
+	// 			return $url;
+	// 		}
+	// 		else {
+	// 			global $post;
+	// 			$category = get_the_category(); 
+
+	// 			if( !empty($category) ) {
+	// 				$option_postfix = preg_replace('/\-+/', '_', strtolower($category[0]->slug));
+	// 				$option = get_option('wdss_featured_images_list_' . $option_postfix, '');
+
+	// 				if( $option ) {
+	// 						$images_ids_arr = explode(',', $option);
+	// 						$rand_index = array_rand($images_ids_arr);
+	// 						$image_id = intval($images_ids_arr[$rand_index]);
+	// 						set_post_thumbnail($post->ID, $image_id);
+	// 				}
+	// 			}
+
+
+
 	// Get Posts Modal window
 	public function wdss_get_posts_modal() {
-		check_ajax_referer( 'ajax-nonce', 'security', false );
+		check_ajax_referer( 'broken-featured-images-nonce', 'security', false );
 		$args = array(
 			'post_type' => 'post',
 			'post_status' => 'any',
-			'numberposts' => -1,
+			'posts_per_page' => -1,
 			'orderby' => 'date', 
+			'cat' => 1, // temp
 			'order' => 'DESC', 
 		);
 		$loop = new WP_Query( $args );
@@ -143,6 +167,12 @@ class Wd_Satellites_Snippets_Admin {
 			<?php
 				if ( $loop->have_posts() ) :
 				while ( $loop->have_posts() ) : $loop->the_post();
+
+				if( has_post_thumbnail() ) {
+					$thumbnail_url = get_the_post_thumbnail_url();
+					$is_broken = !check_url_status($thumbnail_url);
+
+					if( !$is_broken ) {
 			?>
 						<tr class="wdss-table-row post">
 							<td class="wdss-table-post__select"><input type="checkbox" value="<?= get_the_id();?>"></td>
@@ -152,6 +182,8 @@ class Wd_Satellites_Snippets_Admin {
 							<td><?= get_the_date();?></td>				
 						</tr>
 			<?php
+					}
+				}
 				endwhile;
 				endif;
 				wp_reset_postdata();
@@ -160,7 +192,8 @@ class Wd_Satellites_Snippets_Admin {
 				</div>
 			</div>
 			<div class="wdss-modal-footer">
-				<button type="button" class="wdss-button submit">Save</button>
+				<button type="button" class="wdss-button toggle-all">Toggle All</button>
+				<button type="button" class="wdss-button submit">Execute</button>
 			</div>
 		</div>
 		<?php
@@ -192,7 +225,7 @@ class Wd_Satellites_Snippets_Admin {
 				'is_polylang_setup' => function_exists( 'pll_languages_list' ) && count(pll_languages_list()) > 0,
 				'wp_rand' => wp_rand(),
 				'url' => admin_url( 'admin-ajax.php' ),
-				'nonce' => wp_create_nonce( 'ajax-nonce' ),
+				'broken-featured-images-nonce' => wp_create_nonce( 'broken_featured_images_nonce' ),
 				'e410_dictionary_nonce' => wp_create_nonce( 'e410-dictionary-nonce' ),
 				'excluded_hosts_dictionary_nonce' => wp_create_nonce( 'excluded-hosts-dictionary-nonce' ),				
 			];

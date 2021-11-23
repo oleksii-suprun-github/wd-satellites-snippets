@@ -1,4 +1,6 @@
 import {getSiteInfo, accordionToggler, checkboxToggler, sectionToggler, groupToggler, resetValues, toggleAllOptions} from "./modules/helpers";
+import {featuredImageSection, customSchemaSection, polylangSection, featuredImagesListReset, organizationLogoReset, featuredImagesChooser, organizationLogoChooser, getOgranizationName, getSiteEmail, e410_Dictionary, excludedHostsDictionary} from './modules/variables';
+
 import schemaSectionSettings from "./modules/schema-settings";
 import mediaFileChooser from "./modules/media-file-chooser";
 import getPostsModal from "./modules/posts-modal";
@@ -8,81 +10,6 @@ import './css/styles.css';
 
 // Condition for calling our functions
 const pluginPage = document.querySelector('#wdss-settings-page');
-
-// Selectors for our functions
-const featuredImageSection = {
-  toggler: '#wdss-auto-featured-image-condition input',
-  target: '#wdss-featured-images-group'
-};
-
-const customSchemaSection = {
-  toggler: '#wdss-advanced-jsonld-schema-condition input',
-  target: '#wdss-advanced-jsonld-schema-group' 
-}
-
-const polylangSection = {
-  toggler: '#wdss-polylang-meta-data-condition input',
-  target: '#wdss-polylang-meta-data-group'  
-};
-
-const cutTitleClippingReset = {
-  button: '#wdss-title-clipping-excluded button.reset',
-  target: '#wdss-title-clipping-excluded input'
-};
-
-const cutTitleSinceReset = {
-  button: '#wdss-title-clipping-by-date button.reset',
-  target: '#wdss-title-clipping-by-date input'
-};
-
-const featuredImagesListReset = {
-  button: '#wdss-featured-images-group button.reset',
-  target: '#wdss-featured-images-group input'
-};
-
-const organizationLogoReset = {
-  button: '#wdss-jsonld-schema-logo button.reset',
-  target: '#wdss-jsonld-schema-logo input'
-};
-
-const featuredImagesChooser = {
-  select: '.image-chooser.featured button.choose',
-  target: '.image-chooser.featured input',
-  is_multiple: true,
-  title: 'Select Featured Images'
-};
-
-const organizationLogoChooser = {
-  select: '.image-chooser.logo button.choose',
-  target: '.image-chooser.logo input',
-  is_multiple: false,
-  title: 'Select Organization Logo'
-}
-
-const getOgranizationName = {
-  selector: '#wdss-generate-orgname',
-  input: '#wdss-jsonld-schema-orgname input',
-}
-
-const getSiteEmail = {
-  selector: '#wdss-generate-email',
-  input: '#wdss-jsonld-schema-email input',
-}
-
-const e410_Dictionary = {
-  root_el: '#custom-410s-list-settings',
-  action: 'e410_dictionary_update',
-  nonce: 'e410-dictionary-nonce',
-  name: 'e410_dictionary'
-}
-
-const excludedHostsDictionary = {
-  root_el: '#images-settings',
-  action: 'excluded_hosts_dictionary_update',
-  nonce: 'excluded-hosts-dictionary-nonce',
-  name: 'excluded_hosts_dictionary'
-}
-
 
 function Init() {
   if(pluginPage) {

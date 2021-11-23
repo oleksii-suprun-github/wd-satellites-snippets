@@ -3,20 +3,19 @@ export default function getPostsModal() {
   const btn = document.querySelector('#wdss-remove-broken-featured__choose');
   const context = document.querySelector('#wdss-remove-broken-featured');
 
-  btn.addEventListener('click', init);
 
-  function init() {
+  btn.addEventListener('click', Init);
+  function Init() {
 
     jQuery.ajax({
         url : wdss_localize.url,
         type : 'post',
         data : {
           action : 'fetch_broken_featured_images',
-          security : wdss_localize.nonce,
+          security : wdss_localize.broken_featured_images_nonce,
         },
         success : function(response) {
           modalHandler.call(context, response);
-        
         }
     });
   }
@@ -28,8 +27,8 @@ export default function getPostsModal() {
 
     this.insertAdjacentHTML('beforeend', $content);
     
-    const posts = Array.from(document.querySelectorAll('.wdss-table-row.post'));
-    posts.forEach(post => {
+    let posts_list = Array.from(document.querySelectorAll('.wdss-table-row.post'));
+    posts_list.forEach(post => {
         post.addEventListener('click', () => {
           let checkbox = post.querySelector('.wdss-table-post__select input[type="checkbox"]');
           if(checkbox.hasAttribute('checked')) {
@@ -51,15 +50,31 @@ export default function getPostsModal() {
       input.checked = false;
     }
 
-
-    const modal = this.querySelector('.wdss-modal');
-    const close_btn = modal.querySelector('.wdss-modal-header i');
-    const save_btn = modal.querySelector('.wdss-button.submit');
-
     function closeModal() {
       modal.remove();
       html.classList.remove('fixed');
     }
+
+    function toggleAll(e) {
+      let posts = e.currentTarget.params;
+      posts.forEach(post => {
+          let checkbox = post.querySelector('.wdss-table-post__select input[type="checkbox"]');
+          if(checkbox.hasAttribute('checked')) {
+            uncheck(checkbox);
+          }
+          else {
+            check(checkbox);
+          }
+      });
+    }
+
+    const modal = this.querySelector('.wdss-modal');
+    const close_btn = modal.querySelector('.wdss-modal-header i');
+    const toggle_btn = modal.querySelector('.wdss-button.toggle-all');
+    const execute_btn = modal.querySelector('.wdss-button.submit');
+
+    toggle_btn.addEventListener('click', toggleAll);
+    toggle_btn.params = posts_list;
 
     close_btn.addEventListener('click', closeModal);
     document.onkeydown = ((e) => {
@@ -68,7 +83,7 @@ export default function getPostsModal() {
       }
     });
     
-    save_btn.addEventListener('click', () => {
+    execute_btn.addEventListener('click', () => {
       
       const posts = modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]:checked');
       let idsArr = [];
@@ -79,7 +94,9 @@ export default function getPostsModal() {
       });
   
       ids = idsArr.join(',');
-      input.value = ids;
+
+      console.log(ids);
+
       modal.remove();
       html.classList.remove('fixed');
     });

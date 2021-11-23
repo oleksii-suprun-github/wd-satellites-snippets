@@ -26,7 +26,7 @@
   <div class="wdss-row hidden">
     <div class="wdss-section-content">
 
-     <div id="wdss-title-clipping-excluded" class="wdss-setting-item">
+     <div id="wdss-remove-broken-featured" class="wdss-setting-item">
           <span>Delete Broken Featured Images</span>
           <button id="wdss-remove-broken-featured__choose" type="button" class="wdss-button">Open settings</button>
 		  </div>
