@@ -375,6 +375,11 @@ div.disabled:before {
   background: #50575e;
   transition: all 300ms;
 }
+.wdss-button.inactive {
+  pointer-events: none !important;
+  color: #2c3338 !important;
+  background-color: #808080 !important;
+}
 .wdss-button.reset {
   padding: 0;
   background: transparent;
@@ -388,12 +393,14 @@ div.disabled:before {
   color: #cc2020;
   transition: all 300ms;
 }
-.wdss-button.submit {
+.wdss-button.submit,
+.wdss-button.get-posts {
   color: #fff;
   border-color: green;
   background: green;
 }
-.wdss-button.submit:hover {
+.wdss-button.submit:hover,
+.wdss-button.get-posts {
   background: #1ea71e;
 }
 #submit.wdss-button.submit {
@@ -408,6 +415,7 @@ div.disabled:before {
 
 /* Modals */
 .wdss-modal {
+  display: none;
   position: fixed;
   z-index: 2;
   background: #fff;
@@ -419,6 +427,9 @@ div.disabled:before {
   right: 0;
   margin: 0 auto; 
   box-shadow: 1px 1px 3px 1px #2c3338;
+}
+.wdss-modal.active {
+  display: block;
 }
 .wdss-modal-header {
   display: flex;

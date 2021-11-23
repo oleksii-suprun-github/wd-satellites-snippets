@@ -140,63 +140,30 @@ class Wd_Satellites_Snippets_Admin {
 	// Get Posts Modal window
 	public function wdss_get_posts_modal() {
 		check_ajax_referer( 'broken-featured-images-nonce', 'security', false );
-		$args = array(
-			'post_type' => 'post',
-			'post_status' => 'any',
-			'posts_per_page' => -1,
-			'orderby' => 'date', 
-			'cat' => 1, // temp
-			'order' => 'DESC', 
-		);
-		$loop = new WP_Query( $args );
-	?>
-		<div id="exclude-posts-modal" class="wdss-modal">
-			<div class="wdss-modal-header">
-				<i class="fas fa-times"></i>
-			</div>
-			<div class="wdss-modal-body">
-				<div class="wdss-table-wrapper">
-					<table id="wdss-exclude-posts-table" class="wdss-table">
-						<tr class="wdss-table-row header">
-							<th class="wdss-table-post__select"></th>
-							<th class="wdss-table-post__id">ID</th>
-							<th class="wdss-table-post__title">Title</th>
-							<th class="wdss-table-post__status">Status</th>
-							<th class="wdss-table-post__date">Date</th>
-						</tr>
-			<?php
-				if ( $loop->have_posts() ) :
-				while ( $loop->have_posts() ) : $loop->the_post();
 
-				if( has_post_thumbnail() ) {
-					$thumbnail_url = get_the_post_thumbnail_url();
-					$is_broken = !check_url_status($thumbnail_url);
+		$url = get_site_url('/') . '/wp-json/wp/v2/posts?per_page=100';
+		$json = file_get_contents($url);
+		$posts = json_decode($json, TRUE);
+		
 
-					if( !$is_broken ) {
-			?>
-						<tr class="wdss-table-row post">
-							<td class="wdss-table-post__select"><input type="checkbox" value="<?= get_the_id();?>"></td>
-							<td><?= get_the_id();?></td>
-							<td><?= get_the_title();?></td>
-							<td><?= get_post_status();?></td>
-							<td><?= get_the_date();?></td>				
-						</tr>
-			<?php
-					}
-				}
-				endwhile;
-				endif;
-				wp_reset_postdata();
-			?> 
-		</table>
-				</div>
-			</div>
-			<div class="wdss-modal-footer">
-				<button type="button" class="wdss-button toggle-all">Toggle All</button>
-				<button type="button" class="wdss-button submit">Execute</button>
-			</div>
-		</div>
+		foreach($posts as $post) {
+			$id = $post['id'];
+			$post_data = get_post($id);
+			$thumbnail_url = get_the_post_thumbnail_url($id);
+			$is_broken = !check_url_status($thumbnail_url);
+
+			if( !$is_broken ) {
+		?>
+					<tr class="wdss-table-row post">
+						<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post_data->ID; ?>"></td>
+						<td><?= $post_data->ID;?></td>
+						<td><?= $post_data->post_title;?></td>
+						<td><?= $post_data->post_status;?></td>
+						<td><?= $post_data->post_date;?></td>				
+					</tr>
 		<?php
+			}
+		}
 		die();
 	}
 

@@ -1,5 +1,5 @@
 <?php
-
+  if(is_admin()) {
 		// Checks image dimensions
 		function check_image_size($url) {
 			list($width, $height) = getimagesize($url);
@@ -38,3 +38,4 @@
         return false;
       }
     }
+  }

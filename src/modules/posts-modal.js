@@ -1,12 +1,30 @@
 // Custom popup
 export default function getPostsModal() {
-  const btn = document.querySelector('#wdss-remove-broken-featured__choose');
-  const context = document.querySelector('#wdss-remove-broken-featured');
+  const html = document.querySelector('html'); 
+  const open_modal_btn = document.querySelector('#wdss-remove-broken-featured__choose');
+  const close_modal_btn = document.querySelector('.wdss-modal-header i.fa-times');
+  const modal = document.querySelector('.wdss-modal');
+  const execute_btn = modal.querySelector('.wdss-button.submit');
+  const toggle_all_btn = modal.querySelector('.wdss-button.toggle-all');
+  const get_posts_btn = modal.querySelector('.wdss-button.get-posts');
+  const context = document.querySelector('#wdss-exclude-posts-table tbody');
+
+  open_modal_btn.addEventListener('click', openModal);
+  function openModal() {
+    modal.classList.add('active');
+    html.classList.add('fixed');
+  }
+
+  close_modal_btn.addEventListener('click', closeModal);
+  function closeModal() {
+    modal.classList.remove('active');
+    html.classList.remove('fixed');
+  }
+  document.onkeydown = ((e) => e.key === 'Esc' || e.key === 'Escape' ? closeModal() : null);
 
 
-  btn.addEventListener('click', Init);
-  function Init() {
-
+  get_posts_btn.addEventListener('click', getPostsList);
+  function getPostsList() {
     jQuery.ajax({
         url : wdss_localize.url,
         type : 'post',
@@ -21,10 +39,6 @@ export default function getPostsModal() {
   }
 
   function modalHandler($content) {
-
-    const html = document.querySelector('html'); 
-    html.classList.add('fixed');
-
     this.insertAdjacentHTML('beforeend', $content);
     
     let posts_list = Array.from(document.querySelectorAll('.wdss-table-row.post'));
@@ -40,6 +54,13 @@ export default function getPostsModal() {
         });
     });
 
+    get_posts_btn.classList.add('inactive');
+    execute_btn.classList.remove('inactive');
+    toggle_all_btn.classList.remove('inactive');
+
+    toggle_all_btn.addEventListener('click', toggleAll);
+    toggle_all_btn.params = posts_list;
+
     function check(input) {
       input.setAttribute('checked', 'checked');
       input.checked = true; 
@@ -48,11 +69,6 @@ export default function getPostsModal() {
     function uncheck(input) {
       input.removeAttribute('checked');
       input.checked = false;
-    }
-
-    function closeModal() {
-      modal.remove();
-      html.classList.remove('fixed');
     }
 
     function toggleAll(e) {
@@ -68,37 +84,35 @@ export default function getPostsModal() {
       });
     }
 
-    const modal = this.querySelector('.wdss-modal');
-    const close_btn = modal.querySelector('.wdss-modal-header i');
-    const toggle_btn = modal.querySelector('.wdss-button.toggle-all');
-    const execute_btn = modal.querySelector('.wdss-button.submit');
+    function clearAll() {
+      let table_rows = Array.from(modal.querySelectorAll('.wdss-table-row.post'));
+      console.log(table_rows);
 
-    toggle_btn.addEventListener('click', toggleAll);
-    toggle_btn.params = posts_list;
+      table_rows.forEach(row => {
+        row.parentNode.removeChild(row);
+      });
+    }
 
-    close_btn.addEventListener('click', closeModal);
-    document.onkeydown = ((e) => {
-      if(e.key === 'Esc' || e.key === 'Escape') {
-        closeModal();
-      }
-    });
     
     execute_btn.addEventListener('click', () => {
-      
-      const posts = modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]:checked');
+      const proceded_posts = modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]:checked');
       let idsArr = [];
       let ids;
   
-      posts.forEach(post => {
+      proceded_posts.forEach(post => {
         idsArr.push(post.value);
       });
   
       ids = idsArr.join(',');
-
       console.log(ids);
 
-      modal.remove();
-      html.classList.remove('fixed');
+      clearAll();
+      
+      get_posts_btn.classList.remove('inactive');
+      execute_btn.classList.add('inactive');
+      toggle_all_btn.classList.add('inactive');
+
     });
   }
+
 }
