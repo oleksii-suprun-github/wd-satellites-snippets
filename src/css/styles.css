@@ -569,54 +569,11 @@ button#wdss-toggle-options {
 }
 
 
-/* Long Title Clipping Settings */
-#wdss-title-clipping-excluded {
-  margin-left: 15px;
-}
-#wdss-title-clipping-excluded input[type="text"] {
-  min-width: 350px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  margin-right: 0;
-}
-#wdss-title-clipping-excluded__choose {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-@media screen and (max-width: 550px) {
-  #wdss-title-clipping-excluded,
-  #wdss-title-ending {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  #wdss-title-clipping-excluded span,
-  #wdss-title-ending span {
-    margin-bottom: 10px;
-  }
-  #wdss-title-clipping-excluded input[type="text"],
-  #wdss-title-ending input[type="text"] {
-    min-width: unset;
-    width: 95%;
-    margin-bottom: 4px;
-  }
-  #wdss-title-clipping-excluded__choose {
-    margin-left: auto;
-    margin-right: 50px !important;
-    border-radius: 4px;
-  }
-  #wdss-title-clipping-excluded .wdss-button.reset {
-    position: absolute;
-    bottom: 0;
-    right: 18px
-  }
-  #wdss-get-title {
-    margin-left: auto;
-    margin-right: 15px;
-  }
-}
-
-
 /* Featured Images Settings */
+#wdss-remove-broken-featured {
+  margin-left: 15px;
+  margin-bottom: 10px;
+}
 #wdss-settings-page #wdss-featured-images-group {
   border: 1px solid #1d2327;
   margin-left: 15px;

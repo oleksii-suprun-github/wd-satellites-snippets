@@ -1,7 +1,7 @@
 import {getSiteInfo, accordionToggler, checkboxToggler, sectionToggler, groupToggler, resetValues, toggleAllOptions} from "./modules/helpers";
 import schemaSectionSettings from "./modules/schema-settings";
 import mediaFileChooser from "./modules/media-file-chooser";
-// import getPostsModal from "./modules/posts-modal";
+import getPostsModal from "./modules/posts-modal";
 import sectionPinner from "./modules/section-pinner";
 import dictionaryHandler from "./modules/dictionary-handler";
 import './css/styles.css';
@@ -97,9 +97,9 @@ function Init() {
 
       mediaFileChooser(featuredImagesChooser);
 
-      resetValues(cutTitleClippingReset, cutTitleSinceReset, featuredImagesListReset);
+      resetValues(featuredImagesListReset);
 
-      // getPostsModal();
+      getPostsModal();
     }
 
     if(wdss_localize.is_polylang_exists && wdss_localize.is_polylang_setup) {

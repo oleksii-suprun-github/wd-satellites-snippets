@@ -1,7 +1,7 @@
-// Custom popup with list of published posts for Long Title Clipping Settings
+// Custom popup
 export default function getPostsModal() {
-  const btn = document.querySelector('#wdss-title-clipping-excluded__choose');
-  const context = document.querySelector('#wdss-title-clipping-excluded');
+  const btn = document.querySelector('#wdss-remove-broken-featured__choose');
+  const context = document.querySelector('#wdss-remove-broken-featured');
 
   btn.addEventListener('click', init);
 
@@ -11,7 +11,7 @@ export default function getPostsModal() {
         url : wdss_localize.url,
         type : 'post',
         data : {
-          action : 'fetch_modal_content',
+          action : 'fetch_broken_featured_images',
           security : wdss_localize.nonce,
         },
         success : function(response) {
@@ -55,18 +55,6 @@ export default function getPostsModal() {
     const modal = this.querySelector('.wdss-modal');
     const close_btn = modal.querySelector('.wdss-modal-header i');
     const save_btn = modal.querySelector('.wdss-button.submit');
-    const input = this.querySelector('#wdss-title-clipping-excluded input[type="text"]');
-  
-    if(input.value !== '') {
-      let inputIdsArr = input.value.split(',');
-      let checkboxes = Array.from(modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]'));
-      checkboxes.forEach(checkbox => {
-        if(inputIdsArr.includes(checkbox.value)) {
-          checkbox.setAttribute('checked', 'checked');
-          checkbox.checked = true;
-        }
-      });
-    }
 
     function closeModal() {
       modal.remove();
