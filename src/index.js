@@ -1,6 +1,6 @@
 import {getSiteInfo, accordionToggler, checkboxToggler, sectionToggler, groupToggler, resetValues, toggleAllOptions} from "./modules/helpers";
 import {featuredImageSection, polylangSection, featuredImagesListReset, organizationLogoReset, featuredImagesChooser, organizationLogoChooser, getOgranizationName, getSiteEmail, e410_Dictionary, excludedHostsDictionary} from './modules/variables';
-
+import getPostsModal from "./modules/posts-modal";
 import schemaSectionSettings from "./modules/schema-settings";
 import mediaFileChooser from "./modules/media-file-chooser";
 import sectionPinner from "./modules/section-pinner";
@@ -13,6 +13,7 @@ const pluginPage = document.querySelector('#wdss-settings-page');
 function Init() {
   if(pluginPage) {
 
+    getPostsModal();
     sectionToggler();
     sectionPinner();
 
