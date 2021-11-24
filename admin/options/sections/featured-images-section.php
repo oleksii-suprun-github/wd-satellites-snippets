@@ -119,7 +119,12 @@
         add_action('admin_head', 'add_images_column_css');
         function add_images_column_css(){
           if( get_current_screen()->base == 'edit')
-            echo '<style type="text/css">.column-featured{width:3.5%;}</style>';
+            echo '<style type="text/css">
+            .column-featured{width:3.5%;}
+            @media screen and (max-width: 1600px) {
+              .column-featured{width:4.5%;}
+            }
+            </style>';
         }
       }
     }

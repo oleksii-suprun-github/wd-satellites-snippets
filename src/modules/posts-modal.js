@@ -71,41 +71,45 @@ export default function getPostsModal() {
         let promises = []
         
         for (let i = 1; i <= total_pages; i++) {
+          try {
             promises.push(new Promise((resolve, reject) => {
-              fetch(document.location.origin + `/wp-json/wp/v2/posts?orderby=id&order=asc&per_page=100&page=${i}`)
-              .then((response) => {
+              fetch(document.location.origin + `/wp-json/wp/v2/posts?per_page=100&page=${i}`)
+              .then(response => {
                 return response.json();
               })
-              .then((data) => {
+              .then(data => {
                 fetched_posts = fetched_posts.concat(data);
                 resolve();
+              })
+              .catch(error => { 
+                console.log(error);
+                reject();
               });
-              
             }));
+          }
+          catch(e) {
+            break;
+          }
         }
-        return Promise.all(promises);
+        return Promise.allSettled(promises);
   }
   
   
     async function displayPosts() { 
-        try {
-            await getPosts();
-            console.log(fetched_posts);
-              jQuery.ajax({
-                url : wdss_localize.url,
-                type : 'post',
-                data : {
-                  fetched_list: JSON.stringify(fetched_posts),
-                  action: 'fetch_broken_featured',
-                  broken_featured_nonce1: wdss_localize.broken_featured_list_nonce,
-                },
-                success : function(response) {
-                  modalHandler.call(context, response);
-                }
-              }); 
-        } catch (error) {
-            console.log(error);
-        }
+          await getPosts();
+          console.log(fetched_posts);
+          jQuery.ajax({
+            url : wdss_localize.url,
+            type : 'post',
+            data : {
+               fetched_list: JSON.stringify(fetched_posts),
+               action: 'fetch_broken_featured',
+              broken_featured_nonce1: wdss_localize.broken_featured_list_nonce,
+            },
+            success : function(response) {
+              modalHandler.call(context, response);
+            }
+          }); 
     }
     displayPosts();
   }
