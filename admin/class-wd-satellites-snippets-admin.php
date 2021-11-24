@@ -65,7 +65,7 @@ class Wd_Satellites_Snippets_Admin {
 
 		if( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured_modal') );
-			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured_modal') );
+			add_action( 'wp_ajax_remove_broken_featured',  array($this, 'wdss_remove_broken_featured') );
 			
 			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
 			add_action( 'wp_ajax_excluded_hosts_dictionary_update', array($this, 'wdss_excluded_hosts_dictionary_handler') );		
