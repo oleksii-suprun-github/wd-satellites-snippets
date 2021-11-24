@@ -37,8 +37,8 @@ export default function getPostsModal() {
   document.onkeydown = ((e) => e.key === 'Esc' || e.key === 'Escape' ? closeModal() : null);
 
 
-  get_posts_btn.addEventListener('click', getPostsList);
-  function getPostsList() {
+  get_posts_btn.addEventListener('click', getPostsHandler);
+  function getPostsHandler() {
 
     let notification_message = modal.querySelector('.msg'); 
     if(notification_message) {
@@ -54,56 +54,60 @@ export default function getPostsModal() {
 
     if(not_found_msg) {
       not_found_msg.remove();
-     }
+    }
 
+    let total_posts = wdss_localize.total_post_count;
 
-     let total_posts = wdss_localize.total_post_count;
+    if(total_posts > 1000 ) {
+      total_posts = 1000;
+      console.log('Using lite-mode (up to 600 posts per fetch');
+    } 
 
-     if(total_posts > 800 ) {
-      total_posts = 800;
-      console.log('Using lite-mode (up to 800 posts per fetch');
-     } 
+    let total_pages = Math.ceil(total_posts / 100);
 
-     let total_pages = Math.ceil(total_posts / 100);
-     let promises_arr = [];
+    console.log(`Total pages: ${total_pages}`);
 
-     console.log(`Total pages: ${total_pages}`);
-
-     for (let i = 1; i <= total_pages; i++) {
-      console.log(`Loop #: ${i}`);
-        let promise = new Promise(function(resolve, reject) {
-            (function(){
-              jQuery.ajax({
-                url : document.location.origin + `/wp-json/wp/v2/posts?orderby=id&order=asc&per_page=100&page=${i}`, 
-                type: 'get',
-                success: function(response) {
-                  fetched_posts = fetched_posts.concat(response);
-                  resolve();
-                },
-                error: function(error) {
-                  alert('Error!');
-                  console.log(error);
-                  reject();
-                }
+    function getPosts() { 
+        let promises = []
+        
+        for (let i = 1; i <= total_pages; i++) {
+            promises.push(new Promise((resolve, reject) => {
+              fetch(document.location.origin + `/wp-json/wp/v2/posts?orderby=id&order=asc&per_page=100&page=${i}`)
+              .then((response) => {
+                return response.json();
+              })
+              .then((data) => {
+                fetched_posts = fetched_posts.concat(data);
+                resolve();
               });
-            })(i);
-         });
-         promises_arr.push(promise);
-     }
-     Promise.all(promises_arr).then(function(values) {
-        jQuery.ajax({
-          url : wdss_localize.url,
-          type : 'post',
-          data : {
-            posts_list: JSON.stringify(fetched_posts),
-            action : 'fetch_broken_featured',
-            security : wdss_localize.broken_featured_list_nonce,
-          },
-          success : function(response) {
-            modalHandler.call(context, response);
-          }
-        });
-     });
+              
+            }));
+        }
+        return Promise.all(promises);
+  }
+  
+  
+    async function displayPosts() { 
+        try {
+            await getPosts();
+            console.log(fetched_posts);
+              jQuery.ajax({
+                url : wdss_localize.url,
+                type : 'post',
+                data : {
+                  fetched_list: JSON.stringify(fetched_posts),
+                  action: 'fetch_broken_featured',
+                  broken_featured_nonce1: wdss_localize.broken_featured_list_nonce,
+                },
+                success : function(response) {
+                  modalHandler.call(context, response);
+                }
+              }); 
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    displayPosts();
   }
 
   function modalHandler($content) {
@@ -219,8 +223,8 @@ export default function getPostsModal() {
           type : 'post',
           data : {
             selected_list: JSON.stringify(proceded_posts_ids),
-            action : 'remove_broken_featured',
-            security : wdss_localize.remove_broken_featured_nonce,
+            action: 'remove_broken_featured',
+            broken_featured_nonce2: wdss_localize.remove_broken_featured_nonce,
           },
           success : function(response) {
             get_posts_btn.classList.add('inactive');

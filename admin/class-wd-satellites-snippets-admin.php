@@ -65,7 +65,7 @@ class Wd_Satellites_Snippets_Admin {
 
 		if( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured_modal') );
-			add_action( 'wp_ajax_remove_broken_featured',  array($this, 'wdss_remove_broken_featured') );
+			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured_modal') );
 			
 			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
 			add_action( 'wp_ajax_excluded_hosts_dictionary_update', array($this, 'wdss_excluded_hosts_dictionary_handler') );		
@@ -119,7 +119,7 @@ class Wd_Satellites_Snippets_Admin {
 
 	// Removes broken Featured with Ajax Call
 	public function wdss_remove_broken_featured() {
-		check_ajax_referer( 'remove-broken-featured-nonce', 'security', false );
+		check_ajax_referer( 'remove-broken-featured-nonce', 'broken_featured_nonce2', false );
 		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
 
 		var_dump($selected_ids_arr);
@@ -141,8 +141,8 @@ class Wd_Satellites_Snippets_Admin {
 
 	// Posts with broken Featured modal
 	public function wdss_get_broken_featured_modal() {
-		check_ajax_referer( 'broken-featured-list-nonce', 'security', false );
-		$posts = json_decode(stripslashes($_POST['posts_list']));
+		check_ajax_referer( 'broken-featured-list-nonce', 'broken_featured_nonce1', false );
+		$posts = json_decode(stripslashes($_POST['fetched_list']));
 
 		foreach($posts as $post) {
 			$thumbnail_url = get_the_post_thumbnail_url($post->id);
