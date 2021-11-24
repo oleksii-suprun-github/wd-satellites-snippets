@@ -38,25 +38,46 @@ export default function getPostsModal() {
   get_posts_btn.addEventListener('click', getPostsList);
   function getPostsList() {
 
+    get_posts_btn.classList.add('inactive');
+    welcome_msg.classList.remove('active');
+    table.insertAdjacentHTML('afterend', loading_msg_template);
+
+    let fetched_posts = [];
     let not_found_msg = modal.querySelector('.wdss-modal-not-found-msg');
 
     if(not_found_msg) {
       not_found_msg.remove();
-    }
+     }
 
-    welcome_msg.classList.remove('active');
-    table.insertAdjacentHTML('afterend', loading_msg_template);
 
-    let fetched_posts;
-    let loading_msg = document.querySelector('.wdss-modal-loading-msg')
-    
-    jQuery.ajax({
-      url : document.location.origin + '/wp-json/wp/v2/posts?per_page=50', 
-      type: 'get',
-      success: function(response) {
-        fetched_posts = response;
-      },
-      complete: function() {
+     let total_posts = wdss_localize.total_post_count;
+     let total_pages = Math.ceil(total_posts / 100);
+     let promises_arr = [];
+
+     console.log(`Total pages: ${total_pages}`);
+
+     for (let i = 1; i <= total_pages; i++) {
+      console.log(`Loop #: ${i}`);
+        let promise = new Promise(function(resolve, reject) {
+            (function(){
+              jQuery.ajax({
+                url : document.location.origin + `/wp-json/wp/v2/posts?per_page=100&page=${i}`, 
+                type: 'get',
+                success: function(response) {
+                  fetched_posts = fetched_posts.concat(response);
+                  resolve();
+                },
+                error: function(error) {
+                  alert('Error!');
+                  console.log(error);
+                  reject();
+                }
+              });
+            })(i);
+         });
+         promises_arr.push(promise);
+     }
+     Promise.all(promises_arr).then(function(values) {
         jQuery.ajax({
           url : wdss_localize.url,
           type : 'post',
@@ -67,18 +88,23 @@ export default function getPostsModal() {
           },
           success : function(response) {
             modalHandler.call(context, response);
-            loading_msg.remove();
           }
         });
-      }
-    });
+     });
   }
 
   function modalHandler($content) {
     this.insertAdjacentHTML('beforeend', $content);
-    
+
+    let loading_msg = document.querySelector('.wdss-modal-loading-msg');
+    if(loading_msg) {
+      loading_msg.remove();
+    }
+
     
     let posts_list = Array.from(document.querySelectorAll('.wdss-table-row.post'));
+    alert(`Found ${posts_list.length} posts`);
+
 
     // let load_more_btn;
     // if(posts_list.length >= 50) {
