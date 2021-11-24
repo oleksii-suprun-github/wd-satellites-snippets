@@ -5,7 +5,7 @@
  * Description: Bulk of usefull snippets & tweaks for satellites.
  * Version: 1.0.0
  * GitHub Plugin URI: https://github.com/Mironezes/wd-satellites-snippets
- * Primary Branch: beta
+ * Primary Branch: realise
  * Author: Alexey Suprun
  * Author URI: https://github.com/Mironezes
  * Requires at least: 5.5

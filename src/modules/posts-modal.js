@@ -58,9 +58,9 @@ export default function getPostsModal() {
 
     let total_posts = wdss_localize.total_post_count;
 
-    if(total_posts > 1000 ) {
-      total_posts = 1000;
-      console.log('Using lite-mode (up to 600 posts per fetch');
+    if(total_posts > 800 ) {
+      total_posts = 800;
+      console.log('Using lite-mode (up to 800 posts per fetch');
     } 
 
     let total_pages = Math.ceil(total_posts / 100);
