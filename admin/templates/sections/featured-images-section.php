@@ -27,7 +27,7 @@
     <div class="wdss-section-content">
 
      <div id="wdss-remove-broken-featured" class="wdss-setting-item">
-          <span>Delete Broken Featured Images</span>
+          <span>Delete Broken Featured Images<br><small>Be sure to setup the option below first</small></span>
           <button id="wdss-remove-broken-featured__choose" type="button" class="wdss-button">Open settings</button>
 		  </div>
 

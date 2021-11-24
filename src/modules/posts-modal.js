@@ -15,6 +15,8 @@ export default function getPostsModal() {
   const toggle_all_btn = modal.querySelector('.wdss-button.toggle-all');
   const get_posts_btn = modal.querySelector('.wdss-button.get-posts');
 
+  const total_posts_text = modal.querySelector('.wdss-modal-posts-count');
+
   const welcome_msg = modal.querySelector('.wdss-modal-welcome-msg');
   const loading_msg_template = '<span class="wdss-modal-loading-msg">Loading...</span>';
   const not_found_msg_template = '<span class="wdss-modal-not-found-msg">No results...</span>';
@@ -37,6 +39,11 @@ export default function getPostsModal() {
 
   get_posts_btn.addEventListener('click', getPostsList);
   function getPostsList() {
+
+    let notification_message = modal.querySelector('.msg'); 
+    if(notification_message) {
+      notification_message.remove();
+    }
 
     get_posts_btn.classList.add('inactive');
     welcome_msg.classList.remove('active');
@@ -101,9 +108,14 @@ export default function getPostsModal() {
       loading_msg.remove();
     }
 
-    
     let posts_list = Array.from(document.querySelectorAll('.wdss-table-row.post'));
-    console.log(`Found ${posts_list.length} posts`);
+    let total_posts_text_number = total_posts_text.querySelector('strong');
+
+    total_posts_text.classList.add('active');
+    if(total_posts_text_number) {
+      total_posts_text_number.innerHTML = posts_list.length;
+    }
+
 
 
     // let load_more_btn;
@@ -144,6 +156,13 @@ export default function getPostsModal() {
     }
 
     function clearAll() {
+
+      get_posts_btn.classList.remove('inactive');
+      execute_btn.classList.add('inactive');
+      toggle_all_btn.classList.add('inactive');  
+      total_posts_text.classList.remove('active');
+      total_posts_text_number.innerHTML = '';
+
       let table_rows = Array.from(modal.querySelectorAll('.wdss-table-row.post'));
 
       table_rows.forEach(row => {
@@ -173,6 +192,7 @@ export default function getPostsModal() {
     }
     else {
       table.insertAdjacentHTML('afterend', not_found_msg_template);
+      get_posts_btn.classList.remove('inactive');
     }
 
     execute_btn.addEventListener('click', () => {
@@ -189,9 +209,6 @@ export default function getPostsModal() {
         proceded_posts_ids = proceded_posts_ids_arr.join(',');
   
         clearAll();
-        get_posts_btn.classList.remove('inactive');
-        execute_btn.classList.add('inactive');
-        toggle_all_btn.classList.add('inactive');  
         
         jQuery.ajax({
           url : wdss_localize.url,
@@ -202,10 +219,10 @@ export default function getPostsModal() {
             security : wdss_localize.remove_broken_featured_nonce,
           },
           success : function(response) {
-            console.log('Completed!');
+            table.insertAdjacentHTML('afterend', '<span class="msg successful">Completed!</span>');
           },
           error: function(error) {
-            alert('Error!');
+            table.insertAdjacentHTML('afterend', '<span class="msg error">An Error occured! Look in console for more details</span>');
             console.log(error);
           }
         });

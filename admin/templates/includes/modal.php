@@ -21,6 +21,7 @@
 				<button type="button" class="wdss-button toggle-all inactive">Toggle All</button>
         <div class="wdss-modal-footer-main">
           <button type="button" class="wdss-button get-posts">Get posts</button>
+					<span class="wdss-modal-posts-count"> <strong></strong> post(s) in total</span>
         </div>
 				<button type="button" class="wdss-button submit inactive">Execute</button>
 			</div>

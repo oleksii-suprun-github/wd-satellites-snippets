@@ -154,8 +154,19 @@ div.disabled:before {
   color: green;
 }
 .msg.error {
-  color: red;
+  color: #cc2020;
 }
+
+.wdss-modal .msg {
+  width: 100%;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
 
 /* Headings */
 #wdss-settings-page h1 > small {
@@ -464,7 +475,8 @@ div.disabled:before {
 }
 .wdss-modal-not-found-msg,
 .wdss-modal-loading-msg,
-.wdss-modal-welcome-msg.active {
+.wdss-modal-welcome-msg.active,
+.wdss-modal-posts-count.active {
   display: flex;
 }
 .wdss-modal-title {
@@ -478,6 +490,18 @@ div.disabled:before {
   height: 5.25vh;
   color: #fff;
   background: #2c3338;
+}
+.wdss-modal-footer-main {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+}
+.wdss-modal-posts-count {
+  display: none;
+}
+.wdss-modal-posts-count strong {
+  margin-right: 5px;
 }
 .wdss-modal-footer button.toggle-all {
   color: #2c3338;
