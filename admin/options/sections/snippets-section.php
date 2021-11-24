@@ -313,34 +313,39 @@
 
     // Remove redundant links Snippet
     if( get_option( 'wdss_redundant_links', '0' ) ) {
-      remove_action( 'wp_head', 'wlwmanifest_link' );
-      remove_action( 'wp_head', 'index_rel_link' ); 
-      remove_action( 'wp_head', 'parent_post_rel_link', 10, 0 ); 
-      remove_action( 'wp_head', 'start_post_rel_link', 10, 0 ); 
-      remove_action( 'wp_head', 'adjacent_posts_rel_link', 10, 0 ); 
-      remove_action( 'wp_head', 'wp_generator' );
-      remove_action( 'wp_head', 'wp_resource_hints', 2, 99 ); 
-
-      remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
-      remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
-      remove_action( 'template_redirect', 'wp_shortlink_header', 11 );
-      remove_action( 'template_redirect', 'rest_output_link_header', 11 );
-
-      remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
-      remove_action( 'wp_head', 'wp_oembed_add_host_js' );
-      remove_action( 'rest_api_init', 'wp_oembed_register_route' );
-      remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
-      remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
-
-      remove_filter( 'oembed_dataparse', 'wp_filter_oembed_result', 10 );
-  
-      add_filter( 'embed_oembed_discover', '__return_false' );
-
-      add_filter( 'json_enabled', '__return_false' );
-      add_filter( 'json_jsonp_enabled', '__return_false' );
+      if( !is_admin() && is_user_logged_in() ) {
+        add_action('wp', 'wdss_remove_redundant_links');
+        function wdss_remove_redundant_links() {
+          remove_action( 'wp_head', 'wlwmanifest_link' );
+          remove_action( 'wp_head', 'index_rel_link' ); 
+          remove_action( 'wp_head', 'parent_post_rel_link', 10, 0 ); 
+          remove_action( 'wp_head', 'start_post_rel_link', 10, 0 ); 
+          remove_action( 'wp_head', 'adjacent_posts_rel_link', 10, 0 ); 
+          remove_action( 'wp_head', 'wp_generator' );
+          remove_action( 'wp_head', 'wp_resource_hints', 2, 99 ); 
     
-      add_filter( 'rest_enabled', '__return_false' );
-      add_filter( 'rest_jsonp_enabled', '__return_false' );
+          remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
+          remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
+          remove_action( 'template_redirect', 'wp_shortlink_header', 11 );
+          remove_action( 'template_redirect', 'rest_output_link_header', 11 );
+    
+          remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
+          remove_action( 'wp_head', 'wp_oembed_add_host_js' );
+          remove_action( 'rest_api_init', 'wp_oembed_register_route' );
+          remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
+          remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
+    
+          remove_filter( 'oembed_dataparse', 'wp_filter_oembed_result', 10 );
+      
+          add_filter( 'embed_oembed_discover', '__return_false' );
+    
+          add_filter( 'json_enabled', '__return_false' );
+          add_filter( 'json_jsonp_enabled', '__return_false' );
+        
+          add_filter( 'rest_enabled', '__return_false' );
+          add_filter( 'rest_jsonp_enabled', '__return_false' );
+        }
+      }
     }
       
 
@@ -405,7 +410,7 @@
         add_filter( 'tiny_mce_plugins', 'wdss_disable_emojis_tinymce' );
         add_filter( 'wp_resource_hints', 'wdss_disable_emojis_remove_dns_prefetch', 10, 2 );
       }
-      add_action( 'init', 'wdss_disable_emojis' );
+      add_action( 'wp', 'wdss_disable_emojis' );
       
       // Filter function used to remove the tinymce emoji plugin.
       function wdss_disable_emojis_tinymce( $plugins ) {

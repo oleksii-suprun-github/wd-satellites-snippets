@@ -451,6 +451,7 @@ div.disabled:before {
   position: relative;
   height: 40vh;
 }
+.wdss-modal-not-found-msg,
 .wdss-modal-welcome-msg,
 .wdss-modal-loading-msg {
   position: relative;
@@ -461,9 +462,14 @@ div.disabled:before {
   text-align: center;
   font-size: 1.5rem;
 }
+.wdss-modal-not-found-msg,
 .wdss-modal-loading-msg,
 .wdss-modal-welcome-msg.active {
   display: flex;
+}
+.wdss-modal-title {
+  padding-left: 15px;
+  font-size: 16px;  
 }
 .wdss-modal-footer {
   display: flex;
