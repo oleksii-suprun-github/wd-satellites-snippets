@@ -58,6 +58,12 @@ export default function getPostsModal() {
 
 
      let total_posts = wdss_localize.total_post_count;
+
+     if(total_posts > 800 ) {
+      total_posts = 800;
+      console.log('Using lite-mode (up to 800 posts per fetch');
+     } 
+
      let total_pages = Math.ceil(total_posts / 100);
      let promises_arr = [];
 
@@ -156,8 +162,6 @@ export default function getPostsModal() {
     }
 
     function clearAll() {
-
-      get_posts_btn.classList.remove('inactive');
       execute_btn.classList.add('inactive');
       toggle_all_btn.classList.add('inactive');  
       total_posts_text.classList.remove('active');
@@ -219,10 +223,11 @@ export default function getPostsModal() {
             security : wdss_localize.remove_broken_featured_nonce,
           },
           success : function(response) {
-            table.insertAdjacentHTML('afterend', '<span class="msg successful">Completed!</span>');
+            get_posts_btn.classList.add('inactive');
+            table.insertAdjacentHTML('afterend', '<span class="msg successful">Completed!<br><small>Please wait several minutes while changes are implementing</small></span>');
           },
           error: function(error) {
-            table.insertAdjacentHTML('afterend', '<span class="msg error">An Error occured! Look in console for more details</span>');
+            table.insertAdjacentHTML('afterend', '<span class="msg error">An Error occured!<br><smallLook in console for more details</small></span>');
             console.log(error);
           }
         });
