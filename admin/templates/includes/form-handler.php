@@ -95,11 +95,6 @@ function wdss_form_handler() {
       isset_option('wdss_gtm_id');
       isset_option('wdss_yoast_posts_exclude');
 
-      isset_editor_content('wdss_advanced_jsonld_schema_homepage');
-      isset_editor_content('wdss_advanced_jsonld_schema_category');
-      isset_editor_content('wdss_advanced_jsonld_schema_author');
-      isset_editor_content('wdss_advanced_jsonld_schema_page');
-      isset_editor_content('wdss_advanced_jsonld_schema_single');
       
       if( function_exists('pll_languages_list') ) {
         $polylang_lang_list = pll_languages_list(['fields' => []]); 

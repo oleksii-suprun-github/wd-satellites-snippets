@@ -132,94 +132,12 @@
       <!-- Custom schema editor field -->
       <div id="wdss-advanced-jsonld-schema-condition" class="wdss-setting-item">
         <label>
-        <span>Use hard-coded schema<br> (no php code is allowed)</span>
+        <span>Use hard-coded schema</span>
         <?php 
           checkbox_handler_html(['field_name' => 'wdss_advanced_jsonld_schema']); 
           if( get_option('wdss_advanced_jsonld_schema') == '' ) update_option( 'wdss_advanced_jsonld_schema', '0' );               
           ?>    
         </label>
-      </div>
-      <div id="wdss-advanced-jsonld-schema-group" class="wdss-setting-group hidden">
-        <div id="wdss-advanced-jsonld-schema-homepage" class="wdss-setting-item schema-editor-item">
-          <h3>Homepage</h3>
-          <?php 
-            $content = get_option('wdss_advanced_jsonld_schema_homepage', '');
-            $id = 'homepage-schema-editor';
-            $args = array(
-              'teeny' => 0,
-              'tinymce' => 0,
-              'textarea_name' => 'wdss_advanced_jsonld_schema_homepage',
-              'textarea_rows' => 10
-            );
-            wp_editor( $content, $id, $args);
-            if( get_option('wdss_advanced_jsonld_schema_homepage') == '' ) update_option( 'wdss_advanced_jsonld_schema_homepage', '' );  
-          ?>  
-        </div>
-
-        <div id="wdss-advanced-jsonld-schema-category" class="wdss-setting-item schema-editor-item">
-          <h3>Category</h3>
-          <?php 
-            $content = get_option('wdss_advanced_jsonld_schema_category', '');
-            $id = 'category-schema-editor';
-            $args = array(
-              'teeny' => 0,
-              'tinymce' => 0,
-              'textarea_name' => 'wdss_advanced_jsonld_schema_category',
-              'textarea_rows' => 10
-            );
-            wp_editor( $content, $id, $args);
-            if( get_option('wdss_advanced_jsonld_schema_category') == '' ) update_option( 'wdss_advanced_jsonld_schema_category', '' );  
-          ?>  
-        </div>
-
-        <div id="wdss-advanced-jsonld-schema-author" class="wdss-setting-item schema-editor-item">
-          <h3>Author Archive</h3>
-          <?php 
-            $content = get_option('wdss_advanced_jsonld_schema_author', '');
-            $id = 'author-schema-editor';
-            $args = array(
-              'teeny' => 0,
-              'tinymce' => 0,
-              'textarea_name' => 'wdss_advanced_jsonld_schema_author',
-              'textarea_rows' => 10
-            );
-            wp_editor( $content, $id, $args);
-            if( get_option('wdss_advanced_jsonld_schema_author') == '' ) update_option( 'wdss_advanced_jsonld_schema_author', '' );  
-          ?>  
-        </div>
-
-        <div id="wdss-advanced-jsonld-schema-page" class="wdss-setting-item schema-editor-item">
-          <h3>Page</h3>
-          <?php 
-            $content = get_option('wdss_advanced_jsonld_schema_page', '');
-            $id = 'page-schema-editor';
-            $args = array(
-              'teeny' => 0,
-              'tinymce' => 0,
-              'textarea_name' => 'wdss_advanced_jsonld_schema_page',
-              'textarea_rows' => 10
-            );
-            wp_editor( $content, $id, $args);
-            if( get_option('wdss_advanced_jsonld_schema_page') == '' ) update_option( 'wdss_advanced_jsonld_schema_page', '' );  
-          ?>  
-        </div>
-
-        <div id="wdss-advanced-jsonld-schema-single" class="wdss-setting-item schema-editor-item">
-          <h3>Single page</h3>
-          <?php 
-            $content = get_option('wdss_advanced_jsonld_schema_single', '');
-            $id = 'single-schema-editor';
-            $args = array(
-              'teeny' => 0,
-              'tinymce' => 0,
-              'textarea_name' => 'wdss_advanced_jsonld_schema_single',
-              'textarea_rows' => 10
-            );
-            wp_editor( $content, $id, $args);
-            if( get_option('wdss_advanced_jsonld_schema_single') == '' ) update_option( 'wdss_advanced_jsonld_schema_single', '' );  
-          ?>  
-        </div>
-
       </div>
     </div>
   </div>

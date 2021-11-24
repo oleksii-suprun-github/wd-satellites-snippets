@@ -25,6 +25,13 @@
   </div>
   <div class="wdss-row hidden">
     <div class="wdss-section-content">
+
+     <div id="wdss-remove-broken-featured" class="wdss-setting-item">
+          <span>Delete Broken Featured Images<br><small>Be sure to setup the option below first</small></span>
+          <button id="wdss-remove-broken-featured__choose" type="button" class="wdss-button">Open settings</button>
+		  </div>
+
+
       <div id="wdss-auto-featured-image-condition" class="wdss-setting-item">
           <label>
               <span title="Takes featured image from the first attached image in the post">Featured Image From Attachment<sup>?</sup></span>

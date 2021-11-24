@@ -35,10 +35,12 @@
           <?php 
             include_once('sections/snippets-section.php');
             include_once('sections/featured-images-section.php'); 
+            include_once('sections/images-section.php'); 
             include_once('sections/polylang-section.php'); 
             include_once('sections/schema-section.php');
             include_once('sections/custom-410s-section.php'); 
             include_once('sections/other-section.php');
+            include_once('includes/modal.php');
           ?>
 
           <input type="submit" name="submit" id="submit" class="wdss-button submit" value="<?= __('Save changes', 'wdss_domain') ?>">

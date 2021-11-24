@@ -64,8 +64,11 @@ class Wd_Satellites_Snippets_Admin {
     }
 
 		if( wp_doing_ajax() ) {
-			add_action( 'wp_ajax_fetch_modal_content',  array($this, 'wdss_get_posts_modal') );
+			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured_modal') );
+			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured_modal') );
+			
 			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
+			add_action( 'wp_ajax_excluded_hosts_dictionary_update', array($this, 'wdss_excluded_hosts_dictionary_handler') );		
 		}
 	}
 
@@ -104,58 +107,64 @@ class Wd_Satellites_Snippets_Admin {
 	}
 
 
-	// Get Posts Modal window
-	public function wdss_get_posts_modal() {
-		check_ajax_referer( 'ajax-nonce', 'security', false );
-		$args = array(
-			'post_type' => 'post',
-			'post_status' => 'any',
-			'numberposts' => -1,
-			'orderby' => 'date', 
-			'order' => 'DESC', 
-		);
-		$loop = new WP_Query( $args );
-	?>
-		<div id="exclude-posts-modal" class="wdss-modal">
-			<div class="wdss-modal-header">
-				<i class="fas fa-times"></i>
-			</div>
-			<div class="wdss-modal-body">
-				<div class="wdss-table-wrapper">
-					<table id="wdss-exclude-posts-table" class="wdss-table">
-						<tr class="wdss-table-row header">
-							<th class="wdss-table-post__select"></th>
-							<th class="wdss-table-post__id">ID</th>
-							<th class="wdss-table-post__title">Title</th>
-							<th class="wdss-table-post__status">Status</th>
-							<th class="wdss-table-post__date">Date</th>
-						</tr>
-			<?php
-				if ( $loop->have_posts() ) :
-				while ( $loop->have_posts() ) : $loop->the_post();
-			?>
-						<tr class="wdss-table-row post">
-							<td class="wdss-table-post__select"><input type="checkbox" value="<?= get_the_id();?>"></td>
-							<td><?= get_the_id();?></td>
-							<td><?= get_the_title();?></td>
-							<td><?= get_post_status();?></td>
-							<td><?= get_the_date();?></td>				
-						</tr>
-			<?php
-				endwhile;
-				endif;
-				wp_reset_postdata();
-			?> 
-		</table>
-				</div>
-			</div>
-			<div class="wdss-modal-footer">
-				<button type="button" class="wdss-button submit">Save</button>
-			</div>
-		</div>
-		<?php
+	// Excluded Images Hosts Dictionary Handler
+	public function wdss_excluded_hosts_dictionary_handler() {
+		check_ajax_referer( 'excluded-hosts-dictionary-nonce', 'security', false );
+
+    $excluded_hosts_dictionary = $_POST["excluded_hosts_dictionary"];
+    update_option('wdss_excluded_hosts_dictionary', $excluded_hosts_dictionary);
+	}
+
+
+
+	// Removes broken Featured with Ajax Call
+	public function wdss_remove_broken_featured() {
+		check_ajax_referer( 'remove-broken-featured-nonce', 'broken_featured_nonce2', false );
+		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
+
+		var_dump($selected_ids_arr);
+
+		if( !empty(explode(',', $selected_ids_arr)) ) {
+			$selected_ids_arr = explode(',', $selected_ids_arr);
+			foreach($selected_ids_arr as $id) {
+				delete_post_thumbnail($id);
+			}
+		}
+		else {
+			delete_post_thumbnail(intval($selected_ids_arr));
+		}
+
 		die();
 	}
+
+
+
+	// Posts with broken Featured modal
+	public function wdss_get_broken_featured_modal() {
+		check_ajax_referer( 'broken-featured-list-nonce', 'broken_featured_nonce1', false );
+		$posts = json_decode(stripslashes($_POST['fetched_list']));
+
+		foreach($posts as $post) {
+			$thumbnail_url = get_the_post_thumbnail_url($post->id);
+			$is_broken = !check_url_status($thumbnail_url);
+				
+			if( $is_broken) {
+		?>
+			<tr class="wdss-table-row post">
+				<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->id; ?>"></td>
+				<td><?= $post->id;?></td>
+				<td><?= $post->title->rendered;?></td>
+				<td><?= $post->status;?></td>
+				<td><?= $post->date;?></td>				
+			</tr>
+		<?php
+			}
+		}
+		die();
+	}
+
+
+
 
 
 	//Register the JavaScript for the admin area
@@ -177,13 +186,20 @@ class Wd_Satellites_Snippets_Admin {
 				'site_yoast_ending' => $get_title_separator . ' ' . get_bloginfo( 'name' ),
 				'site_name' => get_bloginfo( 'name' ),
 				'site_email' => 'info@' . $_SERVER['SERVER_NAME'],
+
 				'total_post_count' => wp_count_posts( 'post' )->publish,
+
 				'is_polylang_exists' => function_exists( 'pll_languages_list' ),
 				'is_polylang_setup' => function_exists( 'pll_languages_list' ) && count(pll_languages_list()) > 0,
+
 				'wp_rand' => wp_rand(),
 				'url' => admin_url( 'admin-ajax.php' ),
-				'nonce' => wp_create_nonce( 'ajax-nonce' ),
+
+				'broken_featured_list_nonce' => wp_create_nonce( 'broken-featured-list-nonce' ),
+				'remove_broken_featured_nonce' => wp_create_nonce( 'remove-broken-featured-nonce' ),
+
 				'e410_dictionary_nonce' => wp_create_nonce( 'e410-dictionary-nonce' ),
+				'excluded_hosts_dictionary_nonce' => wp_create_nonce( 'excluded-hosts-dictionary-nonce' ),				
 			];
 			wp_localize_script( $this->plugin_name, 'wdss_localize', $wdss_localize_script );
 		}

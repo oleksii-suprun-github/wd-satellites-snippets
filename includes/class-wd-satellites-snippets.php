@@ -72,6 +72,8 @@ class Wd_Satellites {
 		}
 		$this->plugin_name = 'wd-satellites-snippets';
 
+		add_option('wdss_updator_token', 'wdss_updator');
+
 		$this->load_dependencies();
 		$this->set_locale();
 		$this->define_admin_hooks();
@@ -102,6 +104,7 @@ class Wd_Satellites {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wd-satellites-snippets-loader.php';
 
+		
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
@@ -116,6 +119,8 @@ class Wd_Satellites {
 		$this->loader = new Wd_Satellites_Snippets_Loader();
 
 	}
+
+
 
 	/**
 	 * Define the locale for this plugin for internationalization.

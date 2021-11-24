@@ -169,7 +169,7 @@
 
                     <div id="wdss-disable-admin-notices" class="wdss-setting-item">
                         <label>
-                          <span title="For more deep configuration use *Custom Disabled Admin Notices* panel">Disable Basic Admin Notices <sup>?</sup></span>
+                          <span title="Hides annoying msgs out from admin panel">Disable Annoying Notices <sup>?</sup></span>
                           <?php 
                             checkbox_handler_html(['field_name' => 'wdss_disable_admin_notices']); 
                             if( get_option('wdss_disable_admin_notices') == '' ) update_option( 'wdss_disable_admin_notices', '0' );               

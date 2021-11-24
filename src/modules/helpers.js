@@ -13,29 +13,26 @@
 
   // Gets site specific info by request
   export function getSiteInfo(obj) {
-
-    function init() {
-      let target = document.querySelector(obj.input);
-      let action = '';
-  
-      switch (obj.input) {
-        case '#wdss-title-ending input':
-          action = wdss_localize.site_yoast_ending;
-          break;
-        case '#wdss-jsonld-schema-orgname input':
-          action = wdss_localize.site_name;
-          break;
-        case '#wdss-jsonld-schema-email input':
-          action = wdss_localize.site_email;
-          break;          
-        default:
-          break;
+      function init() {
+        let target = document.querySelector(obj.input);
+        let action = '';
+    
+        switch (obj.input) {
+          case '#wdss-jsonld-schema-orgname input':
+            action = wdss_localize.site_name;
+            break;
+          case '#wdss-jsonld-schema-email input':
+            action = wdss_localize.site_email;
+            break;          
+          default:
+            break;
+        }
+        target.value = action;
       }
-      
-      target.value = action;
-    }
-    document.querySelector(obj.selector).addEventListener('click', init);
 
+      if(obj) {
+        document.querySelector(obj.selector).addEventListener('click', init);
+      }
   }
 
   // Hide notices with time helper

@@ -17,7 +17,7 @@
         require_once ABSPATH . 'wp-admin/includes/file.php';
 
         if ( isset($post->ID) ) {
-
+            // If post has no thumbnail
             if( !has_post_thumbnail($post->ID) ) {
               $attached_image = get_children( "post_parent=$post->ID&amp;post_type=attachment&amp;post_mime_type=image&amp;numberposts=1" );
 
@@ -47,6 +47,7 @@
                   return;
               }
             }
+            // Polylang case
             elseif( function_exists('pll_the_languages') && !$polylang_current_lang ) {
               $origin_post_id = pll_get_post($post->ID, $polylang_default_lang);
 
@@ -67,6 +68,20 @@
       add_action('future_to_publish', 'wdss_random_featured_image');
     }
 
+    // 1Investing special bug fix
+    add_filter('wp_get_attachment_url', 'wdss_featured_images_url_fix');
+    function wdss_featured_images_url_fix($url) {
+
+      if(is_archive() || is_home() || is_category()) {
+
+        $target = 'https://' . $_SERVER['SERVER_NAME'] . '/wp-content/uploads/;';
+
+        if( strpos($url, $target) !== false ) {
+          $url = str_replace($target, '', $url);
+        }
+      }
+      return $url;
+    }
 
     if( get_option('wdss_featured_images_add_column', '0') ) {
 

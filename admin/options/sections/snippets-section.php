@@ -1,20 +1,4 @@
 <?php
-
-    // Get URL Status code
-    function check_url_status($url) {
-      // Use get_headers() function
-      $headers = @get_headers($url);
-                  
-      // Use condition to check the existence of URL
-      if($headers && strpos( $headers[0], '200')) {
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
-
-
     // Filters post content from validation errors 
     function wdss_regex_post_content_filters($content) {
       if(is_single()) {
@@ -289,6 +273,8 @@
             body.wp-admin #wp-admin-bar-updates,
             body.wp-admin .update-nag,
             .jitm-banner {display: none !important;} 
+            
+            #wd-satellites-snippets-update {display: table-row !important;} 
         </style>';
                       
 
@@ -327,34 +313,39 @@
 
     // Remove redundant links Snippet
     if( get_option( 'wdss_redundant_links', '0' ) ) {
-      remove_action( 'wp_head', 'wlwmanifest_link' );
-      remove_action( 'wp_head', 'index_rel_link' ); 
-      remove_action( 'wp_head', 'parent_post_rel_link', 10, 0 ); 
-      remove_action( 'wp_head', 'start_post_rel_link', 10, 0 ); 
-      remove_action( 'wp_head', 'adjacent_posts_rel_link', 10, 0 ); 
-      remove_action( 'wp_head', 'wp_generator' );
-      remove_action( 'wp_head', 'wp_resource_hints', 2, 99 ); 
-
-      remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
-      remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
-      remove_action( 'template_redirect', 'wp_shortlink_header', 11 );
-      remove_action( 'template_redirect', 'rest_output_link_header', 11 );
-
-      remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
-      remove_action( 'wp_head', 'wp_oembed_add_host_js' );
-      remove_action( 'rest_api_init', 'wp_oembed_register_route' );
-      remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
-      remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
-
-      remove_filter( 'oembed_dataparse', 'wp_filter_oembed_result', 10 );
-  
-      add_filter( 'embed_oembed_discover', '__return_false' );
-
-      add_filter( 'json_enabled', '__return_false' );
-      add_filter( 'json_jsonp_enabled', '__return_false' );
+      if( !is_admin() && is_user_logged_in() ) {
+        add_action('wp', 'wdss_remove_redundant_links');
+        function wdss_remove_redundant_links() {
+          remove_action( 'wp_head', 'wlwmanifest_link' );
+          remove_action( 'wp_head', 'index_rel_link' ); 
+          remove_action( 'wp_head', 'parent_post_rel_link', 10, 0 ); 
+          remove_action( 'wp_head', 'start_post_rel_link', 10, 0 ); 
+          remove_action( 'wp_head', 'adjacent_posts_rel_link', 10, 0 ); 
+          remove_action( 'wp_head', 'wp_generator' );
+          remove_action( 'wp_head', 'wp_resource_hints', 2, 99 ); 
     
-      add_filter( 'rest_enabled', '__return_false' );
-      add_filter( 'rest_jsonp_enabled', '__return_false' );
+          remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
+          remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
+          remove_action( 'template_redirect', 'wp_shortlink_header', 11 );
+          remove_action( 'template_redirect', 'rest_output_link_header', 11 );
+    
+          remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
+          remove_action( 'wp_head', 'wp_oembed_add_host_js' );
+          remove_action( 'rest_api_init', 'wp_oembed_register_route' );
+          remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
+          remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
+    
+          remove_filter( 'oembed_dataparse', 'wp_filter_oembed_result', 10 );
+      
+          add_filter( 'embed_oembed_discover', '__return_false' );
+    
+          add_filter( 'json_enabled', '__return_false' );
+          add_filter( 'json_jsonp_enabled', '__return_false' );
+        
+          add_filter( 'rest_enabled', '__return_false' );
+          add_filter( 'rest_jsonp_enabled', '__return_false' );
+        }
+      }
     }
       
 
@@ -375,7 +366,9 @@
       
         $regex_new = '/src="([^"]*)"/';
         $regex_url_new = '/(.*?)\?/i';
-        if (!empty($matches[2])) {
+
+        // Checks if iframe neither broken nor Google Maps
+        if (!empty($matches[2]) && !strpos($matches[2][0], 'maps') ) {
           foreach ($matches[2] as $key => $elem) {
             preg_match_all($regex_new, $matches[0][$key], $matches_url);
             $img_link_array = explode('/',$matches_url[1][0]);
@@ -417,7 +410,7 @@
         add_filter( 'tiny_mce_plugins', 'wdss_disable_emojis_tinymce' );
         add_filter( 'wp_resource_hints', 'wdss_disable_emojis_remove_dns_prefetch', 10, 2 );
       }
-      add_action( 'init', 'wdss_disable_emojis' );
+      add_action( 'wp', 'wdss_disable_emojis' );
       
       // Filter function used to remove the tinymce emoji plugin.
       function wdss_disable_emojis_tinymce( $plugins ) {
@@ -475,9 +468,21 @@
             // Get link of the file
             preg_match( '/src=[\'"]([^\'"]+)/', $image, $src_match );
 
+
             // If there`s no width or height is present...
             if( (empty($width_match) || empty($height_match)) ) {
-              
+
+              // Compares src with banned hosts
+              $in_block_list = false;
+              $exceptions = get_option('wdss_excluded_hosts_dictionary', '');
+              // chemistryland.com, fin.gc.ca, support.revelsystems.com
+        
+              foreach($exceptions as $exception) {
+                if( strpos($src_match[1], $exception) !== false ) {
+                  $in_block_list = true;
+                }
+              }
+
               // If image is BLOB encoded
               if(!empty(strpos($src_match[0], 'data:image'))) {
 
@@ -494,14 +499,20 @@
                 }
               }
 
-              // If image has valid url
-              elseif(check_url_status($src_match[1])) {
-
-                $image_url = $src_match[1];
-
-                // Get image dimension
-                if(check_url_status($image_url)) {
-                  list($width, $height) = getimagesize($image_url );
+              // Regular src case
+              else {
+                // If image`s host in block list then remove it
+                if($in_block_list) {
+                  $buffer = str_replace( $tmp, '', $buffer );
+                  return $buffer;
+                }
+                // If src doesn`t contains SERVER NAME then add it
+                if( strpos($src_match[1], 'wp-content') && strpos($src_match[1], 'https') === false ) {
+                  $src_match[1] = 'https://'.$_SERVER['SERVER_NAME'].$src_match[1].'';
+                }
+                // If image src returns 200 status then get image size
+                if( check_url_status($src_match[1]) ) {
+                  list($width, $height) = getimagesize($src_match[1]);
                 }
               }
 
