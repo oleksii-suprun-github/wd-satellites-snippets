@@ -64,7 +64,9 @@ class Wd_Satellites_Snippets_Admin {
     }
 
 		if( wp_doing_ajax() ) {
-			add_action( 'wp_ajax_fetch_broken_featured_images',  array($this, 'wdss_get_posts_modal') );
+			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured_modal') );
+			add_action( 'wp_ajax_remove_broken_featured',  array($this, 'wdss_remove_broken_featured') );
+			
 			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
 			add_action( 'wp_ajax_excluded_hosts_dictionary_update', array($this, 'wdss_excluded_hosts_dictionary_handler') );		
 		}
@@ -115,38 +117,38 @@ class Wd_Satellites_Snippets_Admin {
 
 
 
-	// 		// Subject to improve (currently is Hight Server Latency)
-	// 		if(check_url_status($url) && check_image_size($url) ) {
-	// 			return $url;
-	// 		}
-	// 		else {
-	// 			global $post;
-	// 			$category = get_the_category(); 
+	// Removes broken Featured with Ajax Call
+	public function wdss_remove_broken_featured() {
+		check_ajax_referer( 'remove-broken-featured-nonce', 'security', false );
+		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
 
-	// 			if( !empty($category) ) {
-	// 				$option_postfix = preg_replace('/\-+/', '_', strtolower($category[0]->slug));
-	// 				$option = get_option('wdss_featured_images_list_' . $option_postfix, '');
+		var_dump($selected_ids_arr);
 
-	// 				if( $option ) {
-	// 						$images_ids_arr = explode(',', $option);
-	// 						$rand_index = array_rand($images_ids_arr);
-	// 						$image_id = intval($images_ids_arr[$rand_index]);
-	// 						set_post_thumbnail($post->ID, $image_id);
-	// 				}
-	// 			}
+		if( !empty(explode(',', $selected_ids_arr)) ) {
+			$selected_ids_arr = explode(',', $selected_ids_arr);
+			foreach($selected_ids_arr as $id) {
+				delete_post_thumbnail($id);
+			}
+		}
+		else {
+			delete_post_thumbnail(intval($selected_ids_arr));
+		}
+
+		die();
+	}
 
 
 
-	// Get Posts Modal window
-	public function wdss_get_posts_modal() {
-		check_ajax_referer( 'broken-featured-images-nonce', 'security', false );
+	// Posts with broken Featured modal
+	public function wdss_get_broken_featured_modal() {
+		check_ajax_referer( 'broken-featured-list-nonce', 'security', false );
 		$posts = json_decode(stripslashes($_POST['posts_list']));
 
 		foreach($posts as $post) {
 			$thumbnail_url = get_the_post_thumbnail_url($post->id);
 			$is_broken = !check_url_status($thumbnail_url);
 				
-			if( !$is_broken) {
+			if( $is_broken) {
 		?>
 			<tr class="wdss-table-row post">
 				<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->id; ?>"></td>
@@ -160,6 +162,9 @@ class Wd_Satellites_Snippets_Admin {
 		}
 		die();
 	}
+
+
+
 
 
 	//Register the JavaScript for the admin area
@@ -181,12 +186,18 @@ class Wd_Satellites_Snippets_Admin {
 				'site_yoast_ending' => $get_title_separator . ' ' . get_bloginfo( 'name' ),
 				'site_name' => get_bloginfo( 'name' ),
 				'site_email' => 'info@' . $_SERVER['SERVER_NAME'],
+
 				'total_post_count' => wp_count_posts( 'post' )->publish,
+
 				'is_polylang_exists' => function_exists( 'pll_languages_list' ),
 				'is_polylang_setup' => function_exists( 'pll_languages_list' ) && count(pll_languages_list()) > 0,
+
 				'wp_rand' => wp_rand(),
 				'url' => admin_url( 'admin-ajax.php' ),
-				'broken-featured-images-nonce' => wp_create_nonce( 'broken_featured_images_nonce' ),
+
+				'broken_featured_list_nonce' => wp_create_nonce( 'broken-featured-list-nonce' ),
+				'remove_broken_featured_nonce' => wp_create_nonce( 'remove-broken-featured-nonce' ),
+
 				'e410_dictionary_nonce' => wp_create_nonce( 'e410-dictionary-nonce' ),
 				'excluded_hosts_dictionary_nonce' => wp_create_nonce( 'excluded-hosts-dictionary-nonce' ),				
 			];

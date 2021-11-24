@@ -61,7 +61,7 @@ export default function getPostsModal() {
         let promise = new Promise(function(resolve, reject) {
             (function(){
               jQuery.ajax({
-                url : document.location.origin + `/wp-json/wp/v2/posts?per_page=100&page=${i}`, 
+                url : document.location.origin + `/wp-json/wp/v2/posts?orderby=id&order=asc&per_page=100&page=${i}`, 
                 type: 'get',
                 success: function(response) {
                   fetched_posts = fetched_posts.concat(response);
@@ -83,8 +83,8 @@ export default function getPostsModal() {
           type : 'post',
           data : {
             posts_list: JSON.stringify(fetched_posts),
-            action : 'fetch_broken_featured_images',
-            security : wdss_localize.broken_featured_images_nonce,
+            action : 'fetch_broken_featured',
+            security : wdss_localize.broken_featured_list_nonce,
           },
           success : function(response) {
             modalHandler.call(context, response);
@@ -103,7 +103,7 @@ export default function getPostsModal() {
 
     
     let posts_list = Array.from(document.querySelectorAll('.wdss-table-row.post'));
-    alert(`Found ${posts_list.length} posts`);
+    console.log(`Found ${posts_list.length} posts`);
 
 
     // let load_more_btn;
@@ -145,7 +145,6 @@ export default function getPostsModal() {
 
     function clearAll() {
       let table_rows = Array.from(modal.querySelectorAll('.wdss-table-row.post'));
-      console.log(table_rows);
 
       table_rows.forEach(row => {
         row.parentNode.removeChild(row);
@@ -178,24 +177,42 @@ export default function getPostsModal() {
 
     execute_btn.addEventListener('click', () => {
       const proceded_posts = modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]:checked');
-      let idsArr = [];
-      let ids;
+      let proceded_posts_ids_arr = [];
+      let proceded_posts_ids;
 
       if(proceded_posts.length !== 0) {
+        get_posts_btn.classList.remove('inactive');
         proceded_posts.forEach(post => {
-          idsArr.push(post.value);
+          proceded_posts_ids_arr.push(post.value);
         });
     
-        ids = idsArr.join(',');
-        console.log(ids);
+        proceded_posts_ids = proceded_posts_ids_arr.join(',');
   
         clearAll();
         get_posts_btn.classList.remove('inactive');
         execute_btn.classList.add('inactive');
-        toggle_all_btn.classList.add('inactive');        
+        toggle_all_btn.classList.add('inactive');  
+        
+        jQuery.ajax({
+          url : wdss_localize.url,
+          type : 'post',
+          data : {
+            selected_list: JSON.stringify(proceded_posts_ids),
+            action : 'remove_broken_featured',
+            security : wdss_localize.remove_broken_featured_nonce,
+          },
+          success : function(response) {
+            console.log('Completed!');
+          },
+          error: function(error) {
+            alert('Error!');
+            console.log(error);
+          }
+        });
+
       }
       else {
-        alert('No post are selected!');
+        get_posts_btn.classList.add('inactive');
       }
     });
   }
