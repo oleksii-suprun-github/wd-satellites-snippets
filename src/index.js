@@ -19,13 +19,9 @@ function Init() {
 
     if(wdss_localize.total_post_count > 0) {
       groupToggler(featuredImageSection);
-
-      getSiteInfo(getOgranizationName);
-
       mediaFileChooser(featuredImagesChooser);
-
       resetValues(featuredImagesListReset);
-
+      getSiteInfo(getSiteEmail);
     }
 
     if(wdss_localize.is_polylang_exists && wdss_localize.is_polylang_setup) {
@@ -33,14 +29,17 @@ function Init() {
     }
 
     dictionaryHandler(e410_Dictionary);
-    dictionaryHandler(excludedHostsDictionary);
 
+    if(wdss_localize.total_post_count > 0) {
+      dictionaryHandler(excludedHostsDictionary);
+    }
+    
     mediaFileChooser(organizationLogoChooser);
     resetValues(organizationLogoReset);
 
     schemaSectionSettings();
 
-    getSiteInfo(getSiteEmail);
+    getSiteInfo(getOgranizationName);
 
     checkboxToggler();
     toggleAllOptions();

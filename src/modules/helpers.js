@@ -30,7 +30,7 @@
         target.value = action;
       }
 
-      if(obj) {
+      if(obj && document.querySelector(obj.selector)) {
         document.querySelector(obj.selector).addEventListener('click', init);
       }
   }

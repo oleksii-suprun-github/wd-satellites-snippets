@@ -14,7 +14,9 @@
 							<th class="wdss-table-post__date">Date</th>
 						</tr>
 					</table>
-					<span class="wdss-modal-welcome-msg active">Press "Get Posts" to start</span>
+					<div class="wdss-modal-informaion-panel">
+						<span class="wdss-modal-welcome-msg active">Press "Get Posts" to start</span>
+					</div>
 				</div>
 			</div>
 			<div class="wdss-modal-footer">

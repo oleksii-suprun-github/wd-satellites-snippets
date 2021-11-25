@@ -5,10 +5,11 @@ export default function getPostsModal() {
   const open_modal_btn = document.querySelector('#wdss-remove-broken-featured__choose');
   const close_modal_btn = document.querySelector('.wdss-modal-header i.fa-times');
 
+  const max_posts_per_fetch = 800;
   const modal_title_template = '<span class="wdss-modal-title">Delete Broken Featured Images</span>';
 
   const modal = document.querySelector('.wdss-modal');
-  const table = modal.querySelector('table');
+  const info_panel = modal.querySelector('.wdss-modal-informaion-panel');
   const context = document.querySelector('#wdss-exclude-posts-table tbody');
 
   const execute_btn = modal.querySelector('.wdss-button.submit');
@@ -20,10 +21,15 @@ export default function getPostsModal() {
   const welcome_msg = modal.querySelector('.wdss-modal-welcome-msg');
   const loading_msg_template = '<span class="wdss-modal-loading-msg">Loading...</span>';
   const not_found_msg_template = '<span class="wdss-modal-not-found-msg">No results...</span>';
+  const lite_mode_msg_template = `<small>Lite-mode: max ${max_posts_per_fetch} posts per fetch</small>`;
 
   modal.querySelector('.wdss-modal-header').insertAdjacentHTML('afterbegin', modal_title_template);
   
-  open_modal_btn.addEventListener('click', openModal);
+
+  if(open_modal_btn) {
+    open_modal_btn.addEventListener('click', openModal); 
+  }
+
   function openModal() {
     modal.classList.add('active');
     html.classList.add('fixed');
@@ -47,7 +53,7 @@ export default function getPostsModal() {
 
     get_posts_btn.classList.add('inactive');
     welcome_msg.classList.remove('active');
-    table.insertAdjacentHTML('afterend', loading_msg_template);
+    info_panel.insertAdjacentHTML('afterbegin', loading_msg_template);
 
     let fetched_posts = [];
     let not_found_msg = modal.querySelector('.wdss-modal-not-found-msg');
@@ -56,15 +62,20 @@ export default function getPostsModal() {
       not_found_msg.remove();
     }
 
+    let lite_mode = false;
     let total_posts = wdss_localize.total_post_count;
+    const modal_title = modal.querySelector('.wdss-modal-title');
 
-    if(total_posts > 800 ) {
-      total_posts = 800;
-      console.log('Using lite-mode (up to 800 posts per fetch');
+    if(total_posts > max_posts_per_fetch) {
+      total_posts = max_posts_per_fetch;
+      lite_mode = true;
+
+      if(modal_title) {
+        modal_title.insertAdjacentHTML('afterend', lite_mode_msg_template);
+      }
     } 
 
     let total_pages = Math.ceil(total_posts / 100);
-
     console.log(`Total pages: ${total_pages}`);
 
     function getPosts() { 
@@ -97,7 +108,7 @@ export default function getPostsModal() {
   
     async function displayPosts() { 
           await getPosts();
-          console.log(fetched_posts);
+          console.log(`Total posts: ${fetched_posts.length}`);
           jQuery.ajax({
             url : wdss_localize.url,
             type : 'post',
@@ -203,7 +214,7 @@ export default function getPostsModal() {
       toggle_all_btn.params = posts_list;
     }
     else {
-      table.insertAdjacentHTML('afterend', not_found_msg_template);
+      info_panel.insertAdjacentHTML('afterbegin', not_found_msg_template);
       get_posts_btn.classList.remove('inactive');
     }
 
@@ -232,10 +243,10 @@ export default function getPostsModal() {
           },
           success : function(response) {
             get_posts_btn.classList.add('inactive');
-            table.insertAdjacentHTML('afterend', '<span class="msg successful">Completed!<br><small>Please wait several minutes while changes are implementing</small></span>');
+            info_panel.insertAdjacentHTML('afterbegin', '<span class="msg successful">Completed!<br><small>Please wait several minutes while changes are implementing</small></span>');
           },
           error: function(error) {
-            table.insertAdjacentHTML('afterend', '<span class="msg error">An Error occured!<br><smallLook in console for more details</small></span>');
+            info_panel.insertAdjacentHTML('afterbegin', '<span class="msg error">An Error occured!<br><smallLook in console for more details</small></span>');
             console.log(error);
           }
         });

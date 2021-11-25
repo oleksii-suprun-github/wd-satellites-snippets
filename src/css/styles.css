@@ -457,6 +457,12 @@ div.disabled:before {
   color: #fff;
   background: #2c3338;
 }
+.wdss-modal-header small {
+  display: block;
+  margin-left: 10px;
+  padding-top: 3px;
+  font-size: 12px;
+}
 .wdss-modal-header i {
   font-size: 1.2rem;
   margin-left: auto;

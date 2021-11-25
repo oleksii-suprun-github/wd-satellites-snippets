@@ -1,3 +1,8 @@
+<?php 
+  $total_post_count = wp_count_posts('post')->publish;
+  if( $total_post_count > 0 )  : 
+?>
+
 <section id="images-settings" class="wdss-section">
   <div class="wdss-section-header">
     <h2 class="section-toggler">Post Images</h2>
@@ -52,3 +57,5 @@
               </div>      
     </div>
 </section>
+
+<?php endif; ?>

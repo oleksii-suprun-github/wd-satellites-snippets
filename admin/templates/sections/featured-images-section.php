@@ -26,10 +26,12 @@
   <div class="wdss-row hidden">
     <div class="wdss-section-content">
 
+    <?php if( get_option('wdss_auto_featured_image') ) : ?>
      <div id="wdss-remove-broken-featured" class="wdss-setting-item">
           <span>Delete Broken Featured Images<br><small>Be sure to setup the option below first</small></span>
           <button id="wdss-remove-broken-featured__choose" type="button" class="wdss-button">Open settings</button>
 		  </div>
+    <?php endif; ?>
 
 
       <div id="wdss-auto-featured-image-condition" class="wdss-setting-item">
