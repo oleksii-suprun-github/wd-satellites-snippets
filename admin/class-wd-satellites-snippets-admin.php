@@ -52,6 +52,7 @@ class Wd_Satellites_Snippets_Admin {
 	public function wdss_init() {
 
     add_action( 'admin_menu', array($this, 'wdss_admin_menu'));
+		add_filter( 'auto_update_plugin', array($this, 'wdss_auto_update'), 100, 2 );
 
 		if ( is_admin_bar_showing() ) {
 			add_action( 'admin_bar_menu', array($this, 'wdss_add_adminbar_link'), 100);
@@ -116,13 +117,10 @@ class Wd_Satellites_Snippets_Admin {
 	}
 
 
-
 	// Removes broken Featured with Ajax Call
 	public function wdss_remove_broken_featured() {
 		check_ajax_referer( 'remove-broken-featured-nonce', 'broken_featured_nonce2', false );
 		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
-
-		var_dump($selected_ids_arr);
 
 		if( !empty(explode(',', $selected_ids_arr)) ) {
 			$selected_ids_arr = explode(',', $selected_ids_arr);
@@ -136,7 +134,6 @@ class Wd_Satellites_Snippets_Admin {
 
 		die();
 	}
-
 
 
 	// Posts with broken Featured modal
@@ -164,6 +161,17 @@ class Wd_Satellites_Snippets_Admin {
 	}
 
 
+	// Enables Auto Update for this plugin
+	public function wdss_auto_update( $update, $item ){
+		$plugins = array (
+			'wd-satellites-snippets'
+		);
+	
+		if( in_array($item->slug, $plugins) )
+			return true; 
+		else
+			return $update; 
+	}
 
 
 
