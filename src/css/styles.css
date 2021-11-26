@@ -394,6 +394,9 @@ div.disabled:before {
 .wdss-button.load-more {
   background: #2271b1;
 }
+.wdss-button.load-more.loading {
+  pointer-events: none;
+}
 .wdss-button.inactive {
   pointer-events: none !important;
   color: #2c3338 !important;
@@ -473,6 +476,31 @@ div.disabled:before {
   position: relative;
   height: 40vh;
 }
+.wdss-modal-body.loading:before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0, 45%);
+  z-index: 2;
+}
+.wdss-modal-body.loading:after {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: calc(50% - 25px);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  text-align: center;
+  content: 'Loading...';
+  font-size: 3rem;
+  z-index: 3;
+  color: #fff;
+} 
+
 .wdss-modal-not-found-msg,
 .wdss-modal-welcome-msg,
 .wdss-modal-loading-msg {
