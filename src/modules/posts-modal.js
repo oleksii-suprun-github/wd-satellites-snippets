@@ -7,7 +7,7 @@ export default function getPostsModal() {
   const close_modal_btn = document.querySelector('.wdss-modal-header i.fa-times');
 
   let total_posts = wdss_localize.total_post_count;
-  const max_posts_per_fetch = 800;
+  const max_posts_per_fetch = 100;
 
   const modal_title_template = '<span class="wdss-modal-title">Delete Broken Featured Images</span>';
   const modal_body = modal.querySelector('.wdss-modal-body');
@@ -267,21 +267,26 @@ export default function getPostsModal() {
     }
 
     execute_btn.addEventListener('click', () => {
-      const proceded_posts = modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]:checked');
+      const proceded_posts = Array.from(modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]:checked'));
       let proceded_posts_ids_arr = [];
       let proceded_posts_ids;
 
-      if(proceded_posts.length !== 0) {
-        get_posts_btn.classList.remove('inactive');
-        proceded_posts.forEach(post => {
-          proceded_posts_ids_arr.push(post.value);
-        });
-    
-        proceded_posts_ids = proceded_posts_ids_arr.join(',');
-  
-        clearAll();
+      if(!proceded_posts.length) {
+        alert('Please, select the posts which will be proceded');
+        return;
+      }
+      if(!confirm('Are you ready to start?')) return;
         
-        jQuery.ajax({
+      get_posts_btn.classList.remove('inactive');
+      proceded_posts.forEach(post => {
+        proceded_posts_ids_arr.push(post.value);
+      });
+    
+      proceded_posts_ids = proceded_posts_ids_arr.join(',');
+  
+      clearAll();
+        
+      jQuery.ajax({
           url : wdss_localize.url,
           type : 'post',
           data : {
@@ -289,7 +294,7 @@ export default function getPostsModal() {
             action: 'remove_broken_featured',
             broken_featured_nonce2: wdss_localize.remove_broken_featured_nonce,
           },
-          success : function(response) {
+          success : function() {
             get_posts_btn.classList.add('inactive');
             info_panel.insertAdjacentHTML('afterbegin', '<span class="msg successful">Completed!<br><small>Please wait several minutes while changes are implementing</small></span>');
           },
@@ -297,12 +302,7 @@ export default function getPostsModal() {
             info_panel.insertAdjacentHTML('afterbegin', '<span class="msg error">An Error occured!<br><smallLook in console for more details</small></span>');
             console.log(error);
           }
-        });
-
-      }
-      else {
-        get_posts_btn.classList.add('inactive');
-      }
+      });
     });
   }
 
