@@ -122,14 +122,29 @@ class Wd_Satellites_Snippets_Admin {
 		check_ajax_referer( 'remove-broken-featured-nonce', 'broken_featured_nonce2', false );
 		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
 
+		var_dump("Selected ids: " . $selected_ids_arr);
+
 		if( !empty(explode(',', $selected_ids_arr)) ) {
 			$selected_ids_arr = explode(',', $selected_ids_arr);
 			foreach($selected_ids_arr as $id) {
 				delete_post_thumbnail($id);
+
+				$media = get_attached_media('image', $id);
+				$media = array_shift( $media );
+				$image_url = $media->guid;
+
+				if( $image_url ) {
+						if(!check_url_status($image_url, 'local-only')) {
+							if( wp_delete_attachment( $media->post_parent, true ) ) {
+								var_dump('Deleted attachment for #' . $id);
+							}
+							else {
+								var_dump('Cant delete attachment for #' . $id);
+							}
+						}
+				}
+				var_dump('Removed thumbnail for #' . $id);
 			}
-		}
-		else {
-			delete_post_thumbnail(intval($selected_ids_arr));
 		}
 
 		die();
@@ -143,7 +158,7 @@ class Wd_Satellites_Snippets_Admin {
 
 		foreach($posts as $post) {
 			$thumbnail_url = get_the_post_thumbnail_url($post->id);
-			$is_broken = !check_url_status($thumbnail_url);
+			$is_broken = !check_url_status($thumbnail_url, 'local-only');
 				
 			if( $is_broken) {
 		?>

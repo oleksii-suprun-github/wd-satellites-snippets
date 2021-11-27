@@ -1,4 +1,5 @@
 // Custom modal handler
+import {check, uncheck} from './helpers';
 export default function getPostsModal() {
 
   const html = document.querySelector('html'); 
@@ -27,6 +28,10 @@ export default function getPostsModal() {
     const welcome_msg = modal.querySelector('.wdss-modal-welcome-msg');
     const not_found_msg_template = '<span class="wdss-modal-not-found-msg">No results...</span>';
     const load_more_btn_template = '<button type="button" class="wdss-button load-more">Fetch next page</button>';
+
+    const completed_msg_template = '<span class="msg successful">Completed!<br><small>Please wait several minutes while changes are implementing</small></span>';
+    const error_msg_template = '<span class="msg error">An Error occured!<br><smallLook in console for more details</small></span>';
+
     const modal_title = modal.querySelector('.wdss-modal-title');
     const modal_title_value = 'Delete Broken Featured Images';
 
@@ -34,14 +39,15 @@ export default function getPostsModal() {
     let fetched_posts = [];
     let is_lite_mode = false; 
     let max_posts_per_fetch;
+    let min_posts_per_fetch = 100;
 
     if(window.is_setup_stage === true) {
       modal_title.insertAdjacentHTML('afterbegin', modal_title_value);
       
-      let set_max_posts_per_fetch = parseInt(prompt('Enter max posts per fetch count: '));
-      max_posts_per_fetch = set_max_posts_per_fetch ? set_max_posts_per_fetch : 800;
+      let set_max_posts_per_fetch = parseInt(prompt('Enter max posts per fetch count. The minimum is 100: '));
+      max_posts_per_fetch = set_max_posts_per_fetch >= min_posts_per_fetch ? set_max_posts_per_fetch : 800;
 
-      const lite_mode_msg_template = `<small>Lite-mode: max ${max_posts_per_fetch} posts per fetch</small>`;
+      const lite_mode_msg_template = `<small>Lite-mode: max ${max_posts_per_fetch} posts per fetches</small>`;
 
       if(total_posts > max_posts_per_fetch) {
         is_lite_mode = true;
@@ -81,7 +87,31 @@ export default function getPostsModal() {
       return;
     }
   
+
+    function toggleAllCheckboxes() {
+      let posts = Array.from(document.querySelectorAll('.wdss-table-row.post'));
+      posts.forEach(post => {
+          let checkbox = post.querySelector('.wdss-table-post__select input[type="checkbox"]');
+          if(checkbox.hasAttribute('checked')) {
+            uncheck(checkbox);
+          }
+          else {
+            check(checkbox);
+          }
+      });
+    }
+
+
     function fetchMorePostsHandler() {
+
+      toggle_all_btn.addEventListener('click', toggleAllCheckboxes);
+
+      if(total_pages_info === next_fetched_page) {
+        alert('You achived the last page');
+        load_more_btn.classList.add('inactive');
+        return;
+      }
+
       let not_found_msg = modal.querySelector('.wdss-modal-not-found-msg');
       if(not_found_msg) not_found_msg.remove();
 
@@ -89,11 +119,6 @@ export default function getPostsModal() {
       modal_body.classList.add('loading');
       toggle_all_btn.classList.add('inactive');
       execute_btn.classList.add('inactive');
-  
-      if(total_pages_info === next_fetched_page) {
-        alert('You achived the last page');
-        return;
-      }
   
       try {
         fetch(document.location.origin + `/wp-json/wp/v2/posts?per_page=100&page=${next_fetched_page}`)
@@ -110,9 +135,16 @@ export default function getPostsModal() {
               broken_featured_nonce1: wdss_localize.broken_featured_list_nonce,
             },
             success : function(response) {
-
+              console.log(`Current fetched pages: ${next_fetched_page}`);
               next_fetched_page++;
-  
+
+              if(next_fetched_page < total_pages_info) {
+                console.log(`Next page to fetch: ${next_fetched_page}`);
+              }
+              else {
+                console.log(`This is the last page to fetch`);
+              }
+
               let info_msg = Array.from(modal.querySelectorAll('.msg'));
 
               if(info_msg) {
@@ -170,7 +202,7 @@ export default function getPostsModal() {
         }
         next_fetched_page++;
         if(next_fetched_page < total_pages_info) {
-          console.log(`Next page to fetch ${next_fetched_page}`);
+          console.log(`Next page to fetch: ${next_fetched_page}`);
         }
         else {
           console.log(`This is the last page to fetch`);
@@ -180,7 +212,7 @@ export default function getPostsModal() {
       }
   
       await fetchPosts(next_fetched_page);
-      console.log(`Fetched posts: ${fetched_posts.length}`);
+      console.log(`Fetched posts in first query: ${fetched_posts.length}`);
       jQuery.ajax({
         url : wdss_localize.url,
         type : 'post',
@@ -227,30 +259,7 @@ export default function getPostsModal() {
   
       if(load_more_btn) {
         load_more_btn.addEventListener('click', function() {
-          fetchMorePostsHandler();
-        });
-      }
-  
-      function check(input) {
-        input.setAttribute('checked', 'checked');
-        input.checked = true; 
-      }
-  
-      function uncheck(input) {
-        input.removeAttribute('checked');
-        input.checked = false;
-      }
-  
-      function toggleAll() {
-        let posts = Array.from(document.querySelectorAll('.wdss-table-row.post'));
-        posts.forEach(post => {
-            let checkbox = post.querySelector('.wdss-table-post__select input[type="checkbox"]');
-            if(checkbox.hasAttribute('checked')) {
-              uncheck(checkbox);
-            }
-            else {
-              check(checkbox);
-            }
+            fetchMorePostsHandler();
         });
       }
   
@@ -284,7 +293,7 @@ export default function getPostsModal() {
         execute_btn.classList.remove('inactive');
         toggle_all_btn.classList.remove('inactive');
   
-        toggle_all_btn.addEventListener('click', toggleAll);
+        toggle_all_btn.addEventListener('click', toggleAllCheckboxes);
       }
       else {
         info_panel.insertAdjacentHTML('afterbegin', not_found_msg_template);
@@ -322,10 +331,10 @@ export default function getPostsModal() {
             },
             success : function() {
               get_posts_btn.classList.add('inactive');
-              info_panel.insertAdjacentHTML('afterbegin', '<span class="msg successful">Completed!<br><small>Please wait several minutes while changes are implementing</small></span>');
+              info_panel.insertAdjacentHTML('afterbegin', completed_msg_template);
             },
             error: function(error) {
-              info_panel.insertAdjacentHTML('afterbegin', '<span class="msg error">An Error occured!<br><smallLook in console for more details</small></span>');
+              info_panel.insertAdjacentHTML('afterbegin', error_msg_template);
               console.log(error);
             }
         });

@@ -13,21 +13,25 @@
           $polylang_default_lang = pll_default_language();
           $polylang_current_lang = $polylang_default_lang === pll_current_language();
         }
-
-        require_once ABSPATH . 'wp-admin/includes/file.php';
-
+        
         if ( isset($post->ID) ) {
             // If post has no thumbnail
             if( !has_post_thumbnail($post->ID) ) {
-              $attached_image = get_children( "post_parent=$post->ID&amp;post_type=attachment&amp;post_mime_type=image&amp;numberposts=1" );
 
-              if ( $attached_image ) {
-                  foreach ($attached_image as $attachment_id => $attachment) {
-                      set_post_thumbnail($post->ID, $attachment_id);
+                $media = get_attached_media('image', $post->ID);
+
+                if($media) {           
+                  $media = array_shift( $media );
+                
+                  $image_url = $media->guid;
+                  $post_id = $post->ID;
+    
+                  if( check_url_status($image_url) ) {
+                    attach_first_post_image($post_id, $image_url);
                   }
               }
               elseif( !function_exists('pll_the_languages') || (function_exists('pll_the_languages') && $polylang_current_lang) ) {
-              
+  
                   $category = get_the_category(); 
   
                   if( !empty($category) ) {
@@ -43,8 +47,6 @@
                         set_post_thumbnail($post->ID, $image_id);
                     }
                   }
-  
-                  return;
               }
             }
             // Polylang case
@@ -68,20 +70,20 @@
       add_action('future_to_publish', 'wdss_random_featured_image');
     }
 
-    // 1Investing special bug fix
-    add_filter('wp_get_attachment_url', 'wdss_featured_images_url_fix');
-    function wdss_featured_images_url_fix($url) {
+    // // 1Investing special bug fix
+    // add_filter('wp_get_attachment_url', 'wdss_featured_images_url_fix');
+    // function wdss_featured_images_url_fix($url) {
 
-      if(is_archive() || is_home() || is_category()) {
+    //   if(is_archive() || is_home() || is_category()) {
 
-        $target = 'https://' . $_SERVER['SERVER_NAME'] . '/wp-content/uploads/;';
+    //     $target = 'https://' . $_SERVER['SERVER_NAME'] . '/wp-content/uploads/;';
 
-        if( strpos($url, $target) !== false ) {
-          $url = str_replace($target, '', $url);
-        }
-      }
-      return $url;
-    }
+    //     if( strpos($url, $target) !== false ) {
+    //       $url = str_replace($target, '', $url);
+    //     }
+    //   }
+    //   return $url;
+    // }
 
     if( get_option('wdss_featured_images_add_column', '0') ) {
 

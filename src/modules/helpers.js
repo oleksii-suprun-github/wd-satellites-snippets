@@ -141,6 +141,20 @@
     });
   }
 
+  // Check option in modal window
+  export function check(input) {
+    input.setAttribute('checked', 'checked');
+    input.checked = true; 
+  }
+
+  // Un-check option in modal window
+  export function uncheck(input) {
+    input.removeAttribute('checked');
+    input.checked = false;
+  }
+
+
+
   // Checks/unchecks all checkbox inputs within section
   export function toggleAllOptions() {
     const inputs = Array.from(document.querySelectorAll('#wdss-snippets-settings input'));
