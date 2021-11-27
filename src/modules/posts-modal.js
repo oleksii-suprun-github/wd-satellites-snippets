@@ -135,7 +135,7 @@ export default function getPostsModal() {
               broken_featured_nonce1: wdss_localize.broken_featured_list_nonce,
             },
             success : function(response) {
-              console.log(`Current fetched pages: ${next_fetched_page}`);
+              console.log(`Current fetched page: ${next_fetched_page}`);
               next_fetched_page++;
 
               if(next_fetched_page < total_pages_info) {
