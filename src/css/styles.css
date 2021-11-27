@@ -446,8 +446,8 @@ div.disabled:before {
   position: fixed;
   z-index: 2;
   background: #fff;
-  width: 50vw;
-  height: 50vh;
+  width: 65vw;
+  height: 55vh;
   overflow: hidden;
   top: 25%;
   left: 0;
@@ -479,7 +479,7 @@ div.disabled:before {
 }
 .wdss-modal-body {
   position: relative;
-  height: 40vh;
+  height: 45vh;
 }
 .wdss-modal-body.loading:before {
   content: '';
@@ -575,7 +575,7 @@ div.disabled:before {
   color: #fff;
 }
 .wdss-table-wrapper {
-  max-height: 40vh;
+  max-height: 45vh;
   overflow-y: auto;
   overflow-x: hidden;
 }

@@ -82,6 +82,9 @@ export default function getPostsModal() {
     }
   
     function fetchMorePostsHandler() {
+      let not_found_msg = modal.querySelector('.wdss-modal-not-found-msg');
+      if(not_found_msg) not_found_msg.remove();
+
       load_more_btn.classList.add('inactive');
       modal_body.classList.add('loading');
       toggle_all_btn.classList.add('inactive');
@@ -107,17 +110,28 @@ export default function getPostsModal() {
               broken_featured_nonce1: wdss_localize.broken_featured_list_nonce,
             },
             success : function(response) {
-              context.insertAdjacentHTML('beforeend', response);
+
               next_fetched_page++;
   
+              let info_msg = Array.from(modal.querySelectorAll('.msg'));
+
+              if(info_msg) {
+                info_msg.forEach(msg => msg.remove());
+              }
+        
               modal_body.classList.remove('loading');
               load_more_btn.classList.remove('inactive');
 
               if(response) {
+                context.insertAdjacentHTML('beforeend', response);
+                if(not_found_msg) not_found_msg.remove();
                 toggle_all_btn.classList.remove('inactive');
                 execute_btn.classList.remove('inactive');
               }
-  
+              else {
+                info_panel.insertAdjacentHTML('afterbegin', not_found_msg_template);
+              }
+
               updateFetchedPostsNumber();
             }
           }); 
@@ -193,7 +207,6 @@ export default function getPostsModal() {
       welcome_msg.classList.remove('active');
   
       let not_found_msg = modal.querySelector('.wdss-modal-not-found-msg');
-  
       if(not_found_msg) not_found_msg.remove();
   
       console.log(`Current fetched pages: ${next_fetched_page}`);
@@ -228,8 +241,8 @@ export default function getPostsModal() {
         input.checked = false;
       }
   
-      function toggleAll(e) {
-        let posts = e.currentTarget.params;
+      function toggleAll() {
+        let posts = Array.from(document.querySelectorAll('.wdss-table-row.post'));
         posts.forEach(post => {
             let checkbox = post.querySelector('.wdss-table-post__select input[type="checkbox"]');
             if(checkbox.hasAttribute('checked')) {
@@ -272,7 +285,6 @@ export default function getPostsModal() {
         toggle_all_btn.classList.remove('inactive');
   
         toggle_all_btn.addEventListener('click', toggleAll);
-        toggle_all_btn.params = posts_list;
       }
       else {
         info_panel.insertAdjacentHTML('afterbegin', not_found_msg_template);
@@ -297,7 +309,7 @@ export default function getPostsModal() {
         });
       
         proceded_posts_ids = proceded_posts_ids_arr.join(',');
-    
+        console.log(`Selected IDs: ${proceded_posts_ids}`);
         clearAll();
           
         jQuery.ajax({
