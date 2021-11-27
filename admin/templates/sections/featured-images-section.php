@@ -82,6 +82,7 @@
             else { 
               $category_name = $category->name;
               $category_slug = $category->slug;
+              $category_html_id = preg_replace('/\s+/', '-', strtolower($category_name));
               $category_option = preg_replace('/\-+/', '_', strtolower($category_slug));         
             ?>
               <div id="<?= $category_html_id;?>-category-featured" class="wdss-setting-item image-chooser featured">
