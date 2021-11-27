@@ -378,6 +378,11 @@ div.disabled:before {
 
 
 /* Buttons */
+.wdss-button:focus,
+.wdss-button:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
 .wdss-button {
   height: 30px;
   padding: 0 15px;  

@@ -7,9 +7,12 @@ export default function getPostsModal() {
   const close_modal_btn = document.querySelector('.wdss-modal-header i.fa-times');
 
   let total_posts = wdss_localize.total_post_count;
+  let total_pages_info = Math.ceil(total_posts / 100);
+  console.log(`Total fetchable pages: ${total_pages_info}`);
+
+  window.is_setup_stage = true;
 
   function Init() {
-    const modal_title_template = '<span class="wdss-modal-title">Delete Broken Featured Images</span>';
     const modal_body = modal.querySelector('.wdss-modal-body');
     const info_panel = modal.querySelector('.wdss-modal-informaion-panel');
     const context = document.querySelector('#wdss-exclude-posts-table tbody');
@@ -24,32 +27,39 @@ export default function getPostsModal() {
     const welcome_msg = modal.querySelector('.wdss-modal-welcome-msg');
     const not_found_msg_template = '<span class="wdss-modal-not-found-msg">No results...</span>';
     const load_more_btn_template = '<button type="button" class="wdss-button load-more">Fetch next page</button>';
-  
+    const modal_title = modal.querySelector('.wdss-modal-title');
+    const modal_title_value = 'Delete Broken Featured Images';
+
     let load_more_btn;
     let fetched_posts = [];
     let is_lite_mode = false; 
-    let cusotm_max_posts_per_fetch = parseInt(prompt('Enter max posts per fetch count: '));
-    let max_posts_per_fetch =  cusotm_max_posts_per_fetch ? cusotm_max_posts_per_fetch : 800;
-    let total_pages_info = Math.ceil(wdss_localize.total_post_count / 100);
-    console.log(`Total fetchable pages: ${total_pages_info}`);
-  
-  
-    modal.querySelector('.wdss-modal-header').insertAdjacentHTML('afterbegin', modal_title_template);
-    const modal_title = modal.querySelector('.wdss-modal-title');
-    const lite_mode_msg_template = `<small>Lite-mode: max ${max_posts_per_fetch} posts per fetch</small>`;
-  
-    if(total_posts > max_posts_per_fetch) {
-      is_lite_mode = true;
-        modal_title.insertAdjacentHTML('afterend', lite_mode_msg_template);
-    }
-  
-    if(is_lite_mode) total_posts = max_posts_per_fetch;
-    let next_fetched_page = Math.ceil(total_posts / 100);
-  
+    let max_posts_per_fetch;
+
+    if(window.is_setup_stage === true) {
+      modal_title.insertAdjacentHTML('afterbegin', modal_title_value);
+      
+      let set_max_posts_per_fetch = parseInt(prompt('Enter max posts per fetch count: '));
+      max_posts_per_fetch = set_max_posts_per_fetch ? set_max_posts_per_fetch : 800;
+
+      const lite_mode_msg_template = `<small>Lite-mode: max ${max_posts_per_fetch} posts per fetch</small>`;
+
+      if(total_posts > max_posts_per_fetch) {
+        is_lite_mode = true;
+        if(modal_title) {
+          modal_title.insertAdjacentHTML('afterend', lite_mode_msg_template);
+        }
+      }
     
-    openModal()
+      if(is_lite_mode) total_posts = max_posts_per_fetch;
+    }
+
+
+    let next_fetched_page = Math.ceil(total_posts / 100);
+
+    openModal();
 
     function openModal() {
+      window.is_setup_stage = false;
       modal.classList.add('active');
       html.classList.add('fixed');
     }
@@ -60,8 +70,7 @@ export default function getPostsModal() {
       html.classList.remove('fixed');
     }
     document.onkeydown = ((e) => e.key === 'Esc' || e.key === 'Escape' ? closeModal() : null);
-  
-  
+
     function updateFetchedPostsNumber() {
       let total_posts_amount = Array.from(document.querySelectorAll('.wdss-table-row.post')).length;
   
@@ -101,10 +110,13 @@ export default function getPostsModal() {
               context.insertAdjacentHTML('beforeend', response);
               next_fetched_page++;
   
-              load_more_btn.classList.remove('inactive');
-              toggle_all_btn.classList.remove('inactive');
               modal_body.classList.remove('loading');
-              execute_btn.classList.remove('inactive');
+              load_more_btn.classList.remove('inactive');
+
+              if(response) {
+                toggle_all_btn.classList.remove('inactive');
+                execute_btn.classList.remove('inactive');
+              }
   
               updateFetchedPostsNumber();
             }
@@ -166,6 +178,7 @@ export default function getPostsModal() {
         success : function(response) {
           modalHandler.call(context, response);
           modal_body.classList.remove('loading');
+          get_posts_btn.classList.add('inactive');
         }
       }); 
     }
@@ -263,7 +276,8 @@ export default function getPostsModal() {
       }
       else {
         info_panel.insertAdjacentHTML('afterbegin', not_found_msg_template);
-        get_posts_btn.classList.remove('inactive');
+        toggle_all_btn.classList.add('inactive');
+        execute_btn.classList.add('inactive');
       }
   
       execute_btn.addEventListener('click', () => {
@@ -308,6 +322,6 @@ export default function getPostsModal() {
   }
 
   if(open_modal_btn) {
-    open_modal_btn.addEventListener('click', Init);
+    open_modal_btn.addEventListener('mousedown', Init);
   }
 }
