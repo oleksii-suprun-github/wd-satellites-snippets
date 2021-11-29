@@ -3,7 +3,7 @@
  * Plugin Name: WD Satellite 
  * Plugin URI: https://github.com/Mironezes/wd-satellites-snippets
  * Description: Bulk of usefull snippets & tweaks for satellites.
- * Version: 1.3.2
+ * Version: 1.3.3
  * GitHub Plugin URI: https://github.com/Mironezes/wd-satellites-snippets
  * Primary Branch: realise
  * Author: Alexey Suprun
@@ -28,7 +28,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Currently plugin version.
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'WD_SATELLITES_SNIPPETS_VERSION', '1.3.2' );
+define( 'WD_SATELLITES_SNIPPETS_VERSION', '1.3.3' );
 
 /**
  * The code that runs during plugin activation.

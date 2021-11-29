@@ -51,7 +51,7 @@
   }
   
   export const excludedHostsDictionary = {
-    root_el: '#images-settings',
+    root_el: '#post-content-settings',
     action: 'excluded_hosts_dictionary_update',
     nonce: 'excluded-hosts-dictionary-nonce',
     name: 'excluded_hosts_dictionary'

@@ -13,6 +13,7 @@
 							<th class="wdss-table-post__title">Title</th>
 							<th class="wdss-table-post__status">Status</th>
 							<th class="wdss-table-post__date">Date</th>
+							<th class="wdss-table-post__link">Link</th>
 						</tr>
 					</table>
 					<div class="wdss-modal-informaion-panel">

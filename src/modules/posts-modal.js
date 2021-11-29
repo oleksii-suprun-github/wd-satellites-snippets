@@ -9,11 +9,13 @@ export default function getPostsModal() {
 
   let total_posts = wdss_localize.total_post_count;
   let total_pages_info = Math.ceil(total_posts / 100);
-  console.log(`Total fetchable pages: ${total_pages_info}`);
 
   window.is_setup_stage = true;
 
   function Init() {
+
+    console.log(`Total fetchable pages: ${total_pages_info}`);
+
     const modal_body = modal.querySelector('.wdss-modal-body');
     const info_panel = modal.querySelector('.wdss-modal-informaion-panel');
     const context = document.querySelector('#wdss-exclude-posts-table tbody');
@@ -77,8 +79,12 @@ export default function getPostsModal() {
     }
     document.onkeydown = ((e) => e.key === 'Esc' || e.key === 'Escape' ? closeModal() : null);
 
+    function getPostsFromTable() {
+      return Array.from(document.querySelectorAll('.wdss-table-row.post'));
+    }
+
     function updateFetchedPostsNumber() {
-      let total_posts_amount = Array.from(document.querySelectorAll('.wdss-table-row.post')).length;
+      let total_posts_amount = getPostsFromTable().length;
   
       total_posts_text.classList.add('active');
       if(total_posts_text_number) {
@@ -89,7 +95,7 @@ export default function getPostsModal() {
   
 
     function toggleAllCheckboxes() {
-      let posts = Array.from(document.querySelectorAll('.wdss-table-row.post'));
+      let posts = getPostsFromTable();
       posts.forEach(post => {
           let checkbox = post.querySelector('.wdss-table-post__select input[type="checkbox"]');
           if(checkbox.hasAttribute('checked')) {
@@ -153,12 +159,12 @@ export default function getPostsModal() {
         
               modal_body.classList.remove('loading');
               load_more_btn.classList.remove('inactive');
+              toggle_all_btn.classList.remove('inactive');
+              execute_btn.classList.remove('inactive');
 
               if(response) {
                 context.insertAdjacentHTML('beforeend', response);
                 if(not_found_msg) not_found_msg.remove();
-                toggle_all_btn.classList.remove('inactive');
-                execute_btn.classList.remove('inactive');
               }
               else {
                 info_panel.insertAdjacentHTML('afterbegin', not_found_msg_template);
@@ -250,7 +256,7 @@ export default function getPostsModal() {
       this.insertAdjacentHTML('beforeend', $content);
       updateFetchedPostsNumber();
   
-      let posts_list = Array.from(document.querySelectorAll('.wdss-table-row.post'));
+      let posts_list = getPostsFromTable();
   
       if(is_lite_mode && !modal.querySelector('.wdss-button.load-more')) {
         get_posts_btn.insertAdjacentHTML('beforebegin', load_more_btn_template);

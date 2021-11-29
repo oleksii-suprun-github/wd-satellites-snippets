@@ -620,13 +620,16 @@ div.disabled:before {
   width: 5%;
 }
 .wdss-table-post__title {
-  width: 63%;
+  width: 60%;
 }
 .wdss-table-post__status {
   width: 10%;
 }
 .wdss-table-post__date {
-  width: 15%;
+  width: 10%;
+}
+.wdss-table-post__link {
+  width: 10%;
 }
 @media screen and (max-width: 1200px) {
   .wdss-table td {

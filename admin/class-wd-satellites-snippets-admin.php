@@ -160,14 +160,15 @@ class Wd_Satellites_Snippets_Admin {
 			$thumbnail_url = get_the_post_thumbnail_url($post->id);
 			$is_broken = !check_url_status($thumbnail_url, 'local-only');
 				
-			if( $is_broken) {
+			if( $is_broken ) {
 		?>
 			<tr class="wdss-table-row post">
 				<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->id; ?>"></td>
 				<td><?= $post->id;?></td>
 				<td><?= $post->title->rendered;?></td>
 				<td><?= $post->status;?></td>
-				<td><?= $post->date;?></td>				
+				<td><?= $post->date;?></td>		
+				<td><a target="_blank" href="<?= $post->link;?>">View post</a></td>				
 			</tr>
 		<?php
 			}
