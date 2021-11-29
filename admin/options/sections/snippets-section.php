@@ -2,8 +2,7 @@
     // Filters post content from validation errors 
     function wdss_regex_post_content_filters($content) {
       if(is_single()) {
-        $preset = '/<div itemscope="" itemprop="mainEntity" itemtype="https:\/\/schema\.org\/Question">\n?
-        <div itemprop="name">\n?(<h3>.*<\/h3>?)\n?<\/div>\n?<div itemscope="" itemprop="acceptedAnswer" itemtype="https:\/\/schema\.org\/Answer">\n?<div itemprop="text">\n(<p>.*<\/p>?)\n<\/div>\n?<\/div>\n?<\/div>/';
+        $preset = '/<div itemscope="" itemprop="mainEntity" itemtype="https:\/\/schema\.org\/Question">\n?<div itemprop="name">\n?(<h3>.*<\/h3>?)\n?<\/div>\n?<div itemscope="" itemprop="acceptedAnswer" itemtype="https:\/\/schema\.org\/Answer">\n?<div itemprop="text">\n(<p>.*<\/p>?)\n<\/div>\n?<\/div>\n?<\/div>/';
         
         $content = preg_replace($preset, '${1}<br>${2}', $content);
       }
