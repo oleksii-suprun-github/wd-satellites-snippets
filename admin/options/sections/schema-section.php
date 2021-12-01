@@ -195,7 +195,7 @@ if( get_option('wdss_advanced_jsonld_schema') != '1' ) {
 					"image": "<?= $image_url;?>",
 					"author": {
 						"@type": "Organization",
-						"name": "<?= get_option('wdss_jsonld_schema_orgname'); ?>",
+						"name": "<?= get_option('wdss_jsonld_schema_orgname'); ?>"
 					},
 					"publisher": {
 						"@type": "Organization",

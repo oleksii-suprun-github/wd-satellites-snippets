@@ -1,11 +1,11 @@
 // Custom modal handler
 import {check, uncheck} from './helpers';
-export default function getPostsModal() {
+export default function getPostsModal(obj) {
 
   const html = document.querySelector('html'); 
-  const modal = document.querySelector('.wdss-modal');
-  const open_modal_btn = document.querySelector('#wdss-remove-broken-featured__choose');
-  const close_modal_btn = document.querySelector('.wdss-modal-header i.fa-times');
+  const modal = document.querySelector(obj.modal_el);
+  const open_modal_btn = document.querySelector(obj.open_modal_btn);
+  const close_modal_btn = modal.querySelector('.wdss-modal-header i.fa-times');
 
   let total_posts = wdss_localize.total_post_count;
   let total_pages_info = Math.ceil(total_posts / 100);
@@ -132,14 +132,17 @@ export default function getPostsModal() {
           return response.json();
         })
         .then(data => {
+
+          let data_obj = {
+            fetched_list: JSON.stringify(data),
+            action : obj.fetch_action
+          };
+          data_obj[obj.fetch_nonce_name] = obj.fetch_nonce_value;
+    
           jQuery.ajax({
             url : wdss_localize.url,
             type : 'post',
-            data : {
-              fetched_list: JSON.stringify(data),
-              action: 'fetch_broken_featured',
-              broken_featured_nonce1: wdss_localize.broken_featured_list_nonce,
-            },
+            data : data_obj,
             success : function(response) {
               console.log(`Current fetched page: ${next_fetched_page}`);
               next_fetched_page++;
@@ -219,14 +222,17 @@ export default function getPostsModal() {
   
       await fetchPosts(next_fetched_page);
       console.log(`Fetched posts in first query: ${fetched_posts.length}`);
+
+      let data_obj = {
+        fetched_list: JSON.stringify(fetched_posts),
+        action : obj.fetch_action
+      };
+      data_obj[obj.fetch_nonce_name] = obj.fetch_nonce_value;
+
       jQuery.ajax({
         url : wdss_localize.url,
         type : 'post',
-        data : {
-          fetched_list: JSON.stringify(fetched_posts),
-          action: 'fetch_broken_featured',
-          broken_featured_nonce1: wdss_localize.broken_featured_list_nonce,
-        },
+        data : data_obj,
         success : function(response) {
           modalHandler.call(context, response);
           modal_body.classList.remove('loading');
@@ -327,14 +333,16 @@ export default function getPostsModal() {
         console.log(`Selected IDs: ${proceded_posts_ids}`);
         clearAll();
           
+        let data_obj = {
+          selected_list: JSON.stringify(proceded_posts_ids),
+          action: obj.post_action
+        };
+        data_obj[obj.post_nonce_name] = obj.post_nonce_value;
+
         jQuery.ajax({
             url : wdss_localize.url,
             type : 'post',
-            data : {
-              selected_list: JSON.stringify(proceded_posts_ids),
-              action: 'remove_broken_featured',
-              broken_featured_nonce2: wdss_localize.remove_broken_featured_nonce,
-            },
+            data : data_obj,
             success : function() {
               get_posts_btn.classList.add('inactive');
               info_panel.insertAdjacentHTML('afterbegin', completed_msg_template);

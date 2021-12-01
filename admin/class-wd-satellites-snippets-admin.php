@@ -119,7 +119,7 @@ class Wd_Satellites_Snippets_Admin {
 
 	// Removes broken Featured with Ajax Call
 	public function wdss_remove_broken_featured() {
-		check_ajax_referer( 'remove-broken-featured-nonce', 'broken_featured_nonce2', false );
+		check_ajax_referer( 'remove-broken-featured-nonce', 'remove_broken_featured_nonce', false );
 		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
 
 		var_dump("Selected ids: " . $selected_ids_arr);
@@ -153,24 +153,27 @@ class Wd_Satellites_Snippets_Admin {
 
 	// Posts with broken Featured modal
 	public function wdss_get_broken_featured_modal() {
-		check_ajax_referer( 'broken-featured-list-nonce', 'broken_featured_nonce1', false );
+		check_ajax_referer( 'broken-featured-list-nonce', 'fetch_broken_featured_nonce', false );
 		$posts = json_decode(stripslashes($_POST['fetched_list']));
 
 		foreach($posts as $post) {
-			$thumbnail_url = get_the_post_thumbnail_url($post->id);
-			$is_broken = !check_url_status($thumbnail_url, 'local-only');
-				
-			if( $is_broken ) {
-		?>
-			<tr class="wdss-table-row post">
-				<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->id; ?>"></td>
-				<td><?= $post->id;?></td>
-				<td><?= $post->title->rendered;?></td>
-				<td><?= $post->status;?></td>
-				<td><?= $post->date;?></td>		
-				<td><a target="_blank" href="<?= $post->link;?>">View post</a></td>				
-			</tr>
-		<?php
+
+			if( has_post_thumbnail($post->id) ) {
+				$thumbnail_url = get_the_post_thumbnail_url($post->id);
+				$is_broken = !check_url_status($thumbnail_url, 'local-only');
+					
+				if( $is_broken ) {
+			?>
+				<tr class="wdss-table-row post">
+					<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->id; ?>"></td>
+					<td><?= $post->id;?></td>
+					<td><?= $post->title->rendered;?></td>
+					<td><?= $post->status;?></td>
+					<td><?= $post->date;?></td>		
+					<td><a target="_blank" href="<?= $post->link;?>">View post</a></td>				
+				</tr>
+			<?php
+				}
 			}
 		}
 		die();
