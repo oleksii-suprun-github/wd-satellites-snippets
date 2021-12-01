@@ -30,7 +30,7 @@
         target.value = action;
       }
 
-      if(obj) {
+      if(obj && document.querySelector(obj.selector)) {
         document.querySelector(obj.selector).addEventListener('click', init);
       }
   }
@@ -126,7 +126,6 @@
 
   // Resets value attr in target input
   export function resetValues(...items) {
-
     items.forEach(item => {
       const buttons = Array.from(document.querySelectorAll(item.button));
 
@@ -140,6 +139,84 @@
       });
     });
   }
+
+
+  // Notification modal
+  export function notification(msg, type = 'info', target_func) {
+
+    let notification_template;
+    let html = document.querySelector('html');
+    let notification_class;
+
+    switch (type) {
+      case 'info':
+        notification_class = 'info';
+        break;
+        case 'prompt':
+          notification_class = 'prompt';
+          break;
+      default:
+        break;
+    }
+
+    function closeNotification() {
+      this.closest('.notification').remove();
+      if(type === 'prompt') html.classList.remove('fixed');
+    }
+
+    if(type === 'prompt') html.classList.add('fixed');
+
+    notification_template = `
+    <div class="modal notification ${notification_class}">
+    <div class="notification-header">
+      <i class="fas fa-times"></i>
+    </div>
+    <div class="notification-content">
+    <span>${msg}</span>
+    </div>`;
+
+    if(type === 'prompt') {
+      html.classList.add('fixed');
+      notification_template += `<div class="notification-content-inputs"><input required type="number" min="100" value="100"><button type="button" class="wdss-button">Enter</button></div>`;
+    }
+    notification_template += `</div>`;
+    document.body.insertAdjacentHTML('beforeend', notification_template);
+
+
+    if(document.querySelector('.modal.notification')) {
+      let notification = document.querySelector('.modal.notification');
+      let close_notification = notification.querySelector('i');
+      close_notification.addEventListener('click', closeNotification);
+
+      if(type === 'prompt' && document.querySelector('.notification-content-inputs')) {
+        let inputs_panel = document.querySelector('.notification-content-inputs');
+        let input = inputs_panel.querySelector('input');
+        let button = inputs_panel.querySelector('button');
+        if(input.value) {
+          button.addEventListener('click', function() {
+            target_func(input.value);
+            notification.remove();
+        });
+        }
+      }
+    
+    }
+  }
+
+
+  // Check option in modal window
+  export function check(input) {
+    input.setAttribute('checked', 'checked');
+    input.checked = true; 
+  }
+
+  // Un-check option in modal window
+  export function uncheck(input) {
+    input.removeAttribute('checked');
+    input.checked = false;
+  }
+
+
 
   // Checks/unchecks all checkbox inputs within section
   export function toggleAllOptions() {

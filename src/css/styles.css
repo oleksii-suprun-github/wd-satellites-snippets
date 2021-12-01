@@ -142,6 +142,58 @@ div.disabled:before {
 
 
 /* Notifications */
+.modal.notification {
+  left: 0;
+  margin: 0 auto;
+  position: fixed;
+  right: 0;
+  top: 25%;
+  width: fit-content;
+  background: #fff;
+  z-index: 10;
+  padding: 50px;
+  border: 1px solid #1d2327;
+  box-shadow: 0.5px 0.5px 0.5px #1d2327;
+}
+.notification-header i {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+.notification-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.notification-content span { 
+  font-weight: bold;
+  font-size: 1.15rem;
+}
+.notification-content-inputs {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.notification-content-inputs input,
+.notification-content-inputs button {
+  height: 35px;
+}
+.notification-content-inputs input {
+  width: 125px;
+  margin-right: 10px;
+}
+.notification-content-inputs button {
+  padding: 0 25px;
+  color: #fff;
+  background-color: #3c434a;
+}
+.notification.prompt .notification-content span {
+  margin-bottom: 15px;
+}
 .msg {
   display: block;
   margin: 0 auto;
@@ -386,6 +438,7 @@ div.disabled:before {
   border: 0;
   border-radius: 4px;
   transition: all 300ms;
+  cursor: pointer;
 }
 .wdss-button:hover {
   background: #50575e;
