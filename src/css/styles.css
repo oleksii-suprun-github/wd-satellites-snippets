@@ -84,6 +84,11 @@ html.fixed::before {
   justify-content: flex-start;
   align-items: flex-start;
 }
+@media screen and (max-width: 1200px) {
+  #wdss-settings-page .wdss-section-content {
+    overflow-x: auto;
+  }
+}
 #wdss-settings-page .wdss-section-content-description {
   margin-bottom: 25px;
 }
@@ -208,7 +213,6 @@ div.disabled:before {
 .msg.error {
   color: #cc2020;
 }
-
 .wdss-modal .msg {
   width: 100%;
   height: 260px;
@@ -224,6 +228,7 @@ div.disabled:before {
   font-weight: normal;
   color: #222;
 }
+
 
 /* Headings */
 #wdss-settings-page h1 > small {
@@ -425,11 +430,21 @@ div.disabled:before {
     bottom: 0;
     right: 18px
   }
+  #wdss-featured-images-group .wdss-setting-item.image-chooser .wdss-button.reset {
+      bottom: unset;
+      right: 0;
+      top: -4px;
+  }
 }
 
 
 
 /* Buttons */
+.wdss-button:focus,
+.wdss-button:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
 .wdss-button {
   height: 30px;
   padding: 0 15px;  
@@ -438,7 +453,6 @@ div.disabled:before {
   border: 0;
   border-radius: 4px;
   transition: all 300ms;
-  cursor: pointer;
 }
 .wdss-button:hover {
   background: #50575e;
@@ -446,6 +460,9 @@ div.disabled:before {
 }
 .wdss-button.load-more {
   background: #2271b1;
+}
+.wdss-button.load-more.loading {
+  pointer-events: none;
 }
 .wdss-button.inactive {
   pointer-events: none !important;
@@ -491,8 +508,8 @@ div.disabled:before {
   position: fixed;
   z-index: 2;
   background: #fff;
-  width: 50vw;
-  height: 50vh;
+  width: 65vw;
+  height: 55vh;
   overflow: hidden;
   top: 25%;
   left: 0;
@@ -510,6 +527,11 @@ div.disabled:before {
   color: #fff;
   background: #2c3338;
 }
+.wdss-modal-header small {
+  margin-left: 10px;
+  padding-top: 3px;
+  font-size: 12px;
+}
 .wdss-modal-header i {
   font-size: 1.2rem;
   margin-left: auto;
@@ -518,14 +540,42 @@ div.disabled:before {
 }
 .wdss-modal-body {
   position: relative;
-  height: 40vh;
+  height: 45vh;
+}
+.wdss-modal-body.loading:before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0, 45%);
+  z-index: 2;
+}
+.wdss-modal-body.loading:after {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: calc(50% - 25px);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  text-align: center;
+  content: 'Loading...';
+  font-size: 3rem;
+  z-index: 3;
+  color: #fff;
+} 
+.wdss-modal-informaion-panel {
+  position: relative;
+  height: calc(100% - 5%);
 }
 .wdss-modal-not-found-msg,
 .wdss-modal-welcome-msg,
 .wdss-modal-loading-msg {
   position: relative;
   display: none;
-  height: 260px;
+  height: 100%;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -580,6 +630,11 @@ div.disabled:before {
     height: 60vh;
   }
 }
+@media screen and (max-width: 1200px) {
+  .wdss-modal-informaion-panel {
+    height: 93%;
+  }
+}
 
 
 /* Post Excluded Table */
@@ -589,7 +644,7 @@ div.disabled:before {
   color: #fff;
 }
 .wdss-table-wrapper {
-  max-height: 40vh;
+  height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -616,13 +671,16 @@ div.disabled:before {
   width: 5%;
 }
 .wdss-table-post__title {
-  width: 63%;
+  width: 60%;
 }
 .wdss-table-post__status {
   width: 10%;
 }
 .wdss-table-post__date {
-  width: 15%;
+  width: 10%;
+}
+.wdss-table-post__link {
+  width: 10%;
 }
 @media screen and (max-width: 1200px) {
   .wdss-table td {
@@ -693,6 +751,11 @@ button#wdss-toggle-options {
 #wdss-remove-broken-featured {
   margin-left: 15px;
   margin-bottom: 10px;
+}
+@media screen and (max-width: 1200px) {
+  #wdss-remove-broken-featured {
+    display: none;
+  }
 }
 #wdss-settings-page #wdss-featured-images-group {
   border: 1px solid #1d2327;

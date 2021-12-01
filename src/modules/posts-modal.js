@@ -63,7 +63,7 @@ export default function getPostsModal(obj) {
 			if (total_posts > max_posts_per_fetch) {
 				is_lite_mode = true;
 				if (modal_title) {
-					modal_title.insertAdjacentHTML('afterend', lite_mode_msg_template);
+					modal_title.insertAdjacentHTML('beforeend', lite_mode_msg_template);
 				}
 			}
 			if (is_lite_mode) total_posts = max_posts_per_fetch;

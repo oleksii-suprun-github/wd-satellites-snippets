@@ -57,3 +57,13 @@
     name: 'excluded_hosts_dictionary'
   }
 
+  export const removeBrokenFeatured = {
+    modal_el: '#exclude-posts-modal',
+    open_modal_btn: '#wdss-remove-broken-featured__choose',
+    fetch_action:  'fetch_broken_featured',
+    fetch_nonce_name: 'fetch_broken_featured_nonce',
+    fetch_nonce_value: wdss_localize.broken_featured_list_nonce,
+    post_action: 'remove_broken_featured',
+    post_nonce_name: 'remove_broken_featured_nonce',
+    post_nonce_value: wdss_localize.remove_broken_featured_nonce
+  }
