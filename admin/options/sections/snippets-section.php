@@ -265,6 +265,13 @@
     if( get_option('wdss_disable_admin_notices', '0') ) {
 
       function wdss_disable_admin_notices() {   
+
+        // If last modify is enabled then hide Delete Cache button
+        if(get_option('wdss_last_modified_n_304', '0')) { 
+          echo 
+          '<style>#wp-admin-bar-delete-cache, #wp-admin-bar-autoptimize-delete-cache {display: none !important;}</style>';
+        }
+
         // Hide Update notifications
         echo 
         '<style>
