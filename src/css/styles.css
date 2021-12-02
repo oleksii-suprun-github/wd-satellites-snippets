@@ -453,6 +453,7 @@ div.disabled:before {
   border: 0;
   border-radius: 4px;
   transition: all 300ms;
+  cursor: pointer;
 }
 .wdss-button:hover {
   background: #50575e;
@@ -460,6 +461,9 @@ div.disabled:before {
 }
 .wdss-button.load-more {
   background: #2271b1;
+}
+.wdss-button.save-dictionary {
+  background: green;
 }
 .wdss-button.load-more.loading {
   pointer-events: none;
@@ -473,11 +477,14 @@ div.disabled:before {
   padding: 0;
   background: transparent;
 }
+.wdss-table__remove-item i,
 .wdss-button.reset i {  
   color: #2c3338;
   font-size: 1rem;
   transition: all 300ms;
+  cursor: pointer;
 }
+.wdss-table__remove-item i:hover,
 .wdss-button.reset:hover i {
   color: #cc2020;
   transition: all 300ms;
@@ -637,7 +644,7 @@ div.disabled:before {
 }
 
 
-/* Post Excluded Table */
+/* Modal Tables */
 .wdss-modal-header span {
   text-align: center;
   font-weight: bold;
@@ -857,121 +864,75 @@ button#wdss-toggle-options {
 }
 
 
-/* Panels & tables */
-.wdp-add-item-panel {
-  display: flex;
-  width: 100%;
+/* Inline Tables */
+.wdss-table-description {
   margin-bottom: 25px;
 }
-.wdss-list-item {
+.wdss-table-content {
+  position: relative;
+}
+.wdss-setting-item  .wdss-table thead {
+  background: #f0f0f1;
+}
+.wdss-setting-item  .wdss-table th {
+  padding: 5px;
+  border: 1px solid;
+}
+.wdss-table-handler {
   display: flex;
-  align-items: center;
-  margin-right: 25px;
+  flex-direction: column;
+  align-items: unset;
+  width: 50%;
 }
-.wdss-list-item:first-of-type {
-  margin-right: 25px;
+.wdss-setting-item .wdss-table-wrapper {
+  overflow: unset;
 }
-.wdss-list-item span {
+.wdss-setting-item .wdss-table {
+  min-height: unset;
+  margin-bottom: 15px;
+}
+.wdss-table-input {
+  position: relative;
+  display: flex;
+  align-items: center;  
+  margin-right: 5px;;
+}
+.wdss-table-input input {
+  width: 200px;
+}
+.wdss-table-input span {
   margin-right: 15px;
 }
-.wdss-list-item input {
-  width: 195px;
+.wdss-table-add-item-handler {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
 }
 .wdss-list-item-handlers {
   display: flex;
   align-items: center;
 }
-.wdss-list-item-handler {
+.wdss-table-actions {
   position: relative;
   display: flex;
-  align-items: center;
   justify-content: center;
-  height: 30px;
-  padding: 0 15px;
-  border-radius: 4px;
-  color: #fff;
-  background-color: #000;
-  cursor: pointer;
-  transition: all 300ms;
+  align-items: center;
+  flex-direction: column;
+  width: fit-content;
+  margin: 0 auto;  
 }
-.wdss-list-item-handler:hover {
-  transition: all 300ms;
+.wdss-table td.wdss-table__remove-item {
+  width: 10%;
+  padding-top: 8px;
 }
-.wdss-list-item-handler.add {
-  background-color:green;
-}
-.wdss-list-item-handler.add:hover {
-  background-color: #1ea71e;
-}
-.wdss-list-table-wrapper {
-  position: relative;
-  width: 100%;
-  overflow-x: auto;
-}
-.wdss-list-table {
-  position: relative;
-  width: 100%;
-  margin-bottom: 20px;
-}
-.wdss-list-table thead {
-  background-color: #ccc;
-}
-.wdss-list-table thead tr th:first-of-type {
-  width: 75%;
-}
-.wdss-list-table tr:nth-of-type(even) {
-  background-color: #f0f0f1;
-}
-.wdss-list-table td {
-  text-align: center;
-}
-.wdss-list-table-wrapper button {
-  display: block;
-  height: 25px;
-  margin: 0 auto;
-  padding: 0 25px;
-  background: #3c434a!important;
-  color: #fff;
-  border-radius: 3px;
-  border: 0;
-}
-.wdss-list-table__remove-item i {
-  cursor: pointer;
-}
-.wdss-list-table__remove-item i:hover {
-  color: #cc2020;
-}
-@media screen and (max-width: 767px) {
-  .wdp-add-item-panel {
-    flex-direction: column;
-  }
-  .wdss-list-item:first-of-type {
-    margin: 0;
-  }
-  .wdp-setting-item-accordion,
-  .wdp-setting-item-accordion-content.active {
-    width: -webkit-fill-available;
-  }
-  .wdp-setting-item-accordion-content strong {
-    margin-bottom: 10px;
-  }
-  .wdss-list-item {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-right: 0;
-    margin-bottom: 15px;
-  }
-  .wdss-list-item:last-of-type {
-    margin-bottom: 20px;
-  }
-  .wdss-list-item input {
-    width: 100%;
-  }
-  .wdss-list-item-handlers {
+@media screen and (max-width: 1199px) {
+  .wdss-table-handler {
     width: fit-content;
-    margin-left: auto;
+    width: -moz-fit-content;
   }
 }
+
 
 
 /* Schema Settings */

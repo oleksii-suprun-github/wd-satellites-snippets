@@ -35,7 +35,7 @@
           <?php 
             include_once('sections/snippets-section.php');
             include_once('sections/featured-images-section.php'); 
-            include_once('sections/images-section.php'); 
+            include_once('sections/post-content-section.php'); 
             include_once('sections/polylang-section.php'); 
             include_once('sections/schema-section.php');
             include_once('sections/custom-410s-section.php'); 

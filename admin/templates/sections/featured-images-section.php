@@ -15,7 +15,7 @@
 
   if( $total_post_count > 0 )  : 
 ?>
-<section id="featured-images-settings" class="wdss-section">
+<section id="featured-post-content-settings" class="wdss-section">
   <div class="wdss-section-header">
     <h2 class="section-toggler">Featured Images </h2>
     <div class="wdss-section-header-togglers">

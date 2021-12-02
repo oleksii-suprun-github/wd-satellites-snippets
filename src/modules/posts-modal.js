@@ -2,8 +2,9 @@
 import {
 	check,
 	uncheck,
-	notification
 } from './helpers';
+import { notification } from './notifications';
+
 export default function getPostsModal(obj) {
 
 	const html = document.querySelector('html');
@@ -174,7 +175,11 @@ export default function getPostsModal(obj) {
 									context.insertAdjacentHTML('beforeend', response);
 									if (not_found_msg) not_found_msg.remove();
 								} else {
-									info_panel.insertAdjacentHTML('afterbegin', not_found_msg_template);
+									
+									if(!document.querySelector('.wdss-modal-not-found-msg')) {
+										info_panel.insertAdjacentHTML('afterbegin', not_found_msg_template);
+									}
+
 									toggle_all_btn.classList.add('inactive');
 									execute_btn.classList.add('inactive');
 								}

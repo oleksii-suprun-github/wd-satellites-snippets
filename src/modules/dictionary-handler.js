@@ -5,20 +5,20 @@ export default function dictionaryHandler(dictionary) {
 
   // Constants diclarations
   const root_el = document.querySelector(dictionary.root_el);
-  const add_item_button = root_el.querySelector('.wdss-list-item-handler.add');
+  const add_item_button = root_el.querySelector('.wdss-button.wdss-table-add');
   const save_dictionary_button = root_el.querySelector('.save-dictionary');
   const form = document.querySelector('#wdss-settings-page form');
-  const table = root_el.querySelector('.wdss-list-table tbody');
+  const table = root_el.querySelector('.wdss-table tbody');
   const url = root_el.querySelector('input[type="text"]');
   
   // Counts initial dictionary options
-  let table_rows = jQuery(`${dictionary.root_el} .wdss-list-table tbody tr`);
+  let table_rows = jQuery(`${dictionary.root_el} .wdss-table tbody tr`);
   let table_rows_ids = [];
   jQuery.each(table_rows, function() {table_rows_ids.push(this.id)});
 
   // Sends added rules to DB with wp_update_option func via ajax
   function updateDictionary() {
-    let dictionary_rows = jQuery(`${dictionary.root_el} .wdss-list-table tbody tr`);
+    let dictionary_rows = jQuery(`${dictionary.root_el} .wdss-table tbody tr`);
     let dictionary_data = [];
 
     dictionary_rows.each((index, row) => {
@@ -37,8 +37,8 @@ export default function dictionaryHandler(dictionary) {
       type : 'post',
       dataType: 'json',
       data : data_obj,
-      success : function(response) {
-        let status_msg = root_el.querySelector('.wdss-list-table-actions span');
+      success : function() {
+        let status_msg = root_el.querySelector('.wdss-table-actions span');
         if(status_msg) status_msg.remove();
         
         save_dictionary_button.insertAdjacentHTML('afterend', '<span class="msg successful">Table was updated</span>');
@@ -48,7 +48,7 @@ export default function dictionaryHandler(dictionary) {
         save_dictionary_button.classList.add('saved');
       },
       fail : function(error) {
-        let status_msg = root_el.querySelector('.wdss-list-table-actions span');
+        let status_msg = root_el.querySelector('.wdss-table-actions span');
         if(status_msg) status_msg.remove();
 
         save_dictionary_button.insertAdjacentHTML('afterend', '<span class="msg error">Error, look at information in console</span>');
@@ -72,7 +72,7 @@ export default function dictionaryHandler(dictionary) {
       table.insertAdjacentHTML('beforeend',`
       <tr id="${wdss_localize.wp_rand}">
         <td>${url_temp}</td>
-        <td class="wdss-list-table__remove-item"><i class="fas fa-trash"></i></td>
+        <td class="wdss-table__remove-item"><i class="fas fa-trash"></i></td>
       </tr>
       `);
     }
@@ -86,12 +86,12 @@ export default function dictionaryHandler(dictionary) {
       this.closest('tr').remove();
     }
   }
-  jQuery(document).on('click',`${dictionary.root_el} .wdss-list-table__remove-item i`, removeItem);
+  jQuery(document).on('click',`${dictionary.root_el} .wdss-table__remove-item i`, removeItem);
 
   // Checks if no unsaved changes are left
   function onSave(e) {
     // Counts actual (on save) dictionary options
-    let current_table_rows = jQuery(`${dictionary.root_el} .wdss-list-table tbody tr`);
+    let current_table_rows = jQuery(`${dictionary.root_el} .wdss-table tbody tr`);
     let current_table_rows_ids = [];
     jQuery.each(current_table_rows, function() {
       current_table_rows_ids.push(this.id);
