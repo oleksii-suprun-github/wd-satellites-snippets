@@ -4,6 +4,10 @@ class Wd_Satellites_Snippets_Admin_Options {
 
 	// Last-modifed Settings
 	public function wdss_last_modified() {
+
+		$count_posts = wp_count_posts();
+		$published_posts = $count_posts->publish;
+
 				function last_modified_default() {
 					$LastModified_unix = getlastmod();
 					$LastModified = gmdate( "D, d M Y H:i:s \G\M\T", $LastModified_unix );
@@ -106,7 +110,27 @@ class Wd_Satellites_Snippets_Admin_Options {
 					}
 				}
 
-				if( function_exists('pll_the_languages') ) {
+				function last_modified_landing() {
+					$LastModified_unix = getlastmod();
+					$LastModified = gmdate("D, d M Y H:i:s \G\M\T", $LastModified_unix);
+					$IfModifiedSince = false;
+					if (isset($_ENV['HTTP_IF_MODIFIED_SINCE'])) {
+							$IfModifiedSince = strtotime(substr($_ENV['HTTP_IF_MODIFIED_SINCE'], 5));
+					}
+					if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+							$IfModifiedSince = strtotime(substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 5));
+					}
+					if ($IfModifiedSince && $IfModifiedSince >= $LastModified_unix) {
+							header($_SERVER['SERVER_PROTOCOL'] . ' 304 Not Modified');
+							exit;
+					}
+					header('Last-Modified: '. $LastModified);
+				}
+
+				if($published_posts <= 1) {
+					last_modified_landing();
+				}
+				elseif( function_exists('pll_the_languages') ) {
 					add_action( 'template_redirect', 'last_modified_polylang' );
 				}
 				else {

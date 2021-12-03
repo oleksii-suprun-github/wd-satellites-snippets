@@ -37,6 +37,7 @@ html.fixed::before {
 #wdss-settings-page .wdss-setting-group#wdss-featured-images-group {
   max-height: 350px;
   overflow-y: auto;
+  background: #f0f0f1;
 }
 #wdss-settings-page .wdss-setting-group.hidden {
   position: relative;
@@ -320,6 +321,9 @@ div.disabled:before {
   line-height: 1.3;
   font-weight: 600;
   color: #222;
+}
+#wdss-fix-validation-errors {
+  margin-bottom: 35px;
 }
 @media screen and (max-width: 550px) {
   .wdss-setting-item label span, 
@@ -866,17 +870,20 @@ button#wdss-toggle-options {
 
 /* Inline Tables */
 .wdss-table-description {
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 .wdss-table-content {
   position: relative;
 }
-.wdss-setting-item  .wdss-table thead {
+.wdss-setting-item .wdss-table thead {
   background: #f0f0f1;
 }
-.wdss-setting-item  .wdss-table th {
+.wdss-setting-item .wdss-table th {
   padding: 5px;
   border: 1px solid;
+}
+.wdss-setting-item .wdss-table th:last-of-type {
+  width: 10%;
 }
 .wdss-table-handler {
   display: flex;
@@ -923,7 +930,6 @@ button#wdss-toggle-options {
   margin: 0 auto;  
 }
 .wdss-table td.wdss-table__remove-item {
-  width: 10%;
   padding-top: 8px;
 }
 @media screen and (max-width: 1199px) {

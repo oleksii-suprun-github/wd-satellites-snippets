@@ -8,6 +8,12 @@
   </div>
   <div class="wdss-row hidden">
     <div class="wdss-section-content">
+
+    <div id="wdss-fix-validation-errors" class="wdss-setting-item">
+          <span>Fix Validation Errors<br><small>Be sure to create DB backup first</small></span>
+          <button id="wdss-fix-validation-errors__choose" type="button" class="wdss-button">Open settings</button>
+		  </div>
+
       <div class="wdss-setting-item wdss-table-handler">
           <div class="wdss-table-description">
             <strong>Provide URLs with images which will be EXCLUDED from post content</strong>
