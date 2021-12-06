@@ -3,7 +3,10 @@ import {
 	check,
 	uncheck,
 } from './helpers';
-import { notification } from './notifications';
+
+import { Notification } from './notifications';
+let notification = new Notification;
+
 
 export default function getPostsModal(obj) {
 
@@ -49,11 +52,16 @@ export default function getPostsModal(obj) {
 		}
 
 		if(window.next_fetched_page === undefined) {
-			notification('Enter max posts per fetch count. The minimum is 100: ', 'prompt', openModal);
+			notification.prompt('Enter max posts per fetch count. The minimum is 100: ', openModal);
 			console.log(`Total fetchable pages: ${total_pages_info}`);
 		}
 		else {
-			notification('Please, reload the page first', 'info');
+			notification.info('Please, reload the page first');
+		}
+
+		function checkNoResults() {
+			let not_found_msg = modal.querySelector('.wdss-modal-not-found-msg');
+			if (not_found_msg) not_found_msg.remove();
 		}
 
 		function openModal(set_max_posts_per_fetch) {
@@ -120,13 +128,12 @@ export default function getPostsModal(obj) {
 			toggle_all_btn.addEventListener('click', toggleAllCheckboxes);
 
 			if (total_pages_info === window.next_fetched_page) {
-				notification('You achived the last page', 'info');
+				notification.info('You achived the last page');
 				load_more_btn.classList.add('inactive');
 				return;
 			}
 
-			let not_found_msg = modal.querySelector('.wdss-modal-not-found-msg');
-			if (not_found_msg) not_found_msg.remove();
+			checkNoResults();
 
 			load_more_btn.classList.add('inactive');
 			modal_body.classList.add('loading');
@@ -173,9 +180,9 @@ export default function getPostsModal(obj) {
 
 								if (response) {
 									context.insertAdjacentHTML('beforeend', response);
-									if (not_found_msg) not_found_msg.remove();
+									checkNoResults();
 								} else {
-									
+								
 									if(!document.querySelector('.wdss-modal-not-found-msg')) {
 										info_panel.insertAdjacentHTML('afterbegin', not_found_msg_template);
 									}
@@ -260,8 +267,7 @@ export default function getPostsModal(obj) {
 			get_posts_btn.classList.add('inactive');
 			welcome_msg.classList.remove('active');
 
-			let not_found_msg = modal.querySelector('.wdss-modal-not-found-msg');
-			if (not_found_msg) not_found_msg.remove();
+			checkNoResults();
 
 			console.log(`Current fetched pages: ${window.next_fetched_page}`);
 			window.next_fetched_page = Math.ceil(total_posts / 100);
@@ -327,7 +333,7 @@ export default function getPostsModal(obj) {
 				let proceded_posts_ids;
 
 				if (!proceded_posts.length) {
-					notification('Please, select the posts which will be proceded', 'info');
+					notification.info('Please, select the posts which will be proceded');
 					return;
 				}
 				if (!confirm('Are you ready to start?')) return;

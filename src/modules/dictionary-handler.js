@@ -1,4 +1,6 @@
 import {hideMessage, areArrsEqual} from "./helpers";
+import {Notification} from './notifications';  
+let notification = new Notification;
 
 // Title Dictionary Handler
 export default function dictionaryHandler(dictionary) {
@@ -8,6 +10,7 @@ export default function dictionaryHandler(dictionary) {
   const add_item_button = root_el.querySelector('.wdss-button.wdss-table-add');
   const save_dictionary_button = root_el.querySelector('.save-dictionary');
   const form = document.querySelector('#wdss-settings-page form');
+  const save_form_btn = document.querySelector('.wdss-button.submit');
   const table = root_el.querySelector('.wdss-table tbody');
   const url = root_el.querySelector('input[type="text"]');
   
@@ -82,14 +85,17 @@ export default function dictionaryHandler(dictionary) {
   // Removes rule from dictionary
   function removeItem() {
     save_dictionary_button.classList.remove('saved');
-    if(confirm('Remove this rule from table?')) {
-      this.closest('tr').remove();
-    }
+    notification.confirm('Remove this rule from table?').then( result => {
+      if(result === true) {
+        this.closest('tr').remove();
+      }
+    });
   }
   jQuery(document).on('click',`${dictionary.root_el} .wdss-table__remove-item i`, removeItem);
 
   // Checks if no unsaved changes are left
-  function onSave(e) {
+  async function onSave(e) {
+
     // Counts actual (on save) dictionary options
     let current_table_rows = jQuery(`${dictionary.root_el} .wdss-table tbody tr`);
     let current_table_rows_ids = [];

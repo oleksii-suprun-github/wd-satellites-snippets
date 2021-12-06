@@ -155,7 +155,8 @@ class Wd_Satellites_Snippets_Admin {
 				<td><?= $post->id;?></td>
 				<td><?= $post->title->rendered;?></td>
 				<td><?= $post->status;?></td>
-				<td><?= $post->date;?></td>				
+				<td><?= $post->date;?></td>		
+				<td><?= $post->link;?></td>				
 			</tr>
 		<?php
 			}
@@ -164,6 +165,27 @@ class Wd_Satellites_Snippets_Admin {
 	}
 
 
+
+	// All posts modal
+	public function wdss_get_all_posts_modal() {
+		check_ajax_referer( 'broken-featured-list-nonce', 'broken_featured_nonce1', false );
+		$posts = json_decode(stripslashes($_POST['fetched_list']));
+
+		foreach($posts as $post) {
+		?>
+			<tr class="wdss-table-row post">
+				<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->id; ?>"></td>
+				<td><?= $post->id;?></td>
+				<td><?= $post->title->rendered;?></td>
+				<td><?= $post->status;?></td>
+				<td><?= $post->date;?></td>		
+				<td><?= $post->link;?></td>				
+			</tr>
+		<?php
+
+		}
+		die();
+	}
 
 
 

@@ -49,9 +49,15 @@ html.fixed::before {
 #wdss-settings-page {
   margin-top: 35px;
 }
+#wdss-settings-page h1 {
+  margin-bottom: 5px;
+}
 #wdss-settings-page .container {
   width: 95%;
   padding: 0 10px;
+}
+.wdss-settings-page form {
+  margin-top: 20px;
 }
 #wdss-settings-page .notice {
   display: block !important;
@@ -160,6 +166,15 @@ div.disabled:before {
   padding: 50px;
   border: 1px solid #1d2327;
   box-shadow: 0.5px 0.5px 0.5px #1d2327;
+}
+.notification.confirm {
+  padding: 30px 80px;
+}
+.notification.confirm .notification-content {
+  margin-bottom: 25px;
+}
+.notification.confirm .notification-content-inputs button:first-of-type {
+  margin-right: 25px;
 }
 .notification-header i {
   position: absolute;
@@ -503,7 +518,7 @@ div.disabled:before {
 .wdss-button.get-posts {
   background: #1ea71e;
 }
-#submit.wdss-button.submit {
+.wdss-button.submit {
   margin-top: 35px;
 }
 #wdss-featured-images__reset {
