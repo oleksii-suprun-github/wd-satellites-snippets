@@ -4,7 +4,9 @@ import {
 	uncheck,
 } from './helpers';
 
-import { Notification } from './notifications';
+import {
+	Notification
+} from './notifications';
 let notification = new Notification;
 
 
@@ -17,9 +19,9 @@ export default function getPostsModal(obj) {
 
 	let total_posts = wdss_localize.total_post_count;
 	let total_pages_info = Math.ceil(total_posts / 100);
-	
+
 	window[`${obj.fetch_action}-setup`] = true;
-	
+
 	function Init() {
 		const modal_body = modal.querySelector('.wdss-modal-body');
 		const info_panel = modal.querySelector('.wdss-modal-informaion-panel');
@@ -36,7 +38,7 @@ export default function getPostsModal(obj) {
 		const not_found_msg_template = '<span class="wdss-modal-not-found-msg">No results...</span>';
 		const load_more_btn_template = '<button type="button" class="wdss-button load-more">Fetch next page</button>';
 
-		const completed_msg_template = '<span class="msg successful">Completed!<br><small>Please wait several minutes while changes are implementing</small></span>';
+		const completed_msg_template = '<span class="msg successful">Completed!<br><small>It can take several minutes while changes are implementing</small></span>';
 		const error_msg_template = '<span class="msg error">An Error occured!<br><smallLook in console for more details</small></span>';
 
 		const modal_title = modal.querySelector('.wdss-modal-title');
@@ -48,24 +50,23 @@ export default function getPostsModal(obj) {
 		let max_posts_per_fetch;
 		let min_posts_per_fetch = 100;
 
-		if(modal_title.childNodes.length < 1) {
+		if (modal_title.childNodes.length < 1) {
 			modal_title.insertAdjacentHTML('afterbegin', modal_title_value);
 		}
 
-		if(window[`${obj.fetch_action}-setup`] === true) {
+		if (window[`${obj.fetch_action}-setup`] === true) {
 			notification.prompt('Enter max posts per fetch count. The minimum is 100: ', openModal);
 			console.log(`Total fetchable pages: ${total_pages_info}`);
-		}
-		else {
+		} else {
 			notification.info('Please, reload the page first');
 		}
 
 		function checkNoResults(results = null) {
 
-			if(results && results.length > 0) {
+			if (results && results.length > 0) {
 				info_panel.classList.remove('active');
 			}
-			if(!results) {
+			if (!results) {
 				let not_found_msg = modal.querySelector('.wdss-modal-not-found-msg');
 				if (not_found_msg) not_found_msg.remove();
 			}
@@ -83,7 +84,7 @@ export default function getPostsModal(obj) {
 				}
 			}
 			if (is_lite_mode) total_posts = max_posts_per_fetch;
-		
+
 			window.next_fetched_page = Math.ceil(total_posts / 100);
 
 			modal.classList.add('active');
@@ -97,7 +98,7 @@ export default function getPostsModal(obj) {
 			modal.classList.remove('active');
 			html.classList.remove('fixed');
 			let notifications = Array.from(document.querySelectorAll('.notification'));
-			notifications.forEach(notification =>  {
+			notifications.forEach(notification => {
 				notification.remove();
 			})
 		}
@@ -136,7 +137,7 @@ export default function getPostsModal(obj) {
 			toggle_all_btn.addEventListener('click', toggleAllCheckboxes);
 
 			if (total_pages_info === window.next_fetched_page) {
-				notification.info('You achived the last page');
+				notification.info('You achived the last page', modal);
 				load_more_btn.classList.add('inactive');
 				return;
 			}
@@ -164,45 +165,45 @@ export default function getPostsModal(obj) {
 						jQuery.ajax({
 							url: wdss_localize.url,
 							type: 'post',
-							data: data_obj,
-							success: function(response) {
-								console.log(`Current fetched page: ${window.next_fetched_page}`);
-								window.next_fetched_page++;
+							data: data_obj
+						}).
+						done(function(response) {
+							console.log(`Current fetched page: ${window.next_fetched_page}`);
+							window.next_fetched_page++;
 
-								if (window.next_fetched_page < total_pages_info) {
-									console.log(`Next page to fetch: ${window.next_fetched_page}`);
-								} else {
-									console.log(`This is the last page to fetch`);
-								}
-
-								let info_msg = Array.from(modal.querySelectorAll('.msg'));
-
-								if (info_msg) {
-									info_msg.forEach(msg => msg.remove());
-								}
-
-								modal_body.classList.remove('loading');
-								load_more_btn.classList.remove('inactive');
-								toggle_all_btn.classList.remove('inactive');
-								execute_btn.classList.remove('inactive');
-
-								if (response) {
-									context.insertAdjacentHTML('beforeend', response);
-									checkNoResults(response);
-								} else {
-								
-									if(!document.querySelector('.wdss-modal-not-found-msg')) {
-										info_panel.insertAdjacentHTML('afterbegin', not_found_msg_template);
-									}
-
-									toggle_all_btn.classList.add('inactive');
-									execute_btn.classList.add('inactive');
-								}
-
-								updateFetchedPostsNumber();
+							if (window.next_fetched_page < total_pages_info) {
+								console.log(`Next page to fetch: ${window.next_fetched_page}`);
+							} else {
+								console.log(`This is the last page to fetch`);
 							}
+
+							let info_msg = Array.from(modal.querySelectorAll('.msg'));
+
+							if (info_msg) {
+								info_msg.forEach(msg => msg.remove());
+							}
+
+							modal_body.classList.remove('loading');
+							load_more_btn.classList.remove('inactive');
+							toggle_all_btn.classList.remove('inactive');
+							execute_btn.classList.remove('inactive');
+
+							if (response) {
+								context.insertAdjacentHTML('beforeend', response);
+								checkNoResults(response);
+							} else {
+
+								if (!document.querySelector('.wdss-modal-not-found-msg')) {
+									info_panel.insertAdjacentHTML('afterbegin', not_found_msg_template);
+								}
+
+								toggle_all_btn.classList.add('inactive');
+								execute_btn.classList.add('inactive');
+							}
+
+							updateFetchedPostsNumber();
 						});
-					})
+					});
 			} catch (e) {
 				console.log(e);
 			}
@@ -256,13 +257,13 @@ export default function getPostsModal(obj) {
 			jQuery.ajax({
 				url: wdss_localize.url,
 				type: 'post',
-				data: data_obj,
-				success: function(response) {
-					checkNoResults(response);
-					modalHandler.call(context, response);
-					modal_body.classList.remove('loading');
-					get_posts_btn.classList.add('inactive');
-				}
+				data: data_obj
+			}).
+			done(function(response) {
+				checkNoResults(response);
+				modalHandler.call(context, response);
+				modal_body.classList.remove('loading');
+				get_posts_btn.classList.add('inactive');
 			});
 		}
 
@@ -336,49 +337,63 @@ export default function getPostsModal(obj) {
 				execute_btn.classList.add('inactive');
 			}
 
-			execute_btn.addEventListener('click', () => {
-				const proceded_posts = Array.from(modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]:checked'));
-				let proceded_posts_ids_arr = [];
-				let proceded_posts_ids;
+			execute_btn.addEventListener('click', (e) => {
+				e.preventDefault();
 
-				if (!proceded_posts.length) {
-					notification.info('Please, select the posts which will be proceded');
-					return;
-				}
-				if (!confirm('Are you ready to start?')) return;
+				notification.confirm('Are you ready to start?').then(result => {
+					if (result !== true) {
+						return;
+					} else {
+						const proceded_posts = Array.from(modal.querySelectorAll('.wdss-table-post__select input[type="checkbox"]:checked'));
+						let proceded_posts_ids_arr = [];
+						let proceded_posts_ids;
 
-				get_posts_btn.classList.remove('inactive');
-				proceded_posts.forEach(post => {
-					proceded_posts_ids_arr.push(post.value);
-				});
+						if (!proceded_posts.length) {
+							notification.info('Please, select the posts which will be proceded');
+							return;
+						}
 
-				proceded_posts_ids = proceded_posts_ids_arr.join(',');
-				console.log(`Selected IDs: ${proceded_posts_ids}`);
-				clearAll();
+						get_posts_btn.classList.remove('inactive');
+						proceded_posts.forEach(post => {
+							proceded_posts_ids_arr.push(post.value);
+						});
 
-				let data_obj = {
-					selected_list: JSON.stringify(proceded_posts_ids),
-					action: obj.post_action
-				};
-				data_obj[obj.post_nonce_name] = obj.post_nonce_value;
+						proceded_posts_ids = proceded_posts_ids_arr.join(',');
+						console.log(`Selected IDs: ${proceded_posts_ids}`);
+						clearAll();
 
-				jQuery.ajax({
-					url: wdss_localize.url,
-					type: 'post',
-					data: data_obj,
-					success: function() {
+						let data_obj = {
+							selected_list: JSON.stringify(proceded_posts_ids),
+							action: obj.post_action
+						};
+						data_obj[obj.post_nonce_name] = obj.post_nonce_value;
+
 						get_posts_btn.classList.add('inactive');
-						info_panel.insertAdjacentHTML('afterbegin', completed_msg_template);
-					},
-					error: function(error) {
-						info_panel.insertAdjacentHTML('afterbegin', error_msg_template);
-						console.log(error);
+						if(load_more_btn) load_more_btn.classList.add('inactive');
+
+						modal_body.classList.add('processing');
+
+						jQuery.ajax({
+							url: wdss_localize.url,
+							type: 'post',
+							data: data_obj
+						}).
+						done(function() {
+							info_panel.insertAdjacentHTML('afterbegin', completed_msg_template);
+							info_panel.classList.add('active');
+						}).
+						fail(function(error) {
+							info_panel.insertAdjacentHTML('afterbegin', error_msg_template);
+							console.log(error);
+						}).
+						always(function(){
+							modal_body.classList.remove('processing');
+						});
 					}
 				});
 			});
 		}
 	}
-
 	if (open_modal_btn) {
 		open_modal_btn.addEventListener('mousedown', Init);
 	}

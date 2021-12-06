@@ -117,26 +117,6 @@
                       </label>
                     </div>
 
-                    <div id="wdss-auto-alt-attr" class="wdss-setting-item">
-                        <label>
-                          <span>Auto Alt Attributes</span>
-                          <?php 
-                            checkbox_handler_html(['field_name' => 'wdss_auto_alt_attribute']); 
-                            if( get_option('wdss_auto_alt_attribute') == '' ) update_option( 'wdss_auto_alt_attribute', '0' );               
-                          ?>    
-                      </label>
-                    </div>
-
-                    <div id="wdss-auto-width-height-attr" class="wdss-setting-item">
-                        <label>
-                          <span title="Only for single posts & local loaded images">Auto Width/Height Attributes <sup>?</sup></span>
-                          <?php 
-                            checkbox_handler_html(['field_name' => 'wdss_auto_widght_height_attr']); 
-                            if( get_option('wdss_auto_widght_height_attr') == '' ) update_option( 'wdss_auto_widght_height_attr', '0' );               
-                          ?>    
-                      </label>
-                    </div>
-
                     <div id="wdss-comments-passive-listener-fix" class="wdss-setting-item">
                         <label>
                           <span title="Fixes *Remove passive event listener* Pagespeed warning">WP Comments Fix <sup>?</sup></span>

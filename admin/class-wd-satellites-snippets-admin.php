@@ -147,7 +147,26 @@ class Wd_Satellites_Snippets_Admin {
 		check_ajax_referer( 'fix-posts-validation-errors', 'fix_posts_validation_errors', false );
 		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
 
-		var_dump($selected_ids_arr);
+		include_once( dirname(__DIR__) . 'options/inc/helpers.php');
+
+		if( !empty(explode(',', $selected_ids_arr)) ) {
+			$selected_ids_arr = explode(',', $selected_ids_arr);
+
+			foreach($selected_ids_arr as $id) {
+				$post = get_post($id);
+				$filtered_content_stage1 = regex_post_content_filters($post->post_content);
+				$filtered_content_stage2 = set_image_dimension($filtered_content_stage1);
+				$filtered_content_stage3 = alt_singlepage_autocomplete($id, $filtered_content_stage2);
+
+				$args = array(
+					'ID' => $id,
+					'post_content' => $filtered_content_stage3
+				);
+
+				wp_update_post($args);
+
+			}
+		}
 
 		die();
 	}

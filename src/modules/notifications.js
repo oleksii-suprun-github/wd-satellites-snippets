@@ -2,16 +2,21 @@
 
 	export class Notification {
 
-		static closeNotification(target, type) {
+		static closeNotification(target, type, context) {
+			let is_module_block = context ? context.includes('wdss-modal') : null; 
+			let html = document.querySelector('html');
+			
 			if(target.closest('.notification')) {
 				target.closest('.notification').remove();
 			}
-			if (type === 'prompt') html.classList.remove('fixed');
+			if (type === 'prompt' || is_module_block) {
+				html.classList.remove('fixed');
+			}
 		}
 
 
 		
-		static template(msg, type) {
+		static template(msg, type, context) {
 			let notification_template;
 			let html = document.querySelector('html');
 			let notification_class;
@@ -55,8 +60,7 @@
 					let close_btn =  document.querySelector('.notification-header i');
 
 					close_btn.addEventListener('click', () => { 
-						Notification.closeNotification(close_btn);
-						html.classList.remove('fixed');
+						Notification.closeNotification(close_btn, type, context);
 					});
 				}
 		}
@@ -86,8 +90,8 @@
 
 
 
-		info(msg) {
-			Notification.template(msg, 'info');
+		info(msg, context = null) {
+			Notification.template(msg, 'info', context);
 		}
 
 
