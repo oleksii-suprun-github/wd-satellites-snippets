@@ -238,7 +238,7 @@ export default function getPostsModal(obj) {
 						break;
 					}
 				}
-				window.next_fetched_page++;
+				++window.next_fetched_page;
 				if (window.next_fetched_page < total_pages_info) {
 					console.log(`Next page to fetch: ${window.next_fetched_page}`);
 				} else {
@@ -305,9 +305,11 @@ export default function getPostsModal(obj) {
 				execute_btn.classList.remove('inactive');
 			}
 			else {
-				load_more_btn.addEventListener('click', function() {
-					fetchMorePostsHandler();
-				});
+				if(load_more_btn) {
+					load_more_btn.addEventListener('click', function() {
+						fetchMorePostsHandler();
+					});
+				}
 			}
 
 			function clearAll() {
