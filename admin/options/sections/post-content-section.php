@@ -17,7 +17,6 @@ function wdss_manual_validation_fix() {
 
 
 add_action('publish_post', 'wdss_manual_validation_fix');
-add_action('save_post', 'wdss_manual_validation_fix');
 add_action('draft_to_publish', 'wdss_manual_validation_fix');
 add_action('new_to_publish', 'wdss_manual_validation_fix');
 add_action('pending_to_publish', 'wdss_manual_validation_fix');

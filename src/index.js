@@ -34,8 +34,8 @@ function Init() {
       groupToggler(polylangSection);  
     }
 
-    dictionaryHandler(e410_Dictionary);
     dictionaryHandler(excludedHostsDictionary);
+    dictionaryHandler(e410_Dictionary);
 
     mediaFileChooser(organizationLogoChooser);
     resetValues(organizationLogoReset);

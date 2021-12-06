@@ -8,14 +8,10 @@ export default function dictionaryHandler(dictionary) {
   // Constants diclarations
   const root_el = document.querySelector(dictionary.root_el);
 
-  console.log(root_el);
-
   const add_item_button = root_el.querySelector('.wdss-button.wdss-table-add');
   const save_dictionary_button = root_el.querySelector('.save-dictionary');
   const form = document.querySelector('#wdss-settings-page form');
   const table = root_el.querySelector('.wdss-table-handler .wdss-table tbody');
-
-  console.log(table);
 
   const url = root_el.querySelector('input[type="text"]');
   
@@ -74,8 +70,6 @@ export default function dictionaryHandler(dictionary) {
     if(url.value) {
       save_dictionary_button.classList.remove('saved');
       let url_temp = url.value;
-  
-      console.log(url_temp);
 
       url.value = '';
   
