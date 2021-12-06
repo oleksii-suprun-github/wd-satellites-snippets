@@ -589,7 +589,7 @@ div.disabled:before {
   right: 0;
   margin: 0 auto;
   text-align: center;
-  content: 'Fetching results...';
+  content: 'Fetching information...';
   font-size: 3rem;
   z-index: 3;
   color: #fff;

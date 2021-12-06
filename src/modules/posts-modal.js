@@ -135,13 +135,6 @@ export default function getPostsModal(obj) {
 		function fetchMorePostsHandler() {
 
 			toggle_all_btn.addEventListener('click', toggleAllCheckboxes);
-
-			if (total_pages_info === window.next_fetched_page) {
-				notification.info('You achived the last page', modal);
-				load_more_btn.classList.add('inactive');
-				return;
-			}
-
 			checkNoResults();
 
 			load_more_btn.classList.add('inactive');
@@ -238,7 +231,7 @@ export default function getPostsModal(obj) {
 						break;
 					}
 				}
-				++window.next_fetched_page;
+				window.next_fetched_page++;
 				if (window.next_fetched_page < total_pages_info) {
 					console.log(`Next page to fetch: ${window.next_fetched_page}`);
 				} else {
@@ -299,19 +292,16 @@ export default function getPostsModal(obj) {
 				load_more_btn.classList.add('inactive');
 			}
 
-			if (window.next_fetched_page < total_pages_info && load_more_btn) {
-				load_more_btn.classList.remove('inactive');
+			if (window.next_fetched_page < total_pages_info) {
+				if(load_more_btn) load_more_btn.classList.remove('inactive');
 				toggle_all_btn.classList.remove('inactive');
 				execute_btn.classList.remove('inactive');
+			
+				load_more_btn.addEventListener('click', function() {
+					fetchMorePostsHandler();
+				});
 			}
-			else {
-				if(load_more_btn) {
-					load_more_btn.addEventListener('click', function() {
-						fetchMorePostsHandler();
-					});
-				}
-			}
-
+			
 			function clearAll() {
 				execute_btn.classList.add('inactive');
 				toggle_all_btn.classList.add('inactive');
