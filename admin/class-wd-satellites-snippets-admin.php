@@ -64,8 +64,11 @@ class Wd_Satellites_Snippets_Admin {
     }
 
 		if( wp_doing_ajax() ) {
-			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured_modal') );
-			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured_modal') );
+			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured') );
+			add_action( 'wp_ajax_remove_broken_featured',  array($this, 'wdss_remove_broken_featured') );
+
+			add_action( 'wp_ajax_fetch_all_posts',  array($this, 'wdss_get_all_posts') );
+			add_action( 'wp_ajax_fix_posts_validation_errors', array($this, 'wdss_fix_validation_errors') );
 			
 			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
 			add_action( 'wp_ajax_excluded_hosts_dictionary_update', array($this, 'wdss_excluded_hosts_dictionary_handler') );		
@@ -139,8 +142,20 @@ class Wd_Satellites_Snippets_Admin {
 
 
 
+	// Fixes Posts Validation Errors with Ajax Call
+	public function wdss_fix_validation_errors() {
+		check_ajax_referer( 'fix-posts-validation-errors', 'fix_posts_validation_errors', false );
+		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
+
+		var_dump($selected_ids_arr);
+
+		die();
+	}
+	
+
+
 	// Posts with broken Featured modal
-	public function wdss_get_broken_featured_modal() {
+	public function wdss_get_broken_featured() {
 		check_ajax_referer( 'broken-featured-list-nonce', 'broken_featured_nonce1', false );
 		$posts = json_decode(stripslashes($_POST['fetched_list']));
 
@@ -156,7 +171,7 @@ class Wd_Satellites_Snippets_Admin {
 				<td><?= $post->title->rendered;?></td>
 				<td><?= $post->status;?></td>
 				<td><?= $post->date;?></td>		
-				<td><?= $post->link;?></td>				
+				<td><a href="<?= $post->link;?>" target="_blank">Open</a></td>				
 			</tr>
 		<?php
 			}
@@ -167,8 +182,8 @@ class Wd_Satellites_Snippets_Admin {
 
 
 	// All posts modal
-	public function wdss_get_all_posts_modal() {
-		check_ajax_referer( 'broken-featured-list-nonce', 'broken_featured_nonce1', false );
+	public function wdss_get_all_posts() {
+		check_ajax_referer( 'all-posts-list-nonce', 'all_posts_list_nonce', false );
 		$posts = json_decode(stripslashes($_POST['fetched_list']));
 
 		foreach($posts as $post) {
@@ -179,7 +194,7 @@ class Wd_Satellites_Snippets_Admin {
 				<td><?= $post->title->rendered;?></td>
 				<td><?= $post->status;?></td>
 				<td><?= $post->date;?></td>		
-				<td><?= $post->link;?></td>				
+				<td><a href="<?= $post->link;?>" target="_blank">Open</a></td>	
 			</tr>
 		<?php
 
@@ -216,6 +231,9 @@ class Wd_Satellites_Snippets_Admin {
 
 				'wp_rand' => wp_rand(),
 				'url' => admin_url( 'admin-ajax.php' ),
+
+				'all_posts_list_nonce' => wp_create_nonce('all-posts-list-nonce'),
+				'fix_posts_validation_errors_nonce' => wp_create_nonce('fix-posts-validation-errors-nonce'),
 
 				'broken_featured_list_nonce' => wp_create_nonce( 'broken-featured-list-nonce' ),
 				'remove_broken_featured_nonce' => wp_create_nonce( 'remove-broken-featured-nonce' ),

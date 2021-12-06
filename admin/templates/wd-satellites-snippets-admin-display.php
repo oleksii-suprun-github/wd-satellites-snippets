@@ -12,7 +12,6 @@
  */
 
   require_once('includes/input-handler.php');
-
   require_once('includes/form-handler.php');
 
   function wdss_settings_template() { ?>
@@ -41,7 +40,6 @@
             include_once('sections/schema-section.php');
             include_once('sections/custom-410s-section.php'); 
             include_once('sections/other-section.php');
-            include_once('includes/modal.php');
           ?>
 
           <input type="submit" name="submit" id="wdss-submit" class="wdss-button submit" value="<?= __('Save changes', 'wdss_domain') ?>">

@@ -17,12 +17,13 @@ export default function getPostsModal(obj) {
 
 	let total_posts = wdss_localize.total_post_count;
 	let total_pages_info = Math.ceil(total_posts / 100);
-	window.is_setup_stage = true;
-
+	
+	window[`${obj.fetch_action}-setup`] = true;
+	
 	function Init() {
 		const modal_body = modal.querySelector('.wdss-modal-body');
 		const info_panel = modal.querySelector('.wdss-modal-informaion-panel');
-		const context = document.querySelector('#wdss-exclude-posts-table tbody');
+		const context = modal.querySelector('tbody');
 
 		const execute_btn = modal.querySelector('.wdss-button.submit');
 		const toggle_all_btn = modal.querySelector('.wdss-button.toggle-all');
@@ -39,7 +40,7 @@ export default function getPostsModal(obj) {
 		const error_msg_template = '<span class="msg error">An Error occured!<br><smallLook in console for more details</small></span>';
 
 		const modal_title = modal.querySelector('.wdss-modal-title');
-		const modal_title_value = 'Delete Broken Featured Images';
+		const modal_title_value = obj.modal_title;
 
 		let load_more_btn;
 		let fetched_posts = [];
@@ -51,7 +52,7 @@ export default function getPostsModal(obj) {
 			modal_title.insertAdjacentHTML('afterbegin', modal_title_value);
 		}
 
-		if(window.next_fetched_page === undefined) {
+		if(window[`${obj.fetch_action}-setup`] === true) {
 			notification.prompt('Enter max posts per fetch count. The minimum is 100: ', openModal);
 			console.log(`Total fetchable pages: ${total_pages_info}`);
 		}
@@ -59,9 +60,15 @@ export default function getPostsModal(obj) {
 			notification.info('Please, reload the page first');
 		}
 
-		function checkNoResults() {
-			let not_found_msg = modal.querySelector('.wdss-modal-not-found-msg');
-			if (not_found_msg) not_found_msg.remove();
+		function checkNoResults(results = null) {
+
+			if(results && results.length > 0) {
+				info_panel.classList.remove('active');
+			}
+			if(!results) {
+				let not_found_msg = modal.querySelector('.wdss-modal-not-found-msg');
+				if (not_found_msg) not_found_msg.remove();
+			}
 		}
 
 		function openModal(set_max_posts_per_fetch) {
@@ -81,6 +88,7 @@ export default function getPostsModal(obj) {
 
 			modal.classList.add('active');
 			html.classList.add('fixed');
+			window[`${obj.fetch_action}-setup`] = false;
 		}
 
 		close_modal_btn.addEventListener('click', closeModal);
@@ -180,7 +188,7 @@ export default function getPostsModal(obj) {
 
 								if (response) {
 									context.insertAdjacentHTML('beforeend', response);
-									checkNoResults();
+									checkNoResults(response);
 								} else {
 								
 									if(!document.querySelector('.wdss-modal-not-found-msg')) {
@@ -209,7 +217,7 @@ export default function getPostsModal(obj) {
 				for (let i = 1; i <= window.next_fetched_page; i++) {
 					try {
 						promises.push(new Promise((resolve, reject) => {
-							fetch(document.location.origin + `/wp-json/wp/v2/posts?per_page=100&page=${i}`)
+							fetch(document.location.origin + `/wp-json/wp/v2/posts/?per_page=100&page=${i}`)
 								.then(response => {
 									return response.json();
 								})
@@ -250,6 +258,7 @@ export default function getPostsModal(obj) {
 				type: 'post',
 				data: data_obj,
 				success: function(response) {
+					checkNoResults(response);
 					modalHandler.call(context, response);
 					modal_body.classList.remove('loading');
 					get_posts_btn.classList.add('inactive');

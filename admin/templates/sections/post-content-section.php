@@ -1,4 +1,10 @@
 <section id="post-content-settings" class="wdss-section">
+
+  <?php 
+    include_once(dirname(__DIR__). '/includes/modal.php');
+    get_modal_template('fix-validation-posts-modal');
+  ?>
+
   <div class="wdss-section-header">
     <h2 class="section-toggler">Post Content</h2>
     <div class="wdss-section-header-togglers">

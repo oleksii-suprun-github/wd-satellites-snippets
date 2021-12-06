@@ -56,7 +56,7 @@ html.fixed::before {
   width: 95%;
   padding: 0 10px;
 }
-.wdss-settings-page form {
+#wdss-settings-page form {
   margin-top: 20px;
 }
 #wdss-settings-page .notice {
@@ -518,7 +518,7 @@ div.disabled:before {
 .wdss-button.get-posts {
   background: #1ea71e;
 }
-.wdss-button.submit {
+#wdss-settings-page form > .wdss-button.submit {
   margin-top: 35px;
 }
 #wdss-featured-images__reset {
@@ -592,7 +592,7 @@ div.disabled:before {
   z-index: 3;
   color: #fff;
 } 
-.wdss-modal-informaion-panel {
+.wdss-modal-informaion-panel.active {
   position: relative;
   height: calc(100% - 5%);
 }
@@ -657,7 +657,7 @@ div.disabled:before {
   }
 }
 @media screen and (max-width: 1200px) {
-  .wdss-modal-informaion-panel {
+  .wdss-modal-informaion-panel.active {
     height: 93%;
   }
 }
