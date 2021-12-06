@@ -7,11 +7,16 @@ export default function dictionaryHandler(dictionary) {
 
   // Constants diclarations
   const root_el = document.querySelector(dictionary.root_el);
+
+  console.log(root_el);
+
   const add_item_button = root_el.querySelector('.wdss-button.wdss-table-add');
   const save_dictionary_button = root_el.querySelector('.save-dictionary');
   const form = document.querySelector('#wdss-settings-page form');
-  const save_form_btn = document.querySelector('.wdss-button.submit');
-  const table = root_el.querySelector('.wdss-table tbody');
+  const table = root_el.querySelector('.wdss-table-handler .wdss-table tbody');
+
+  console.log(table);
+
   const url = root_el.querySelector('input[type="text"]');
   
   // Counts initial dictionary options
@@ -21,7 +26,7 @@ export default function dictionaryHandler(dictionary) {
 
   // Sends added rules to DB with wp_update_option func via ajax
   function updateDictionary() {
-    let dictionary_rows = jQuery(`${dictionary.root_el} .wdss-table tbody tr`);
+    let dictionary_rows = jQuery(`${dictionary.root_el} .wdss-table-handler .wdss-table tbody tr`);
     let dictionary_data = [];
 
     dictionary_rows.each((index, row) => {
@@ -70,6 +75,8 @@ export default function dictionaryHandler(dictionary) {
       save_dictionary_button.classList.remove('saved');
       let url_temp = url.value;
   
+      console.log(url_temp);
+
       url.value = '';
   
       table.insertAdjacentHTML('beforeend',`
