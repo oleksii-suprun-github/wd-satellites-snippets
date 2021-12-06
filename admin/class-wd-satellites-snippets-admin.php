@@ -52,7 +52,6 @@ class Wd_Satellites_Snippets_Admin {
 	public function wdss_init() {
 
     add_action( 'admin_menu', array($this, 'wdss_admin_menu'));
-		add_filter( 'auto_update_plugin', array($this, 'wdss_auto_update'), 100, 2 );
 
 		if ( is_admin_bar_showing() ) {
 			add_action( 'admin_bar_menu', array($this, 'wdss_add_adminbar_link'), 100);
@@ -65,8 +64,11 @@ class Wd_Satellites_Snippets_Admin {
     }
 
 		if( wp_doing_ajax() ) {
-			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured_modal') );
+			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured') );
 			add_action( 'wp_ajax_remove_broken_featured',  array($this, 'wdss_remove_broken_featured') );
+
+			add_action( 'wp_ajax_fetch_all_posts',  array($this, 'wdss_get_all_posts') );
+			add_action( 'wp_ajax_fix_posts_validation_errors', array($this, 'wdss_fix_validation_errors') );
 			
 			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
 			add_action( 'wp_ajax_excluded_hosts_dictionary_update', array($this, 'wdss_excluded_hosts_dictionary_handler') );		
@@ -117,79 +119,106 @@ class Wd_Satellites_Snippets_Admin {
 	}
 
 
+
 	// Removes broken Featured with Ajax Call
 	public function wdss_remove_broken_featured() {
-		check_ajax_referer( 'remove-broken-featured-nonce', 'remove_broken_featured_nonce', false );
+		check_ajax_referer( 'remove-broken-featured-nonce', 'broken_featured_nonce2', false );
 		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
 
-		var_dump("Selected ids: " . $selected_ids_arr);
+		var_dump($selected_ids_arr);
 
 		if( !empty(explode(',', $selected_ids_arr)) ) {
 			$selected_ids_arr = explode(',', $selected_ids_arr);
 			foreach($selected_ids_arr as $id) {
 				delete_post_thumbnail($id);
+			}
+		}
+		else {
+			delete_post_thumbnail(intval($selected_ids_arr));
+		}
 
-				$media = get_attached_media('image', $id);
-				$media = array_shift( $media );
-				$image_url = $media->guid;
+		die();
+	}
 
-				if( $image_url ) {
-						if(!check_url_status($image_url, 'local-only')) {
-							if( wp_delete_attachment( $media->post_parent, true ) ) {
-								var_dump('Deleted attachment for #' . $id);
-							}
-							else {
-								var_dump('Cant delete attachment for #' . $id);
-							}
-						}
-				}
-				var_dump('Removed thumbnail for #' . $id);
+
+
+	// Fixes Posts Validation Errors with Ajax Call
+	public function wdss_fix_validation_errors() {
+		check_ajax_referer( 'fix-posts-validation-errors', 'fix_posts_validation_errors', false );
+		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
+
+		include_once( dirname(__DIR__) . 'options/inc/helpers.php');
+
+		if( !empty(explode(',', $selected_ids_arr)) ) {
+			$selected_ids_arr = explode(',', $selected_ids_arr);
+
+			foreach($selected_ids_arr as $id) {
+				$post = get_post($id);
+				$filtered_content_stage1 = regex_post_content_filters($post->post_content);
+				$filtered_content_stage2 = set_image_dimension($filtered_content_stage1);
+				$filtered_content_stage3 = alt_singlepage_autocomplete($id, $filtered_content_stage2);
+
+				$args = array(
+					'ID' => $id,
+					'post_content' => $filtered_content_stage3
+				);
+
+				wp_update_post($args);
+
 			}
 		}
 
 		die();
 	}
+	
 
 
 	// Posts with broken Featured modal
-	public function wdss_get_broken_featured_modal() {
-		check_ajax_referer( 'broken-featured-list-nonce', 'fetch_broken_featured_nonce', false );
+	public function wdss_get_broken_featured() {
+		check_ajax_referer( 'broken-featured-list-nonce', 'broken_featured_nonce1', false );
 		$posts = json_decode(stripslashes($_POST['fetched_list']));
 
 		foreach($posts as $post) {
-
-			if( has_post_thumbnail($post->id) ) {
-				$thumbnail_url = get_the_post_thumbnail_url($post->id);
-				$is_broken = !check_url_status($thumbnail_url, 'local-only');
-					
-				if( $is_broken ) {
-			?>
-				<tr class="wdss-table-row post">
-					<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->id; ?>"></td>
-					<td><?= $post->id;?></td>
-					<td><?= $post->title->rendered;?></td>
-					<td><?= $post->status;?></td>
-					<td><?= $post->date;?></td>		
-					<td><a target="_blank" href="<?= $post->link;?>">View post</a></td>				
-				</tr>
-			<?php
-				}
+			$thumbnail_url = get_the_post_thumbnail_url($post->id);
+			$is_broken = !check_url_status($thumbnail_url);
+				
+			if( $is_broken) {
+		?>
+			<tr class="wdss-table-row post">
+				<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->id; ?>"></td>
+				<td><?= $post->id;?></td>
+				<td><?= $post->title->rendered;?></td>
+				<td><?= $post->status;?></td>
+				<td><?= $post->date;?></td>		
+				<td><a href="<?= $post->link;?>" target="_blank">Open</a></td>				
+			</tr>
+		<?php
 			}
 		}
 		die();
 	}
 
 
-	// Enables Auto Update for this plugin
-	public function wdss_auto_update( $update, $item ){
-		$plugins = array (
-			'wd-satellites-snippets'
-		);
-	
-		if( in_array($item->slug, $plugins) )
-			return true; 
-		else
-			return $update; 
+
+	// All posts modal
+	public function wdss_get_all_posts() {
+		check_ajax_referer( 'all-posts-list-nonce', 'all_posts_list_nonce', false );
+		$posts = json_decode(stripslashes($_POST['fetched_list']));
+
+		foreach($posts as $post) {
+		?>
+			<tr class="wdss-table-row post">
+				<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->id; ?>"></td>
+				<td><?= $post->id;?></td>
+				<td><?= $post->title->rendered;?></td>
+				<td><?= $post->status;?></td>
+				<td><?= $post->date;?></td>		
+				<td><a href="<?= $post->link;?>" target="_blank">Open</a></td>	
+			</tr>
+		<?php
+
+		}
+		die();
 	}
 
 
@@ -221,6 +250,9 @@ class Wd_Satellites_Snippets_Admin {
 
 				'wp_rand' => wp_rand(),
 				'url' => admin_url( 'admin-ajax.php' ),
+
+				'all_posts_list_nonce' => wp_create_nonce('all-posts-list-nonce'),
+				'fix_posts_validation_errors_nonce' => wp_create_nonce('fix-posts-validation-errors-nonce'),
 
 				'broken_featured_list_nonce' => wp_create_nonce( 'broken-featured-list-nonce' ),
 				'remove_broken_featured_nonce' => wp_create_nonce( 'remove-broken-featured-nonce' ),

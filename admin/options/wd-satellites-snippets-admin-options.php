@@ -125,5 +125,6 @@ class Wd_Satellites_Snippets_Admin_Options {
 		include_once('sections/schema-section.php');
 		include_once('sections/custom-410s.php');
 		include_once('sections/other-section.php');
+		include_once('sections/post-content-section.php');
   }
 }

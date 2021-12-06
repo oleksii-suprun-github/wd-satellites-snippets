@@ -1,17 +1,4 @@
 <?php
-    // Filters post content from validation errors 
-    function wdss_regex_post_content_filters($content) {
-      if(is_single()) {
-        $preset = '/<div itemscope="" itemprop="mainEntity" itemtype="https:\/\/schema\.org\/Question">\n?<div itemprop="name">\n?(<h3>.*<\/h3>?)\n?<\/div>\n?<div itemscope="" itemprop="acceptedAnswer" itemtype="https:\/\/schema\.org\/Answer">\n?<div itemprop="text">\n(<p>.*<\/p>?)\n<\/div>\n?<\/div>\n?<\/div>/';
-        
-        $content = preg_replace($preset, '${1}<br>${2}', $content);
-      }
-      
-      return $content;
-    }
-    add_filter( 'the_content', 'wdss_regex_post_content_filters', 10 );
-
-
     // Disables jQuery and Migration script for Frontend
     if( get_option('wdss_disable_jquery', '0') ) {
       function wdss_disable_jquery() {
@@ -108,39 +95,7 @@
 
 
     // Auto Alt Attributes for the rest images
-    if( get_option('wdss_auto_alt_attribute', '0') ) {
-      function wdss_alt_singlepage_autocomplete( $content ) {
-        global $post;
-    
-        if ( empty( $post ) ) {
-          return $content;
-        }
-    
-        $old_content = $content;
-    
-        preg_match_all( '/<img[^>]+>/', $content, $images );
-    
-        if ( ! is_null( $images ) ) {
-          foreach ( $images[0] as $index => $value ) {
-            if ( ! preg_match( '/alt=/', $value ) ) {
-              $new_img = str_replace( '<img', '<img alt="' . esc_attr( $post->post_title ) . '"', $images[0][ $index ] );
-              $content = str_replace( $images[0][ $index ], $new_img, $content );
-            } else if ( preg_match( '/alt=["\']\s?["\']/', $value ) ) {
-              $new_img = preg_replace( '/alt=["\']\s?["\']/', 'alt="' . esc_attr( $post->post_title ) . '"', $images[0][ $index ] );
-              $content = str_replace( $images[0][ $index ], $new_img, $content );
-            }
-          }
-        }
-    
-        if ( empty( $content ) ) {
-          return $old_content;
-        }
-    
-        return $content;
-      }
-      add_filter('the_content', 'wdss_alt_singlepage_autocomplete');
-
-      function wdss_alt_attachment_autocomplete($html, $post_id, $post_thumbnail_id, $size, $attr) {
+    function wdss_alt_attachment_autocomplete($html, $post_id, $post_thumbnail_id, $size, $attr) {
         
         if(!isset($attr['alt'])) {
           $id = get_post_thumbnail_id();
@@ -150,9 +105,8 @@
         }
 
         return $html;
-      }
-      add_filter('post_thumbnail_html', 'wdss_alt_attachment_autocomplete', 10, 5);      
     }
+    add_filter('post_thumbnail_html', 'wdss_alt_attachment_autocomplete', 10, 5);      
 
 
     // Fixes WP Comments Passive Listener Issue 
@@ -264,6 +218,13 @@
     if( get_option('wdss_disable_admin_notices', '0') ) {
 
       function wdss_disable_admin_notices() {   
+
+        // If last modify is enabled then hide Delete Cache button
+        if(get_option('wdss_last_modified_n_304', '0')) { 
+          echo 
+          '<style>#wp-admin-bar-delete-cache, #wp-admin-bar-autoptimize-delete-cache {display: none !important;}</style>';
+        }
+
         // Hide Update notifications
         echo 
         '<style>
@@ -435,111 +396,6 @@
     // Remove Yoast Schema Snippet
     if( function_exists('wpseo_init') && get_option('wdss_yoast_schema', '0') ) {
       add_filter( 'wpseo_json_ld_output', '__return_false' );
-    }
-
-
-    // Auto width/height attributes
-    if( get_option('wdss_auto_widght_height_attr', '0') ) {
-      if( !is_admin()) {
-  
-        add_filter('the_content', 'wdss_set_image_dimension', 20);
-        function wdss_set_image_dimension($content) {
-          if( is_single() ) {
-        
-            $buffer = $content;
-            
-            // Get all images without width or height attribute
-            $pattern1 = '/<img(?:[^>](?!(height|width)=))*+>/i'; // if no width & height
-            $pattern2 = '/<img(?:(\s*(height|width)\s*=\s*"([^"]+)"\s*)+|[^>]+?)*>/i'; // if width OR height is present
-
-            preg_match_all($pattern1, $content, $first_match);
-            preg_match_all($pattern2, $content, $second_match);
-            
-            $all_images = array_merge($first_match[0], $second_match[0]);
-            foreach ( $all_images as $image ) {
-
-            $tmp = $image;
-        
-            // Trying to get width attr (last-stand filter)
-            preg_match( '/width="(\d+)"/', $image, $width_match );
-            // Trying to get height attr (last-stand filter)
-            preg_match( '/height="(\d+)"/', $image, $height_match );
-            // Get link of the file
-            preg_match( '/src=[\'"]([^\'"]+)/', $image, $src_match );
-
-
-            // If there`s no width or height is present...
-            if( (empty($width_match) || empty($height_match)) ) {
-
-              // Compares src with banned hosts
-              $in_block_list = false;
-              $exceptions = get_option('wdss_excluded_hosts_dictionary', '');
-              // chemistryland.com, fin.gc.ca, support.revelsystems.com
-        
-              if(is_array($exceptions)) {
-                foreach($exceptions as $exception) {
-                  if( strpos($src_match[1], $exception) !== false ) {
-                    $in_block_list = true;
-                  }
-                }
-              }
-
-              // If image is BLOB encoded
-              if(!empty(strpos($src_match[0], 'data:image'))) {
-
-                $image_url = $src_match[1];
-                $binary = base64_decode(explode(',', $image_url)[1]);
-
-                if(!getimagesizefromstring($binary)) return;
-
-                $image_data = getimagesizefromstring($binary) ? getimagesizefromstring($binary) : false;
-              
-                if($image_data) {
-                  $width = $image_data[0];
-                  $height = $image_data[1];
-                }
-              }
-
-              // Regular src case
-              else {
-                // If image`s host in block list then remove it
-                if($in_block_list) {
-                  $buffer = str_replace( $tmp, '', $buffer );
-                  return $buffer;
-                }
-                // If src doesn`t contains SERVER NAME then add it
-                if( strpos($src_match[1], 'wp-content') && strpos($src_match[1], 'https') === false ) {
-                  $src_match[1] = 'https://'.$_SERVER['SERVER_NAME'].$src_match[1].'';
-                }
-                // If image src returns 200 status then get image size
-                if( check_url_status($src_match[1]) ) {
-                  list($width, $height) = getimagesize($src_match[1]);
-                }
-              }
-
-              // Checks if width & height are defined
-              if(!empty($width) && !empty($height)) {
-                $dimension = 'width="'.$width.'" height="'.$height.'" ';
-
-                // Add width and width attribute
-                $image = str_replace( '<img', '<img loading="lazy" ' . $dimension, $image );
-
-                // Replace image with new attributes
-                $buffer = str_replace( $tmp, $image, $buffer );
-              }
-              else {
-                $buffer = str_replace( $tmp, '', $buffer );
-              }
-            }
-            elseif(!check_url_status($src_match[1])) {
-              $buffer = str_replace( $tmp, '', $buffer );
-            }
-          }
-          return $buffer;
-        }
-        return $content; 
-        }
-      }
     }
 
 

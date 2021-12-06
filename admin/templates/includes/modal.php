@@ -1,5 +1,6 @@
-<?php ?>
-  <div id="exclude-posts-modal" class="wdss-modal">
+<?php 
+	function get_modal_template($modal_id) { ?>
+  <div id="<?= $modal_id; ?>" class="wdss-modal">
 			<div class="wdss-modal-header">
 				<span class="wdss-modal-title"></span>
 				<i class="fas fa-times"></i>
@@ -16,7 +17,7 @@
 							<th class="wdss-table-post__link">Link</th>
 						</tr>
 					</table>
-					<div class="wdss-modal-informaion-panel">
+					<div class="wdss-modal-informaion-panel active">
 						<span class="wdss-modal-welcome-msg active">Press "Get Posts" to start</span>
 					</div>
 				</div>
@@ -30,3 +31,4 @@
 				<button type="button" class="wdss-button submit inactive">Execute</button>
 			</div>
 		</div>
+	<?php } 

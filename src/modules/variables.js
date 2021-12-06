@@ -59,6 +59,7 @@
 
   export const removeBrokenFeatured = {
     modal_el: '#exclude-posts-modal',
+    modal_title: 'Delete Broken Featured Images',
     open_modal_btn: '#wdss-remove-broken-featured__choose',
     fetch_action:  'fetch_broken_featured',
     fetch_nonce_name: 'fetch_broken_featured_nonce',
@@ -66,4 +67,16 @@
     post_action: 'remove_broken_featured',
     post_nonce_name: 'remove_broken_featured_nonce',
     post_nonce_value: wdss_localize.remove_broken_featured_nonce
+  }
+
+  export const fixValidationErrors = {
+    modal_el: '#fix-validation-posts-modal',
+    modal_title: 'Fix Posts Validation Errors',
+    open_modal_btn: '#wdss-fix-validation-errors__choose',
+    fetch_action:  'fetch_all_posts',
+    fetch_nonce_name: 'all_posts_list_nonce',
+    fetch_nonce_value: wdss_localize.all_posts_list_nonce,
+    post_action: 'fix_posts_validation_errors',
+    post_nonce_name: 'fix-posts-validation-errors-nonce',
+    post_nonce_value: wdss_localize.fix_posts_validation_errors_nonce    
   }

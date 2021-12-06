@@ -12,7 +12,6 @@
  */
 
   require_once('includes/input-handler.php');
-
   require_once('includes/form-handler.php');
 
   function wdss_settings_template() { ?>
@@ -20,6 +19,7 @@
       <div class="container">
 
         <h1>WD Satellite  <small>ver <?= WD_SATELLITES_SNIPPETS_VERSION ?></small></h1>
+        <a href="https://maxiproject.atlassian.net/wiki/spaces/FSDV/pages/3594682804/WD+Satellite" target="_blank">Documentation</a>
 
         <?php 
           if(!empty($_POST['wdss_form_submitted'])) {
@@ -40,10 +40,9 @@
             include_once('sections/schema-section.php');
             include_once('sections/custom-410s-section.php'); 
             include_once('sections/other-section.php');
-            include_once('includes/modal.php');
           ?>
 
-          <input type="submit" name="submit" id="submit" class="wdss-button submit" value="<?= __('Save changes', 'wdss_domain') ?>">
+          <input type="submit" name="submit" id="wdss-submit" class="wdss-button submit" value="<?= __('Save changes', 'wdss_domain') ?>">
         </form>
       </div>
     </div>

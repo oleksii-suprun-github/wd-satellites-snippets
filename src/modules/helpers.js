@@ -1,3 +1,7 @@
+  import {Notification} from './notifications';  
+  let notification = new Notification;
+
+
   // Deep array comparison helper
   export const areArrsEqual = (first, second) => {
     if(first.length !== second.length){
@@ -10,6 +14,7 @@
     };
     return true;
   };
+
 
   // Gets site specific info by request
   export function getSiteInfo(obj) {
@@ -35,12 +40,14 @@
       }
   }
 
+
   // Hide notices with time helper
   export const hideMessage = (element, timeout) => {
     setTimeout(function() {
       element.remove();
     }, timeout);
   };
+
 
   // Show/hide accordion content helper
   export function accordionToggler() {
@@ -63,6 +70,7 @@
     });
   }
 
+
   // Checkbox toggle helper
   export function checkboxToggler() {
     const inputs = Array.from(document.querySelectorAll('input[type="checkbox"'));
@@ -82,6 +90,7 @@
       })
     });
   }
+
 
   // Show/hide section on click helper
   export function sectionToggler() {
@@ -109,6 +118,7 @@
     });
   }
 
+
   // Show/hide group on-condition helper
   export function groupToggler(section) {  
     const toggler = document.querySelector(section.toggler);
@@ -124,9 +134,9 @@
     });
   }
 
+
   // Resets value attr in target input
   export function resetValues(...items) {
-
     items.forEach(item => {
       const buttons = Array.from(document.querySelectorAll(item.button));
 
@@ -135,11 +145,18 @@
           let parent = button.closest('div');
           let target = parent.querySelector(item.target);
   
-          if( target.value !== "" && confirm('Are you sure?') ) target.value = "";
+          if(target.value !== "") {
+            notification.confirm('Are you sure?').then(function(result) {
+              if(result === true) {
+                target.value = "";
+              }
+            });
+          }
         });
       });
     });
   }
+
 
   // Check option in modal window
   export function check(input) {
@@ -147,12 +164,12 @@
     input.checked = true; 
   }
 
+
   // Un-check option in modal window
   export function uncheck(input) {
     input.removeAttribute('checked');
     input.checked = false;
   }
-
 
 
   // Checks/unchecks all checkbox inputs within section
