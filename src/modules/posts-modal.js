@@ -73,11 +73,14 @@ export default function getPostsModal(obj) {
 		}
 
 		function openModal(set_max_posts_per_fetch) {
+
+			console.log(set_max_posts_per_fetch);
+
 			max_posts_per_fetch = set_max_posts_per_fetch >= min_posts_per_fetch ? set_max_posts_per_fetch : 800;
 
 			const lite_mode_msg_template = `<small>Lite-mode: max ${max_posts_per_fetch} posts per fetches</small>`;
 
-			if (total_posts > max_posts_per_fetch) {
+			if (Number(total_posts) > Number(max_posts_per_fetch)) {
 				is_lite_mode = true;
 				if (modal_title) {
 					modal_title.insertAdjacentHTML('beforeend', lite_mode_msg_template);
@@ -178,8 +181,11 @@ export default function getPostsModal(obj) {
 
 							modal_body.classList.remove('loading');
 
-							if(window.next_fetched_page < total_pages_info) {
+							if (window.next_fetched_page < total_pages_info) {
 								load_more_btn.classList.remove('inactive');
+								toggle_all_btn.classList.remove('inactive');
+								execute_btn.classList.remove('inactive');
+							} else {
 								toggle_all_btn.classList.remove('inactive');
 								execute_btn.classList.remove('inactive');
 							}
@@ -235,7 +241,7 @@ export default function getPostsModal(obj) {
 				if (window.next_fetched_page < total_pages_info) {
 					console.log(`Next page to fetch: ${window.next_fetched_page}`);
 				} else {
-					console.log(`This is the last page to fetch`);				
+					console.log(`This is the last page to fetch`);
 				}
 
 				return Promise.allSettled(promises);
@@ -293,15 +299,15 @@ export default function getPostsModal(obj) {
 			}
 
 			if (window.next_fetched_page < total_pages_info) {
-				if(load_more_btn) load_more_btn.classList.remove('inactive');
+				if (load_more_btn) load_more_btn.classList.remove('inactive');
 				toggle_all_btn.classList.remove('inactive');
 				execute_btn.classList.remove('inactive');
-			
+
 				load_more_btn.addEventListener('click', function() {
 					fetchMorePostsHandler();
 				});
 			}
-			
+
 			function clearAll() {
 				execute_btn.classList.add('inactive');
 				toggle_all_btn.classList.add('inactive');
@@ -370,7 +376,7 @@ export default function getPostsModal(obj) {
 						data_obj[obj.post_nonce_name] = obj.post_nonce_value;
 
 						get_posts_btn.classList.add('inactive');
-						if(load_more_btn) load_more_btn.classList.add('inactive');
+						if (load_more_btn) load_more_btn.classList.add('inactive');
 
 						modal_body.classList.add('processing');
 
@@ -387,7 +393,7 @@ export default function getPostsModal(obj) {
 							info_panel.insertAdjacentHTML('afterbegin', error_msg_template);
 							console.log(error);
 						}).
-						always(function(){
+						always(function() {
 							modal_body.classList.remove('processing');
 						});
 					}

@@ -191,8 +191,10 @@ div.disabled:before {
   align-items: center;
 }
 .notification-content span { 
-  font-weight: bold;
   font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: center;
 }
 .notification-content-inputs {
   position: relative;
@@ -339,6 +341,14 @@ div.disabled:before {
 }
 #wdss-fix-validation-errors {
   margin-bottom: 35px;
+}
+#wdss-fix-validation-errors__choose {
+  margin-right: 25px;
+}
+#wdss-fix-validation-errors__clear {
+  color: #cc2020;
+  background: transparent;
+  border: 1px solid #cc2020;
 }
 @media screen and (max-width: 550px) {
   .wdss-setting-item label span, 

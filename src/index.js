@@ -1,5 +1,5 @@
-import {getSiteInfo, accordionToggler, checkboxToggler, sectionToggler, groupToggler, resetValues, toggleAllOptions} from "./modules/helpers";
-import {featuredImageSection, polylangSection, featuredImagesListReset, organizationLogoReset, featuredImagesChooser, organizationLogoChooser, getOgranizationName, getSiteEmail, e410_Dictionary, excludedHostsDictionary, removeBrokenFeatured, fixValidationErrors} from './modules/variables';
+import {getSiteInfo, accordionToggler, checkboxToggler, sectionToggler, groupToggler, ajaxQuery, resetInputs, toggleAllOptions} from "./modules/helpers";
+import {featuredImageSection, polylangSection, featuredImagesListReset, organizationLogoReset, featuredImagesChooser, organizationLogoChooser, getOgranizationName, getSiteEmail, e410_Dictionary, excludedHostsDictionary, removeBrokenFeatured, fixValidationErrors, resetPostsValidationStatuses} from './modules/variables';
 
 import schemaSectionSettings from "./modules/schema-settings";
 import mediaFileChooser from "./modules/media-file-chooser";
@@ -24,7 +24,7 @@ function Init() {
 
       mediaFileChooser(featuredImagesChooser);
 
-      resetValues(featuredImagesListReset);
+      resetInputs(featuredImagesListReset);
 
       getPostsModal(removeBrokenFeatured);
       getPostsModal(fixValidationErrors);
@@ -38,11 +38,13 @@ function Init() {
     dictionaryHandler(e410_Dictionary);
 
     mediaFileChooser(organizationLogoChooser);
-    resetValues(organizationLogoReset);
+    resetInputs(organizationLogoReset);
 
     schemaSectionSettings();
 
     getSiteInfo(getSiteEmail);
+
+    ajaxQuery(resetPostsValidationStatuses);
 
     checkboxToggler();
     toggleAllOptions();

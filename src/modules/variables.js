@@ -74,9 +74,18 @@
     modal_title: 'Fix Posts Validation Errors',
     open_modal_btn: '#wdss-fix-validation-errors__choose',
     fetch_action:  'fetch_all_posts',
-    fetch_nonce_name: 'all_posts_list_nonce',
-    fetch_nonce_value: wdss_localize.all_posts_list_nonce,
+    fetch_nonce_name: 'unvalidated_posts_list_nonce',
+    fetch_nonce_value: wdss_localize.unvalidated_posts_list_nonce,
     post_action: 'fix_posts_validation_errors',
     post_nonce_name: 'fix-posts-validation-errors-nonce',
     post_nonce_value: wdss_localize.fix_posts_validation_errors_nonce    
+  }
+
+  export const resetPostsValidationStatuses = {
+    target_btn: '#wdss-fix-validation-errors__clear',
+    confirm_msg: 'You are going to reset all validation statuses<br> and returns already processed posts<br> in fetching results. Continue?',
+    data: 'true',
+    post_action: 'reset_posts_validation_status',
+    post_nonce_name: wdss_localize.reset_posts_validation_status,
+    post_nonce_value: wdss_localize.reset_posts_validation_status_nonce,
   }

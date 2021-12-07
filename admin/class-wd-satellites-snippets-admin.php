@@ -67,8 +67,9 @@ class Wd_Satellites_Snippets_Admin {
 			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured') );
 			add_action( 'wp_ajax_remove_broken_featured',  array($this, 'wdss_remove_broken_featured') );
 
-			add_action( 'wp_ajax_fetch_all_posts',  array($this, 'wdss_get_all_posts') );
+			add_action( 'wp_ajax_fetch_all_posts',  array($this, 'wdss_get_all_unvalidated_posts') );
 			add_action( 'wp_ajax_fix_posts_validation_errors', array($this, 'wdss_fix_validation_errors') );
+			add_action( 'wp_ajax_reset_posts_validation_status', array($this, 'wdss_reset_posts_validation_status') );
 			
 			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
 			add_action( 'wp_ajax_excluded_hosts_dictionary_update', array($this, 'wdss_excluded_hosts_dictionary_handler') );		
@@ -144,7 +145,7 @@ class Wd_Satellites_Snippets_Admin {
 
 	// Fixes Posts Validation Errors with Ajax Call
 	public function wdss_fix_validation_errors() {
-		check_ajax_referer( 'fix-posts-validation-errors', 'fix_posts_validation_errors', false );
+		check_ajax_referer( 'fix-posts-validation-errors-nonce', 'fix_posts_validation_errors_nonce', false );
 		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
 
 		include_once( dirname(__DIR__) . 'options/inc/helpers.php');
@@ -160,18 +161,29 @@ class Wd_Satellites_Snippets_Admin {
 
 				$args = array(
 					'ID' => $id,
-					'post_content' => $filtered_content_stage3
+					'post_content' => $filtered_content_stage3,
+					'meta_input' => [
+						'wdss_validation_fixed' => true
+					]
 				);
 
 				wp_update_post($args);
-
 			}
 		}
-
 		die();
 	}
 	
 
+	public function wdss_reset_posts_validation_status() {
+		check_ajax_referer( 'reset-posts-validation-status-nonce', 'reset_posts_validation_status_nonce', false );
+		$response = json_decode(stripslashes($_POST['data']));
+
+		if($response == true) {
+			delete_metadata( 'post', 0, 'wdss_validation_fixed', false, true );
+		}
+
+	}
+	
 
 	// Posts with broken Featured modal
 	public function wdss_get_broken_featured() {
@@ -200,12 +212,14 @@ class Wd_Satellites_Snippets_Admin {
 
 
 
-	// All posts modal
-	public function wdss_get_all_posts() {
-		check_ajax_referer( 'all-posts-list-nonce', 'all_posts_list_nonce', false );
+	// Unvalidated posts modal
+	public function wdss_get_all_unvalidated_posts() {
+		check_ajax_referer( 'unvalidated-posts-list-nonce', 'unvalidated_posts_list_nonce', false );
 		$posts = json_decode(stripslashes($_POST['fetched_list']));
 
+
 		foreach($posts as $post) {
+			if(!metadata_exists('post', $post->id, 'wdss_validation_fixed')) {
 		?>
 			<tr class="wdss-table-row post">
 				<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->id; ?>"></td>
@@ -216,10 +230,12 @@ class Wd_Satellites_Snippets_Admin {
 				<td><a href="<?= $post->link;?>" target="_blank">Open</a></td>	
 			</tr>
 		<?php
-
+			}
 		}
 		die();
 	}
+
+
 
 
 
@@ -251,8 +267,9 @@ class Wd_Satellites_Snippets_Admin {
 				'wp_rand' => wp_rand(),
 				'url' => admin_url( 'admin-ajax.php' ),
 
-				'all_posts_list_nonce' => wp_create_nonce('all-posts-list-nonce'),
+				'unvalidated_posts_list_nonce' => wp_create_nonce('unvalidated-posts-list-nonce'),
 				'fix_posts_validation_errors_nonce' => wp_create_nonce('fix-posts-validation-errors-nonce'),
+				'reset_posts_validation_status_nonce' => wp_create_nonce('reset-posts-validation-status-nonce'),
 
 				'broken_featured_list_nonce' => wp_create_nonce( 'broken-featured-list-nonce' ),
 				'remove_broken_featured_nonce' => wp_create_nonce( 'remove-broken-featured-nonce' ),

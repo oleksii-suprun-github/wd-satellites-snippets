@@ -136,7 +136,7 @@
 
 
   // Resets value attr in target input
-  export function resetValues(...items) {
+  export function resetInputs(...items) {
     items.forEach(item => {
       const buttons = Array.from(document.querySelectorAll(item.button));
 
@@ -199,4 +199,30 @@
         checkAll();
       }
     });
+  }
+
+
+  // Ajax Query Helper
+  export function ajaxQuery(obj) {
+    let button = document.querySelector(obj.target_btn);
+    button.addEventListener('click', function() {
+        notification.confirm(obj.confirm_msg).then(function(result) {
+          if(result === true) {
+						let data_obj = {
+							data: JSON.stringify(obj.data),
+							action: obj.post_action
+						};
+						data_obj[obj.post_nonce_name] = obj.post_nonce_value;
+
+						jQuery.ajax({
+							url: wdss_localize.url,
+							type: 'post',
+							data: data_obj
+						}).
+						done(function() {
+             notification.info('Completed!');
+						});
+          }
+        });
+      });
   }
