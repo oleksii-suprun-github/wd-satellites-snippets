@@ -134,6 +134,7 @@ function set_image_dimension($content)
 
         // Removing existing width/height attributes
         $clean_image = preg_replace('/\swidth="(\d*(px%)?)"(\sheight="(\w+)")?/', '', $tmp);
+        $clean_image = preg_replace('/loading="lazy"/', '', $clean_image);
 
         if ($clean_image)
         {

@@ -177,6 +177,7 @@ class Wd_Satellites_Snippets_Admin {
 	public function wdss_reset_posts_validation_status() {
 		check_ajax_referer( 'reset-posts-validation-status-nonce', 'reset_posts_validation_status_nonce', false );
 		$response = json_decode(stripslashes($_POST['data']));
+		var_dump($response);
 
 		if($response == true) {
 			delete_metadata( 'post', 0, 'wdss_validation_fixed', false, true );

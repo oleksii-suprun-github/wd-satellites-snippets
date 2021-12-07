@@ -146,9 +146,17 @@ export default function getPostsModal(obj) {
 			execute_btn.classList.add('inactive');
 
 			try {
-				fetch(document.location.origin + `/wp-json/wp/v2/posts?per_page=100&page=${window.next_fetched_page}`)
+				fetch(document.location.origin + `/wp-json/wp/v2/posts/?per_page=100&page=${window.next_fetched_page}`)
 					.then(response => {
-						return response.json();
+
+						if (response.status >= 200 && response.status < 300) {
+							return response.json();
+						} else {
+							info_panel.insertAdjacentHTML('afterbegin', error_msg_template);
+							execute_btn.classList.add('inactive');
+							toggle_all_btn.classList.add('inactive');
+						}
+
 					})
 					.then(data => {
 
@@ -169,8 +177,6 @@ export default function getPostsModal(obj) {
 
 							if (window.next_fetched_page < total_pages_info) {
 								console.log(`Next page to fetch: ${window.next_fetched_page}`);
-							} else {
-								console.log(`This is the last page to fetch`);
 							}
 
 							let info_msg = Array.from(modal.querySelectorAll('.msg'));
@@ -204,6 +210,10 @@ export default function getPostsModal(obj) {
 							}
 
 							updateFetchedPostsNumber();
+						}).
+						fail(function(error) {
+							info_panel.insertAdjacentHTML('afterbegin', error_msg_template);
+							console.log(error);
 						});
 					});
 			} catch (e) {
@@ -240,8 +250,6 @@ export default function getPostsModal(obj) {
 				window.next_fetched_page++;
 				if (window.next_fetched_page < total_pages_info) {
 					console.log(`Next page to fetch: ${window.next_fetched_page}`);
-				} else {
-					console.log(`This is the last page to fetch`);
 				}
 
 				return Promise.allSettled(promises);
@@ -266,6 +274,10 @@ export default function getPostsModal(obj) {
 				modalHandler.call(context, response);
 				modal_body.classList.remove('loading');
 				get_posts_btn.classList.add('inactive');
+			}).
+			fail(function(error) {
+				info_panel.insertAdjacentHTML('afterbegin', error_msg_template);
+				console.log(error);
 			});
 		}
 
@@ -388,6 +400,9 @@ export default function getPostsModal(obj) {
 						done(function() {
 							info_panel.insertAdjacentHTML('afterbegin', completed_msg_template);
 							info_panel.classList.add('active');
+							if(load_more_btn) {
+								load_more_btn.classList.remove('inactive');					
+							}
 						}).
 						fail(function(error) {
 							info_panel.insertAdjacentHTML('afterbegin', error_msg_template);
