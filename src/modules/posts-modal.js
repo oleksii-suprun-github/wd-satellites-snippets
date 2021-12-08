@@ -270,8 +270,6 @@ export default function getPostsModal(obj) {
 
 			jQuery.post( ajaxurl, data_obj, 'json').
 			done(function(response) {
-				console.log(response);
-
 				checkNoResults(response);
 				modalHandler.call(context, response);
 				modal_body.classList.remove('loading');

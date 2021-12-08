@@ -184,6 +184,7 @@ class Wd_Satellites_Snippets_Admin {
 
 		if($response == true) {
 			delete_metadata( 'post', 0, 'wdss_validation_fixed', false, true );
+			delete_metadata( 'post', 0, 'bbconv_not_converted', false, true );
 		}
 
 	}
