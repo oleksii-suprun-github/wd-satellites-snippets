@@ -146,11 +146,13 @@ function set_image_dimension($content)
             $in_block_list = false;
             $exceptions = get_option('wdss_excluded_hosts_dictionary', '');
             // chemistryland.com, fin.gc.ca, support.revelsystems.com
-            foreach ($exceptions as $exception)
-            {
-                if (strpos($src_match[1], $exception) !== false)
+            if(!empty($exceptions) && is_array($exceptions)) {
+                foreach ($exceptions as $exception)
                 {
-                    $in_block_list = true;
+                    if (strpos($src_match[1], $exception) !== false)
+                    {
+                        $in_block_list = true;
+                    }
                 }
             }
 

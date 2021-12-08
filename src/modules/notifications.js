@@ -47,7 +47,7 @@
 		
 				if (type === 'prompt') {
 					html.classList.add('fixed');
-					notification_template += `<div class="notification-content-inputs"><input required type="number" min="100" value="100"><button type="button" class="wdss-button">Enter</button></div>`;
+					notification_template += `<div class="notification-content-inputs"><input required type="number" min="50" value="50"><button type="button" class="wdss-button">Enter</button></div>`;
 				}
 				else if(type === 'confirm') {
 					notification_template += `<div class="notification-content-inputs"><button class="wdss-button confirm">Yes</button><button class="wdss-button cancel">No</button></div>`;

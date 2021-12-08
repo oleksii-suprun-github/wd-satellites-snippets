@@ -145,16 +145,19 @@ class Wd_Satellites_Snippets_Admin {
 
 	// Fixes Posts Validation Errors with Ajax Call
 	public function wdss_fix_validation_errors() {
+		include_once( dirname(__DIR__) . 'options/inc/helpers.php');
+
 		check_ajax_referer( 'fix-posts-validation-errors-nonce', 'fix_posts_validation_errors_nonce', false );
 		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
-
-		include_once( dirname(__DIR__) . 'options/inc/helpers.php');
 
 		if( !empty(explode(',', $selected_ids_arr)) ) {
 			$selected_ids_arr = explode(',', $selected_ids_arr);
 
 			foreach($selected_ids_arr as $id) {
+				var_dump($id);
+
 				$post = get_post($id);
+
 				$filtered_content_stage1 = regex_post_content_filters($post->post_content);
 				$filtered_content_stage2 = set_image_dimension($filtered_content_stage1);
 				$filtered_content_stage3 = alt_singlepage_autocomplete($id, $filtered_content_stage2);
@@ -217,7 +220,6 @@ class Wd_Satellites_Snippets_Admin {
 	public function wdss_get_all_unvalidated_posts() {
 		check_ajax_referer( 'unvalidated-posts-list-nonce', 'unvalidated_posts_list_nonce', false );
 		$posts = json_decode(stripslashes($_POST['fetched_list']));
-
 
 		foreach($posts as $post) {
 			if(!metadata_exists('post', $post->id, 'wdss_validation_fixed')) {

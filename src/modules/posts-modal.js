@@ -9,6 +9,10 @@ import {
 } from './notifications';
 let notification = new Notification;
 
+String.prototype.stripSlashes = function(){
+	return this.replace(/\\(.)/mg, "$1");
+}
+
 
 export default function getPostsModal(obj) {
 
@@ -18,7 +22,7 @@ export default function getPostsModal(obj) {
 	const close_modal_btn = modal.querySelector('.wdss-modal-header i.fa-times');
 
 	let total_posts = wdss_localize.total_post_count;
-	let total_pages_info = Math.ceil(total_posts / 100);
+	let total_pages_info = Math.ceil(total_posts / 50);
 
 	window[`${obj.fetch_action}-setup`] = true;
 
@@ -48,14 +52,14 @@ export default function getPostsModal(obj) {
 		let fetched_posts = [];
 		let is_lite_mode = false;
 		let max_posts_per_fetch;
-		let min_posts_per_fetch = 100;
+		let min_posts_per_fetch = 50;
 
 		if (modal_title.childNodes.length < 1) {
 			modal_title.insertAdjacentHTML('afterbegin', modal_title_value);
 		}
 
 		if (window[`${obj.fetch_action}-setup`] === true) {
-			notification.prompt('Enter max posts per fetch count. The minimum is 100: ', openModal);
+			notification.prompt('Enter max posts per fetch count. The minimum is 50: ', openModal);
 			console.log(`Total fetchable pages: ${total_pages_info}`);
 		} else {
 			notification.info('Please, reload the page first');
@@ -88,7 +92,7 @@ export default function getPostsModal(obj) {
 			}
 			if (is_lite_mode) total_posts = max_posts_per_fetch;
 
-			window.next_fetched_page = Math.ceil(total_posts / 100);
+			window.next_fetched_page = Math.ceil(total_posts / 50);
 
 			modal.classList.add('active');
 			html.classList.add('fixed');
@@ -126,11 +130,7 @@ export default function getPostsModal(obj) {
 			let posts = getPostsFromTable();
 			posts.forEach(post => {
 				let checkbox = post.querySelector('.wdss-table-post__select input[type="checkbox"]');
-				if (checkbox.hasAttribute('checked')) {
-					uncheck(checkbox);
-				} else {
 					check(checkbox);
-				}
 			});
 		}
 
@@ -146,7 +146,7 @@ export default function getPostsModal(obj) {
 			execute_btn.classList.add('inactive');
 
 			try {
-				fetch(document.location.origin + `/wp-json/wp/v2/posts/?per_page=100&page=${window.next_fetched_page}`)
+				fetch(window.location.origin + `/wp-json/wp/v2/posts/?per_page=50&page=${window.next_fetched_page}`)
 					.then(response => {
 
 						if (response.status >= 200 && response.status < 300) {
@@ -160,17 +160,15 @@ export default function getPostsModal(obj) {
 					})
 					.then(data => {
 
+						console.log(data);
+
 						let data_obj = {
 							fetched_list: JSON.stringify(data),
 							action: obj.fetch_action
 						};
 						data_obj[obj.fetch_nonce_name] = obj.fetch_nonce_value;
 
-						jQuery.ajax({
-							url: wdss_localize.url,
-							type: 'post',
-							data: data_obj
-						}).
+						jQuery.post( ajaxurl, data_obj, 'json').
 						done(function(response) {
 							console.log(`Current fetched page: ${window.next_fetched_page}`);
 							window.next_fetched_page++;
@@ -221,6 +219,7 @@ export default function getPostsModal(obj) {
 			}
 		}
 
+		// Main Part, весь пиздец здесь
 		async function fetchPostsMainHandler() {
 			modal_body.classList.add('loading');
 
@@ -230,12 +229,15 @@ export default function getPostsModal(obj) {
 				for (let i = 1; i <= window.next_fetched_page; i++) {
 					try {
 						promises.push(new Promise((resolve, reject) => {
-							fetch(document.location.origin + `/wp-json/wp/v2/posts/?per_page=100&page=${i}`)
+							fetch(document.location.origin + `/wp-json/wp/v2/posts/?per_page=50&page=${i}`)
 								.then(response => {
 									return response.json();
 								})
 								.then(data => {
-									fetched_posts = fetched_posts.concat(data);
+
+									console.log(data);
+
+									fetched_posts = fetched_posts.concat(...data);
 									resolve();
 								})
 								.catch(error => {
@@ -258,18 +260,18 @@ export default function getPostsModal(obj) {
 			await fetchPosts(window.next_fetched_page);
 			console.log(`Fetched posts in first query: ${fetched_posts.length}`);
 
+			console.log(fetched_posts);
+
 			let data_obj = {
 				fetched_list: JSON.stringify(fetched_posts),
-				action: obj.fetch_action
+				action: `${obj.fetch_action}`,
 			};
 			data_obj[obj.fetch_nonce_name] = obj.fetch_nonce_value;
 
-			jQuery.ajax({
-				url: wdss_localize.url,
-				type: 'post',
-				data: data_obj
-			}).
+			jQuery.post( ajaxurl, data_obj, 'json').
 			done(function(response) {
+				console.log(response);
+
 				checkNoResults(response);
 				modalHandler.call(context, response);
 				modal_body.classList.remove('loading');
@@ -294,7 +296,7 @@ export default function getPostsModal(obj) {
 			checkNoResults();
 
 			console.log(`Current fetched pages: ${window.next_fetched_page}`);
-			window.next_fetched_page = Math.ceil(total_posts / 100);
+			window.next_fetched_page = Math.ceil(total_posts / 50);
 			fetchPostsMainHandler();
 		}
 
@@ -392,12 +394,9 @@ export default function getPostsModal(obj) {
 
 						modal_body.classList.add('processing');
 
-						jQuery.ajax({
-							url: wdss_localize.url,
-							type: 'post',
-							data: data_obj
-						}).
-						done(function() {
+						jQuery.post( ajaxurl, data_obj, 'json').
+						done(function(response) {
+							console.log(response);
 							info_panel.insertAdjacentHTML('afterbegin', completed_msg_template);
 							info_panel.classList.add('active');
 							if(load_more_btn) {
