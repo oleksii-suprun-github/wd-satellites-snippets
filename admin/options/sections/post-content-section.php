@@ -9,9 +9,13 @@ function on_save_post_validation_fix($post_id) {
 
   $args = array(
     'ID' => $post_id,
-    'post_content' => $filtered_content_stage3
+    'post_content' => $filtered_content_stage3,
+    'meta_input' => [
+      'wdss_validation_fixed' => true
+    ]
   );
   wp_update_post($args);
+
 
   add_action('save_post', 'on_save_post_validation_fix', 25 );
 
