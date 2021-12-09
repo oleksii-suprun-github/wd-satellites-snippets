@@ -69,7 +69,6 @@ class Wd_Satellites_Snippets_Admin {
 
 			add_action( 'wp_ajax_fetch_all_posts',  array($this, 'wdss_get_all_unvalidated_posts') );
 			add_action( 'wp_ajax_fix_posts_validation_errors', array($this, 'wdss_fix_validation_errors') );
-			add_action( 'wp_ajax_reset_posts_validation_status', array($this, 'wdss_reset_posts_validation_status') );
 			
 			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
 			add_action( 'wp_ajax_excluded_hosts_dictionary_update', array($this, 'wdss_excluded_hosts_dictionary_handler') );		
@@ -176,18 +175,6 @@ class Wd_Satellites_Snippets_Admin {
 		die();
 	}
 	
-
-	public function wdss_reset_posts_validation_status() {
-		check_ajax_referer( 'reset-posts-validation-status-nonce', 'reset_posts_validation_status_nonce', false );
-		$response = json_decode(stripslashes($_POST['data']));
-		var_dump($response);
-
-		if($response == true) {
-			delete_metadata( 'post', 0, 'wdss_validation_fixed', false, true );
-			delete_metadata( 'post', 0, 'bbconv_not_converted', false, true );
-		}
-
-	}
 	
 
 	// Posts with broken Featured modal
