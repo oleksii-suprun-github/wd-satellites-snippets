@@ -75,6 +75,30 @@ class Wd_Satellites_Snippets_Admin {
 		}
 	}
 
+	
+  // Removes WP Security captcha validation error
+  public function wdss_wp_security_captcha_buffer_start() {
+      ob_start(array($this, 'wdss_wp_security_captcha_validation_fix'));
+  }
+  
+  public function wdss_wp_security_captcha_buffer_end() {
+      ob_end_clean();
+  }
+  
+  public function wdss_wp_security_captcha_validation_fix( $output ) {
+      if ( comments_open() ) {
+        $pattern = '/<p (class="aiowps-captcha")>(.*)<\/p>/';
+        preg_match_all( $pattern, $output, $matches );
+        if ( ! empty( $matches[0] ) ) {
+          foreach ( $matches[0] as $match ) {
+            $output = preg_replace($pattern, '<div $1>$2</div>', $output);
+          }
+        }
+      }
+      return $output;
+  }
+
+
 
 	// Add Admin Menu
 	public function wdss_admin_menu() {

@@ -44,8 +44,6 @@ function Init() {
 
     getSiteInfo(getSiteEmail);
 
-    ajaxQuery(resetPostsValidationStatuses);
-
     checkboxToggler();
     toggleAllOptions();
     accordionToggler();

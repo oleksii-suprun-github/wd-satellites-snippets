@@ -158,6 +158,11 @@ class Wd_Satellites {
 		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_admin, 'wdss_front_enqueue_scripts' );
 		
 		$this->loader->add_action( 'init', $plugin_admin, 'wdss_init');
+
+    // Removes WP Security captcha validation error
+    $this->loader->add_action( 'after_setup_theme', $plugin_admin, 'wdss_wp_security_captcha_buffer_start' );
+    $this->loader->add_action( 'shutdown', $plugin_admin, 'wdss_wp_security_captcha_buffer_start', 10 );
+    $this->loader->add_action( 'shutdown', $plugin_admin, 'wdss_wp_security_captcha_buffer_end', 20 );
 	}
 
 
