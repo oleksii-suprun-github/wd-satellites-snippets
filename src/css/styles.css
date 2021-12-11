@@ -761,6 +761,7 @@ div.disabled:before {
 .wdss-setting-item-accordion-content {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   overflow: hidden;
   height: 0;
   opacity: 0;
@@ -867,6 +868,10 @@ button#wdss-toggle-options {
   display: flex;
   flex-direction: column;
   width: 100%;  
+  margin-bottom: 25px;
+}
+.wdss-polylang-author-block:last-of-type {
+  margin-bottom: 0;
 }
 .wdss-polylang-author-block h4 {
   display: flex;

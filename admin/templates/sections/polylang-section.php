@@ -96,10 +96,11 @@
                   </div>
                   <?php endforeach;  ?>
                 </div>
+              </div>
               <?php endforeach; ?>   
             </div>
           </div>
-                  </div>
+      
           <div id="wdss-polylang-author-description" class="wdss-setting-item wdss-polylang-accordion">
             <div class="wdss-setting-item-accordion">
               <h3>Author`s page description</h3>
@@ -115,18 +116,19 @@
                 <h4><i class="fas fa-user"></i> <?= $author->display_name; ?></h4>
                 <div class="wdss-polylang-textarea-blocks">
                   <?php foreach($polylang_lang_list as $lang) : ?>
-                  <div class="wdss-polylang-textarea-block">
-                    <strong><?= $lang->name; ?></strong>
+                    <div class="wdss-polylang-textarea-block">
+                      <strong><?= $lang->name; ?></strong>
                       <?php 
                         textarea_handler_html(['field_name' => 'wdss_polylang_author_desc_' . $author->user_nicename . '_'. $lang->slug . '']);       
                       ?>
-                  </div>
+                    </div>
                   <?php endforeach;  ?>
                 </div>
+              </div>
               <?php endforeach; ?>   
             </div>
+          </div>
           <?php endif; ?>
-        </div>
       </div>
       <div id="wdss-multilang-sitemap-condition" class="wdss-setting-item">
         <label>
@@ -136,7 +138,7 @@
               if( get_option('wdss_multilang_sitemap') == '' ) update_option( 'wdss_multilang_sitemap', '0' );               
             ?>    
         </label>
-    </div>
+      </div>
   </div>
 </section>
 <?php 
