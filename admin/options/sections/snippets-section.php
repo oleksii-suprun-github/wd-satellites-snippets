@@ -284,6 +284,8 @@
           remove_action( 'wp_head', 'wp_generator' );
           remove_action( 'wp_head', 'wp_resource_hints', 2, 99 ); 
     
+          wp_dequeue_script( 'wp-embed' );
+
           remove_action( 'xmlrpc_rsd_apis', 'rest_output_rsd' );
           remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
           remove_action( 'template_redirect', 'wp_shortlink_header', 11 );
@@ -294,9 +296,9 @@
           remove_action( 'rest_api_init', 'wp_oembed_register_route' );
           remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
           remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
-    
+
           remove_filter( 'oembed_dataparse', 'wp_filter_oembed_result', 10 );
-      
+          add_filter( 'rewrite_rules_array', 'disable_embeds_rewrites' );
           add_filter( 'embed_oembed_discover', '__return_false' );
     
           add_filter( 'json_enabled', '__return_false' );

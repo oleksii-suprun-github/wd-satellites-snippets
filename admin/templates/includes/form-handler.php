@@ -99,8 +99,10 @@ function wdss_form_handler() {
         $authors = get_users( array( 'fields' => array( 'ID', 'display_name', 'user_nicename' ), 'has_published_posts' => 'post' ) );
 
         foreach($polylang_lang_list as $lang) {
+          isset_option('wdss_polylang_home_title_' . $lang->slug . '');  
           isset_option('wdss_polylang_home_desc_' . $lang->slug . '');  
           foreach($authors as $author) {
+            isset_option('wdss_polylang_author_title_' . $author->user_nicename . '_' . $lang->slug . '');  
             isset_option('wdss_polylang_author_desc_' . $author->user_nicename . '_' . $lang->slug . '');   
           }     
         }

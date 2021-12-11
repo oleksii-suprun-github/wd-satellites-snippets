@@ -830,12 +830,10 @@ button#wdss-toggle-options {
 #wdss-polylang-meta-data-group {
   margin-top: 25px;
 }
-#wdss-settings-page #wdss-polylang-homepage-description span,
-#wdss-settings-page #wdss-polylang-author-description span {
+#wdss-settings-page .wdss-polylang-accordion  span {
   margin-right: 10px;
 }
-#wdss-settings-page #wdss-polylang-homepage-description,
-#wdss-settings-page #wdss-polylang-author-description {
+#wdss-settings-page .wdss-polylang-accordion {
   align-items: baseline;
 }
 .wdss-polylang-textarea-blocks {
@@ -858,14 +856,12 @@ button#wdss-toggle-options {
   width: 100%;
   max-height: 125px;
 }
-#wdss-settings-page #wdss-polylang-homepage-description,
-#wdss-settings-page #wdss-polylang-author-description {
+#wdss-settings-page .wdss-polylang-accordion {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: unset;
   margin-left: 15px;
-  margin-bottom: 35px;
 }
 .wdss-polylang-author-block {
   display: flex;
@@ -875,6 +871,7 @@ button#wdss-toggle-options {
 .wdss-polylang-author-block h4 {
   display: flex;
   align-items: center;
+  margin-top: 0;
   font-size: 1.15rem;
 }
 #wdss-settings-page .wdss-polylang-author-block h4 i {

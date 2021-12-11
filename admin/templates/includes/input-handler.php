@@ -27,8 +27,10 @@ function image_to_url_handler_html($args) {
 <? }
 
 
-  function textarea_handler_html($args) { ?>
-    <textarea name="<?= $args['field_name']; ?>" cols="30" rows="10"><?= esc_attr(get_option($args['field_name']));?></textarea>
+  function textarea_handler_html($args) { 
+    $textarea_rows = isset($args['rows_count']) ? $args['rows_count'] : 10;
+  ?>
+    <textarea name="<?= $args['field_name']; ?>" cols="30" rows="<?= $textarea_rows; ?>"><?= esc_attr(get_option($args['field_name']));?></textarea>
   <?php }
 
   function date_handler_html($args) { ?>
