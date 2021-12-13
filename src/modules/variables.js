@@ -58,6 +58,7 @@
   }
 
   export const removeBrokenFeatured = {
+    query_type: 'rest',
     modal_el: '#exclude-posts-modal',
     modal_title: 'Delete Broken Featured Images',
     open_modal_btn: '#wdss-remove-broken-featured__choose',
@@ -69,23 +70,15 @@
     post_nonce_value: wdss_localize.remove_broken_featured_nonce
   }
 
-  export const fixValidationErrors = {
+  export const fixEmptyPostsContent = {
+    query_type: 'sql',
     modal_el: '#fix-validation-posts-modal',
-    modal_title: 'Fix Posts Validation Errors',
-    open_modal_btn: '#wdss-fix-validation-errors__choose',
+    modal_title: 'Fix Empty Posts Content',
+    open_modal_btn: '#wdss-fix-empty-content__choose',
     fetch_action:  'fetch_all_posts',
-    fetch_nonce_name: 'unvalidated_posts_list_nonce',
-    fetch_nonce_value: wdss_localize.unvalidated_posts_list_nonce,
+    fetch_nonce_name: 'empty_posts_list_nonce',
+    fetch_nonce_value: wdss_localize.empty_posts_list_nonce,
     post_action: 'fix_posts_validation_errors',
     post_nonce_name: 'fix-posts-validation-errors-nonce',
     post_nonce_value: wdss_localize.fix_posts_validation_errors_nonce    
-  }
-
-  export const resetPostsValidationStatuses = {
-    target_btn: '#wdss-fix-validation-errors__clear',
-    confirm_msg: 'You are going to reset all validation statuses<br> and returns already processed posts<br> in fetching results. Continue?',
-    data: 'true',
-    post_action: 'reset_posts_validation_status',
-    post_nonce_name: wdss_localize.reset_posts_validation_status,
-    post_nonce_value: wdss_localize.reset_posts_validation_status_nonce,
   }

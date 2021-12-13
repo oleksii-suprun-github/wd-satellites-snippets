@@ -1,5 +1,5 @@
 import {getSiteInfo, accordionToggler, checkboxToggler, sectionToggler, groupToggler, ajaxQuery, resetInputs, toggleAllOptions} from "./modules/helpers";
-import {featuredImageSection, polylangSection, featuredImagesListReset, organizationLogoReset, featuredImagesChooser, organizationLogoChooser, getOgranizationName, getSiteEmail, e410_Dictionary, excludedHostsDictionary, removeBrokenFeatured, fixValidationErrors, resetPostsValidationStatuses} from './modules/variables';
+import {featuredImageSection, polylangSection, featuredImagesListReset, organizationLogoReset, featuredImagesChooser, organizationLogoChooser, getOgranizationName, getSiteEmail, e410_Dictionary, excludedHostsDictionary, removeBrokenFeatured, fixEmptyPostsContent} from './modules/variables';
 
 import schemaSectionSettings from "./modules/schema-settings";
 import mediaFileChooser from "./modules/media-file-chooser";
@@ -27,7 +27,7 @@ function Init() {
       resetInputs(featuredImagesListReset);
 
       getPostsModal(removeBrokenFeatured);
-      getPostsModal(fixValidationErrors);
+      getPostsModal(fixEmptyPostsContent);
     }
 
     if(wdss_localize.is_polylang_exists && wdss_localize.is_polylang_setup) {

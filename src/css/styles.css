@@ -340,11 +340,10 @@ div.disabled:before {
   text-align: left;
   color: #222;
 }
-#wdss-fix-validation-errors {
-  display: none;
+#wdss-fix-empty-content{
   margin-bottom: 35px;
 }
-#wdss-fix-validation-errors__choose {
+#wdss-fix-empty-content__choose {
   margin-right: 25px;
 }
 #wdss-fix-validation-errors__clear {

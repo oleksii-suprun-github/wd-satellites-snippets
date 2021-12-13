@@ -15,11 +15,9 @@
   <div class="wdss-row hidden">
     <div class="wdss-section-content">
 
-    <div id="wdss-fix-validation-errors" class="wdss-setting-item">
-          <!-- Broken by now -->
-          <!-- <span>Fix Validation Errors<br><small>Be sure to create DB backup first</small></span>
-          <button id="wdss-fix-validation-errors__choose" type="button" class="wdss-button">Open settings</button> -->
-          <!-- <button id="wdss-fix-validation-errors__clear" type="button" class="wdss-button" title="Clear metadata *validated* from all posts and return them to fetching table"><i class="fas fa-trash"></i> Reset all post validation statuses</button> -->
+    <div id="wdss-fix-empty-content" class="wdss-setting-item">
+          <span>Find & fix empty content<br><small>Be sure to create DB backup first</small></span>
+          <button id="wdss-fix-empty-content__choose" type="button" class="wdss-button">Open settings</button>
 		  </div>
 
       <div class="wdss-setting-item wdss-table-handler">

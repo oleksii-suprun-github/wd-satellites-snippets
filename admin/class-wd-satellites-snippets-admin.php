@@ -67,7 +67,7 @@ class Wd_Satellites_Snippets_Admin {
 			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured') );
 			add_action( 'wp_ajax_remove_broken_featured',  array($this, 'wdss_remove_broken_featured') );
 
-			add_action( 'wp_ajax_fetch_all_posts',  array($this, 'wdss_get_all_unvalidated_posts') );
+			add_action( 'wp_ajax_fetch_all_posts',  array($this, 'wdss_get_all_empty_posts') );
 			add_action( 'wp_ajax_fix_posts_validation_errors', array($this, 'wdss_fix_validation_errors') );
 			
 			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
@@ -166,36 +166,68 @@ class Wd_Satellites_Snippets_Admin {
 
 
 
-	// Fixes Posts Validation Errors with Ajax Call
+	// Fixes Posts Empty Content with Ajax Call
 	public function wdss_fix_validation_errors() {
-		include_once( dirname(__DIR__) . 'options/inc/helpers.php');
 
 		check_ajax_referer( 'fix-posts-validation-errors-nonce', 'fix_posts_validation_errors_nonce', false );
-		$selected_ids_arr = json_decode(stripslashes($_POST['selected_list']));
+		$selected_ids = json_decode(stripslashes($_POST['selected_list']));
+		$selected_ids_arr = [];
 
-		if( !empty(explode(',', $selected_ids_arr)) ) {
-			$selected_ids_arr = explode(',', $selected_ids_arr);
-
-			foreach($selected_ids_arr as $id) {
-				var_dump($id);
-
-				$post = get_post($id);
-
-				$filtered_content_stage1 = regex_post_content_filters($post->post_content);
-				$filtered_content_stage2 = set_image_dimension($filtered_content_stage1);
-				$filtered_content_stage3 = alt_singlepage_autocomplete($id, $filtered_content_stage2);
-
-				$args = array(
-					'ID' => $id,
-					'post_content' => $filtered_content_stage3,
-					'meta_input' => [
-						'wdss_validation_fixed' => true
-					]
-				);
-
-				wp_update_post($args);
-			}
+		if(strpos($selected_ids, ',') !== false) {
+			$selected_ids_arr = explode(',', $selected_ids);
 		}
+		else {
+			 array_push($selected_ids_arr, $selected_ids);
+		}
+
+		var_dump($selected_ids_arr);
+
+		foreach ($selected_ids_arr as $id)
+		{
+
+				$revisions_arr = wp_get_post_revisions($id, ['offset' => 1, // Start from the previous change
+				'posts_per_page' => 1, // Only a single revision
+				'post_name__in' => ["{$id}-revision-v1"], 'check_enabled' => false, ]);
+	
+
+				if (!empty($revisions_arr))
+				{
+						$revision = array_pop(array_reverse($revisions_arr));
+						$revision_parent_id = $revision->post_parent;
+
+						if ($id == $revision_parent_id)
+						{
+		
+								$revision_content = $revision->post_content;
+								var_dump($revision_content);
+
+								$updated_post_args = array(
+										'ID' => $revision_parent_id,
+										'post_status' => 'publish',
+										'post_content' => $revision_content,
+										'tags_input' => ''  
+								);
+								wp_update_post($updated_post_args);
+								
+								if(get_option('wdss_410s_dictionary')) {
+									$post = get_post($revision_parent_id);
+									$url = '/'.$post->post_name.'/';
+
+									$values_arr = get_option('wdss_410s_dictionary');
+									$pos = array_search($url, $values_arr);
+									unset($values_arr[$pos]);
+									$values_arr = array_unique($values_arr);
+									update_option('wdss_410s_dictionary', $values_arr);
+								}
+						}
+				}
+				else
+				{
+						echo 'no revisions for id: # ' . $id . ';<br>';
+				}
+				usleep(150);
+		}
+
 		die();
 	}
 	
@@ -228,30 +260,69 @@ class Wd_Satellites_Snippets_Admin {
 
 
 
-	// Unvalidated posts modal
-	public function wdss_get_all_unvalidated_posts() {
-		check_ajax_referer( 'unvalidated-posts-list-nonce', 'unvalidated_posts_list_nonce', false );
-		$posts = json_decode(stripslashes($_POST['fetched_list']));
+	// Empty content posts modal
+	public function wdss_get_all_empty_posts() {
+		check_ajax_referer( 'empty-posts-list-nonce', 'empty_posts_list_nonce', false );
 
-		foreach($posts as $post) {
-			if(!metadata_exists('post', $post->id, 'wdss_validation_fixed')) {
-		?>
-			<tr class="wdss-table-row post">
-				<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->id; ?>"></td>
-				<td><?= $post->id;?></td>
-				<td><?= $post->title->rendered;?></td>
-				<td><?= $post->status;?></td>
-				<td><?= $post->date;?></td>		
-				<td><a href="<?= $post->link;?>" target="_blank">Open</a></td>	
-			</tr>
-		<?php
-			}
+		$lang_list = [];
+
+		if (function_exists('pll_the_languages'))
+		{
+				$lang_list = implode(',', pll_languages_list('locale'));
 		}
+		
+		$args = array(
+				'post_type' => 'post',
+				'post_status' => array(
+						'publish',
+						'pending',
+						'draft',
+						'future',
+						'private',
+						'inherit'
+				) ,
+				'posts_per_page' => - 1,
+				'orderby' => 'ID',
+				'lang' => $lang_list,
+				'order' => 'desc'
+		);
+
+
+		$blank_posts = array();
+		
+		$posts = new WP_Query($args);
+
+		if ($posts->have_posts()):
+				while ($posts->have_posts()):
+						$posts->the_post();
+						global $post;
+						$content = get_the_content();
+						if (empty($content))
+						{
+							array_push($blank_posts, $post);
+							
+						}
+				endwhile;
+		endif;
+
+		if (!empty($blank_posts)) :
+    	foreach ($blank_posts as $post) :?>
+
+				<tr class="wdss-table-row post">
+					<td class="wdss-table-post__select"><input type="checkbox" value="<?= $post->ID; ?>"></td>
+					<td><?= $post->ID;?></td>
+					<td><?= $post->post_title?></td>
+					<td><?= $post->post_status;?></td>
+					<td><?= $post->post_date;?></td>		
+					<td><a href="<?= $post->link;?>" target="_blank">Open</a></td>	
+				</tr>
+   <?php 
+				sleep(1); 
+			endforeach;
+		endif;	
+
 		die();
 	}
-
-
-
 
 
 	//Register the JavaScript for the admin area
@@ -282,7 +353,7 @@ class Wd_Satellites_Snippets_Admin {
 				'wp_rand' => wp_rand(),
 				'url' => admin_url( 'admin-ajax.php' ),
 
-				'unvalidated_posts_list_nonce' => wp_create_nonce('unvalidated-posts-list-nonce'),
+				'empty_posts_list_nonce' => wp_create_nonce('empty-posts-list-nonce'),
 				'fix_posts_validation_errors_nonce' => wp_create_nonce('fix-posts-validation-errors-nonce'),
 				'reset_posts_validation_status_nonce' => wp_create_nonce('reset-posts-validation-status-nonce'),
 
