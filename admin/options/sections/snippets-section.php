@@ -273,7 +273,7 @@
 
     // Remove redundant links Snippet
     if( get_option( 'wdss_redundant_links', '0' ) ) {
-      if( !is_admin() && is_user_logged_in() ) {
+      if( !is_admin() && !is_user_logged_in() ) {
         add_action('wp', 'wdss_remove_redundant_links');
         function wdss_remove_redundant_links() {
           remove_action( 'wp_head', 'wlwmanifest_link' );
