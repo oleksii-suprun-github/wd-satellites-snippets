@@ -311,6 +311,27 @@
     }
       
 
+    // Sets X Default Hreflang`s 
+    if(function_exists('pll_languages_list')) {
+      function wdss_x_default_hreflang() {
+        $languages = icl_get_languages('skip_missing=1');
+        foreach($languages as $l){
+            if ($l['language_code'] == 'pl' ) {
+                $x_default_url = $l['url'];
+          if(is_paged()){
+            $output='<link rel="alternate" href="' . $x_default_url . '" />'  . PHP_EOL;
+          }else{
+            $output='<link rel="alternate" hreflang="x-default" href="' . $x_default_url . '" />'  . PHP_EOL;
+          }
+                echo $output;
+            }
+        }
+      }
+      add_action('wp_head','wdss_x_default_hreflang');
+    }
+
+
+
     //Lazy load for iframes
     if( get_option('lazy_load_for_iframes', '0') ) {
 
