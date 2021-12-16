@@ -273,7 +273,7 @@
 
     // Remove redundant links Snippet
     if( get_option( 'wdss_redundant_links', '0' ) ) {
-      if( !is_admin() && !is_user_logged_in() ) {
+      if( !is_admin() ) {
         add_action('wp', 'wdss_remove_redundant_links');
         function wdss_remove_redundant_links() {
           remove_action( 'wp_head', 'wlwmanifest_link' );
@@ -306,10 +306,23 @@
         
           add_filter( 'rest_enabled', '__return_false' );
           add_filter( 'rest_jsonp_enabled', '__return_false' );
+
+          remove_action('wp_head', 'rsd_link');
+          add_filter( 'xmlrpc_enabled', '__return_false' );
+          remove_action('wp_head', 'adjacent_post_rel_link_wp_head', 10, 0);
+          
+          remove_action('wp_head', 'print_emoji_detection_script', 7);
+          remove_action('wp_print_styles', 'print_emoji_styles');
         }
       }
-    }
-      
+    }      
+
+    // Disable X-Pingback to header
+    add_filter( 'wp_headers', 'disable_x_pingback' );
+    function disable_x_pingback( $headers ) {
+      unset( $headers['X-Pingback'] );
+      return $headers;
+    }    
 
     // Sets X Default Hreflang`s 
     if(function_exists('pll_languages_list')) {
