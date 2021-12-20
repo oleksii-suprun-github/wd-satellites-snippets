@@ -30,6 +30,7 @@ function wdss_form_handler() {
       isset_option('wdss_disable_emojis');   
       isset_option('wdss_disable_pingbacks');   
       
+      isset_option('wdss_disable_gutenberg');   
 
       isset_option('wdss_disable_autoupdates');
       isset_option('wdss_disable_admin_notices');

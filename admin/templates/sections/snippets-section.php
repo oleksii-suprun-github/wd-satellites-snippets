@@ -13,8 +13,18 @@
                             if( get_option('wdss_last_modified_n_304') == '' ) update_option( 'wdss_last_modified_n_304', '0' );               
                           ?>    
                       </label>
-                    </div>
+                    </div> 
 
+                    <div id="wdss-disable-wp-blocks" class="wdss-setting-item">
+                        <label>
+                          <span>Disable Gutenberg Block Editor & Widgets</span>
+                          <?php 
+                            checkbox_handler_html(['field_name' => 'wdss_disable_gutenberg']); 
+                            if( get_option('wdss_disable_gutenberg') == '' ) update_option( 'wdss_disable_gutenberg', '0' );               
+                          ?>    
+                      </label>
+                    </div>                           
+                  
                     <div id="wdss-disable-jquery" class="wdss-setting-item">
                         <label>
                           <span title="Disables jQuery and Migration script for Frontend">Disable jQuery <sup>?</sup></span>
@@ -23,9 +33,9 @@
                             if( get_option('wdss_disable_jquery') == '' ) update_option( 'wdss_disable_jquery', '0' );               
                           ?>    
                       </label>
-                    </div>           
-                  
-                    <div id="wdss-last-modified" class="wdss-setting-item">
+                    </div>      
+
+                    <div id="wdss-force-slash" class="wdss-setting-item">
                         <label>
                           <span title="To apply changes visit Permalinks page ">Force Trailling Slash <sup>?</sup></span>
                           <?php 

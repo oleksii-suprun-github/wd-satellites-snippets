@@ -317,6 +317,24 @@
       }
     }      
 
+
+    // Disable Gutenberg Block Editor & New Block Widget Area
+    if(get_option('wdss_disable_gutenberg', '0')) {
+       // Disables the block editor itself
+      add_filter( 'use_block_editor_for_post', '__return_false' );
+      // Disables the block editor from managing widgets in the Gutenberg plugin.
+      add_filter( 'gutenberg_use_widgets_block_editor', '__return_false', 100 );
+      // Disables the block editor from managing widgets. renamed from wp_use_widgets_block_editor
+      add_filter( 'use_widgets_block_editor', '__return_false' );
+    }
+
+
+    // Additional option to allow *data* protocol(?) on images
+    add_filter('kses_allowed_protocols', function ($protocols) {
+      $protocols[] = 'data';
+      return $protocols;
+    });
+
     // Disable X-Pingback to header
     add_filter( 'wp_headers', 'disable_x_pingback' );
     function disable_x_pingback( $headers ) {
