@@ -234,7 +234,7 @@
             body.wp-admin .update-nag,
             .jitm-banner {display: none !important;} 
             
-            #wd-satellites-snippets-update {display: table-row !important;} 
+            #wd-satellites-snippets-update, #wd-bulk-validation-fixer-update {display: table-row !important;} 
         </style>';
                       
 
