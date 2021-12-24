@@ -1,7 +1,8 @@
 <?php 
 
 // Polylang Meta Descriptions Settings
-if( get_option('wdss_polylang_meta_data', '0') ) {
+$post_counts = wp_count_posts( 'post' )->publish;
+if( get_option('wdss_polylang_meta_data', '0') && $post_counts > 1 ) {
 
     function polylang_meta_title($meta_title) {
         if( function_exists('pll_the_languages') ) {

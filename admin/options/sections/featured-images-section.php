@@ -1,6 +1,7 @@
 <?php
 // Random Featured Image from the list
-if (get_option('wdss_auto_featured_image', '0'))
+$post_counts = wp_count_posts( 'post' )->publish;
+if (get_option('wdss_auto_featured_image', '0') && $post_counts > 1)
 {
 
 

@@ -10,21 +10,21 @@
       value="<?= esc_attr(get_option($args['field_name']));?>" >  
   <? }
 
-function image_to_url_handler_html($args) { 
-  if(get_option($args['field_name'])) {
-    $attachment_url = esc_attr(get_option($args['field_name']));
-  }
-  else {
-    $attachment_id = esc_attr(get_option($args['field_name']));
-    $attachment_url = wp_get_attachment_url($attachment_id);
-  }
-?>
-  <input type="text" 
-    <?php if(isset($args['id'])) : ?> id="<?= $args['id']; ?>" <?php endif ?>
-    name="<?= $args['field_name']; ?>" 
-    value="<?= $attachment_url; ?>" 
-    >  
-<? }
+  function image_to_url_handler_html($args) { 
+    if(get_option($args['field_name'])) {
+      $attachment_url = esc_attr(get_option($args['field_name']));
+    }
+    else {
+      $attachment_id = esc_attr(get_option($args['field_name']));
+      $attachment_url = wp_get_attachment_url($attachment_id);
+    }
+  ?>
+    <input type="text" 
+      <?php if(isset($args['id'])) : ?> id="<?= $args['id']; ?>" <?php endif ?>
+      name="<?= $args['field_name']; ?>" 
+      value="<?= $attachment_url; ?>" 
+      >  
+  <? }
 
 
   function textarea_handler_html($args) { 
@@ -32,6 +32,7 @@ function image_to_url_handler_html($args) {
   ?>
     <textarea name="<?= $args['field_name']; ?>" cols="30" rows="<?= $textarea_rows; ?>"><?= esc_attr(get_option($args['field_name']));?></textarea>
   <?php }
+
 
   function date_handler_html($args) { ?>
     <input type="date" name="<?= $args['field_name']; ?>" value="<?= esc_attr(get_option($args['field_name']));?>" >  

@@ -1,6 +1,7 @@
 <?php 
+  $post_counts = wp_count_posts( 'post' )->publish;
   $polylang = function_exists('pll_languages_list') ? count(pll_languages_list()) : false;
-  if($polylang)  : 
+  if($polylang && $post_counts > 1)  : 
 ?>
 <section id="polylang-settings" class="wdss-section">
   <div class="wdss-section-header">
