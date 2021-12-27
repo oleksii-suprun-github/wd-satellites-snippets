@@ -23,36 +23,10 @@ if (get_option('wdss_auto_featured_image', '0') && $post_counts > 1)
             // If post has no thumbnail
             if (!has_post_thumbnail($post->ID))
             {
-
                 $media = get_attached_media('image', $post->ID);
-
-                if ($media)
-                {
-                    $media = array_shift($media);
-                    $image_url = $media->guid;
-
-
-                    if (check_url_status($image_url))
-                    {
-                        $is_attached = attach_first_post_image($post->ID, $image_url);
-                        if (!$is_attached)
-                        {
-                            if (function_exists('rand_image_from_list'))
-                            {
-                                rand_image_from_list($post->ID);
-                            }
-                        }
-                    }
-                    else
-                    {
-                      rand_image_from_list($post->ID);
-                    }
-                }
-                elseif (!function_exists('pll_the_languages') || (function_exists('pll_the_languages') && $polylang_current_lang))
-                {
-                    if (function_exists('rand_image_from_list'))
-                    {
-                      rand_image_from_list($post->ID);
+                if(!$media || (function_exists('pll_the_languages') && $polylang_current_lang)) {
+                    if (function_exists('rand_image_from_list')) {
+                        rand_image_from_list($post->ID);
                     }
                 }
             }
