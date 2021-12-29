@@ -1,22 +1,36 @@
 <?php
 // Picks random image from predifined lists
-function rand_image_from_list($post_id)
+function rand_image_from_list($post_id, $default = false)
 {
-    $category = get_the_category($post_id);
 
-    if (!empty($category))
-    {
-
-        $option_postfix = preg_replace('/\-+/', '_', strtolower($category[0]->slug));
-
-        $option = get_option('wdss_featured_images_list_' . $option_postfix, '');
-
+    if($default) {
+        $option = get_option('wdss_featured_images_list_default');
+    
         if ($option)
         {
             $images_ids_arr = explode(',', $option);
             $rand_index = array_rand($images_ids_arr);
             $image_id = intval($images_ids_arr[$rand_index]);
             set_post_thumbnail($post_id, $image_id);
+        }
+    } 
+    else {
+        $category = get_the_category($post_id);
+
+        if (!empty($category))
+        {
+    
+            $option_postfix = preg_replace('/\-+/', '_', strtolower($category[0]->slug));
+    
+            $option = get_option('wdss_featured_images_list_' . $option_postfix, '');
+    
+            if ($option)
+            {
+                $images_ids_arr = explode(',', $option);
+                $rand_index = array_rand($images_ids_arr);
+                $image_id = intval($images_ids_arr[$rand_index]);
+                set_post_thumbnail($post_id, $image_id);
+            }
         }
     }
 }

@@ -23,11 +23,13 @@ if (get_option('wdss_auto_featured_image', '0') && $post_counts > 1)
             // If post has no thumbnail
             if (!has_post_thumbnail($post->ID))
             {
-                $media = get_attached_media('image', $post->ID);
-                if(!$media || (function_exists('pll_the_languages') && $polylang_current_lang)) {
+                if(function_exists('pll_the_languages') && $polylang_current_lang) {
                     if (function_exists('rand_image_from_list')) {
                         rand_image_from_list($post->ID);
                     }
+                }
+                else {
+                    rand_image_from_list($post->ID, true);
                 }
             }
             // Polylang case

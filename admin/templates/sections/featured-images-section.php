@@ -58,24 +58,23 @@
              <span>In case if there`s no images in post, you also can choose which images should be randomly picked for posts in each category </span>
           <?php elseif(!$polylang_current_lang) : ?>
               <span>Please change your lang to <?= strtoupper($polylang_default_lang); ?> in order to implement custom featured images</span>
-          <?php endif;
+          <?php endif; ?>
           
+          <div id="default-category-featured" class="wdss-setting-item image-chooser featured">
+            <span>-- *Default*</span>
+             <?php 
+                text_handler_html(['field_name' => 'wdss_featured_images_list_default']);            
+              ?>  
+              <button type="button" class="wdss-button choose">Choose</button>
+              <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>
+          </div>
+
+          <?php 
           foreach( $categories as $category ) {
 
             $category_id = $category->term_id;
 
-            if( $polylang_default_lang ) { ?>
-
-              <div id="default-category-featured" class="wdss-setting-item image-chooser featured">
-                <span>-- *Default*</span>
-                <?php 
-                  text_handler_html(['field_name' => 'wdss_featured_images_list_default']);            
-                ?>  
-                <button type="button" class="wdss-button choose">Choose</button>
-                <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>
-              </div>
-              
-            <?php 
+            if( $polylang_default_lang ) { 
               if( $polylang_current_lang )  {
                 $category_tr =  get_category(pll_get_term($category_id)); 
                 $category_tr_name = $category_tr->name;
