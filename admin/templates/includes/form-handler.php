@@ -74,6 +74,8 @@ function wdss_form_handler() {
   
         isset_option('wdss_featured_images_list_' . $category_option . '');
       }
+
+      isset_option('wdss_featured_images_list_default');
     
       isset_option('wdss_polylang_meta_data');   
       isset_option('wdss_multilang_sitemap');

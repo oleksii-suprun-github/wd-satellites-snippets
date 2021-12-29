@@ -42,7 +42,7 @@
 
       <div id="wdss-auto-featured-image-condition" class="wdss-setting-item">
           <label>
-              <span title="Takes featured image from the first attached image in the post">Featured Image From Attachment<sup>?</sup></span>
+              <span>Featured Image From Predefined Lists</span>
               <?php 
                 checkbox_handler_html(['field_name' => 'wdss_auto_featured_image']); 
                 if( get_option('wdss_auto_featured_image') == '' ) update_option( 'wdss_auto_featured_image', '0' );               
@@ -64,8 +64,18 @@
 
             $category_id = $category->term_id;
 
-            if( $polylang_default_lang ) {
+            if( $polylang_default_lang ) { ?>
 
+              <div id="default-category-featured" class="wdss-setting-item image-chooser featured">
+                <span>-- *Default*</span>
+                <?php 
+                  text_handler_html(['field_name' => 'wdss_featured_images_list_default']);            
+                ?>  
+                <button type="button" class="wdss-button choose">Choose</button>
+                <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>
+              </div>
+              
+            <?php 
               if( $polylang_current_lang )  {
                 $category_tr =  get_category(pll_get_term($category_id)); 
                 $category_tr_name = $category_tr->name;

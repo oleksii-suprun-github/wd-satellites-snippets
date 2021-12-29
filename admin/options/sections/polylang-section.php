@@ -51,6 +51,7 @@ if( get_option('wdss_polylang_meta_data', '0') && $post_counts > 1 ) {
             }
             return $meta_title;
         }
+        return $meta_title;
     }
     add_filter('wpseo_title', 'polylang_meta_title', 99);
     add_filter('wpseo_opengraph_title', 'polylang_meta_title', 99);
@@ -102,6 +103,7 @@ if( get_option('wdss_polylang_meta_data', '0') && $post_counts > 1 ) {
             }
             return $meta_description;
         }
+        return $meta_description;
   }
   add_filter('wpseo_metadesc', 'polylang_meta_description', 99);
   add_filter('wpseo_opengraph_desc', 'polylang_meta_description', 99);
