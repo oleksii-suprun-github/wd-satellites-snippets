@@ -48,7 +48,6 @@ function wdss_form_handler() {
       isset_option('wdss_yoast_canonical_fix');   
       isset_option('wdss_autoptimize_lazy_fix');   
       isset_option('wdss_gutenberg_styles');   
-      isset_option('wdss_amp_rules');  
       isset_option('wdss_amp_fix');   
       isset_option('wdss_force_lowercase');  
       

@@ -203,16 +203,6 @@
                       </label>
                     </div> 
 
-                    <div id="wdss-redundant-links" class="wdss-setting-item">
-                        <label>
-                          <span>Basic Redirect Rules</span>
-                          <?php 
-                            checkbox_handler_html(['field_name' => 'wdss_amp_rules']); 
-                            if( get_option('wdss_amp_rules') == '' ) update_option( 'wdss_amp_rules', '0' );               
-                          ?>    
-                      </label>
-                    </div>
-
                     <?php if( function_exists('amp_bootstrap_plugin') ) { ?>
                     <div id="wdss-amp-template-fix" class="wdss-setting-item">
                         <label>
