@@ -61,6 +61,7 @@
 						}
 					}
 			}
+      add_action('wp', 'wdss_force_lowercase');
 		}
 
 
@@ -606,26 +607,6 @@
           exit();
         }       
       }
-    }
-
-
-    // Force tralling slash
-    if( get_option('wdss_forced_trail_slash', '0') ) {
-
-      function wdss_forced_trail_slash($rules) {
-          $rule  = "\n";
-          $rule .= "# Force Tralling Slash.\n";
-          $rule .= "<IfModule mod_rewrite.c>\n";
-          $rule .= "RewriteEngine On\n";
-          $rule .= "RewriteCond %{REQUEST_URI} !(/$|\.)\n";
-          $rule .= "RewriteRule (.*) %{REQUEST_URI}/ [R=301,L]\n";
-          $rule .= "</IfModule>\n";
-          $rule .= "\n";
-        
-          return $rule . $rules;
-        }
-
-        add_filter('mod_rewrite_rules', 'wdss_forced_trail_slash'); 
     }
 
 

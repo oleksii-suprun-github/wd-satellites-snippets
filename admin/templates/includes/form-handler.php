@@ -23,7 +23,6 @@ function wdss_form_handler() {
 
       isset_option('wdss_last_modified_n_304'); 
 
-      isset_option('wdss_forced_trail_slash');   
       isset_option('wdss_disable_jquery'); 
       
       isset_option('wdss_redundant_links');   

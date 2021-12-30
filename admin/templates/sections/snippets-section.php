@@ -35,16 +35,6 @@
                       </label>
                     </div>      
 
-                    <div id="wdss-force-slash" class="wdss-setting-item">
-                        <label>
-                          <span title="To apply changes visit Permalinks page ">Force Trailling Slash <sup>?</sup></span>
-                          <?php 
-                            checkbox_handler_html(['field_name' => 'wdss_forced_trail_slash']); 
-                            if( get_option('wdss_forced_trail_slash') == '' ) update_option( 'wdss_forced_trail_slash', '0' );               
-                          ?>    
-                      </label>
-                    </div>
-
                     <div id="410-status-for-categories" class="wdss-setting-item">
                         <label>
                           <span title="Sets 410 Gone status code for standard category">Set 410 for empty categories <sup>?</sup></span>
