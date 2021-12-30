@@ -754,15 +754,20 @@
     function wdss_custom_post_descriptions($meta_description)  {
        
       if( is_single() ) {
-        $condition = '#<div[^>]*id="toc"[^>]*>.*?</div>#is';
+        $condition1 = '#<div[^>]*id="toc"[^>]*>.*?</div>#is';
+        $condition2 = '/<p[^>]*[^>]*>.*?<\/p>/';
         $content = apply_filters( 'the_content', get_the_content() );
       
-        if( preg_match($condition, $content) ) {
-          $raw = apply_filters( 'the_content', get_the_content() );
-          $clear = preg_replace('#<div[^>]*id="toc"[^>]*>.*?</div>#is', '', $raw);	
-          $stripped = strip_tags($clear);
-          $meta_description = mb_substr($stripped, 0, 150, 'UTF-8') . ' [...]';
+        if( preg_match($condition1, $content) ) {
+          $clear = preg_replace($condition1, '', $content);	
         }
+        else {
+          preg_match_all('/<p[^>]*[^>]*>.*?<\/p>/', $content, $results);
+          $clear = $results[0][1];	
+        }
+
+        $stripped = strip_tags($clear);
+        $meta_description = mb_substr($stripped, 0, 150, 'UTF-8') . ' [...]';
       }
 
       return $meta_description;

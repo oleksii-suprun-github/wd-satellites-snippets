@@ -57,7 +57,7 @@
           <?php if( $polylang_current_lang || !$polylang_default_lang ) : ?>
              <span>In case if there`s no images in post, you also can choose which images should be randomly picked for posts in each category </span>
           <?php elseif(!$polylang_current_lang) : ?>
-              <span>Please change your lang to <?= strtoupper($polylang_default_lang); ?> in order to implement custom featured images</span>
+              <span>Please change your lang to <?= strtoupper($polylang_default_lang); ?> in order to implement custom featured images to specific category</span>
           <?php endif; ?>
           
           <div id="default-category-featured" class="wdss-setting-item image-chooser featured">
