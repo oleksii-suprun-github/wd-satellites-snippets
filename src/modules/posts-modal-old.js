@@ -19,7 +19,7 @@ export default function getPostsModal(obj) {
 	const html = document.querySelector('html');
 	const modal = document.querySelector(obj.modal_el);
 	const open_modal_btn = document.querySelector(obj.open_modal_btn);
-	const close_modal_btn = modal.querySelector('.wdss-modal-header i.fa-times');
+	const close_modal_btn = modal.querySelector('.wdss-modal-header i.times');
 
 	let total_posts = wdss_localize.total_post_count;
 	let total_pages_info = Math.ceil(total_posts / 30);

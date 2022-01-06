@@ -2,8 +2,8 @@
   <div class="wdss-section-header">
     <h2 class="section-toggler">Other</h2>
     <div class="wdss-section-header-togglers">
-      <i title="Pin this section as open" class="fas fa-lock section-pin"></i>
-      <i class="fas fa-chevron-down section-toggler"></i>
+      <i title="Pin this section as open" class=" lock section-pin"></i>
+      <i class=" chevron-down section-toggler"></i>
     </div>
   </div>
   <div class="wdss-row hidden">

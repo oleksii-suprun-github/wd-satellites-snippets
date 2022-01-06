@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Layer_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 23.773212 14"
+   xml:space="preserve"
+   sodipodi:docname="chevron-icon.svg"
+   width="23.773212"
+   height="14"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"><metadata
+   id="metadata9"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs7" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1017"
+   id="namedview5"
+   showgrid="false"
+   inkscape:zoom="4"
+   inkscape:cx="-41.220283"
+   inkscape:cy="26.455014"
+   inkscape:window-x="-8"
+   inkscape:window-y="-8"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="Layer_1" />
+<path
+   d="m 13.407915,13.369863 c -0.840183,0.840183 -2.123288,0.840183 -2.964993,0 -0.03653,-0.04262 -0.03653,-0.04262 -0.03653,-0.04262 L 0.59817352,3.5616438 c -0.79756469,-0.8401826 -0.79756469,-2.1187214 0,-2.95890407 0.84018268,-0.80365297 2.12328768,-0.80365297 2.95890408,0 L 11.923896,9.0060883 20.252664,0.68188737 c 0.797564,-0.79756469 2.123287,-0.79756469 2.922374,0 0.797565,0.80365293 0.797565,2.12328763 0,2.92237443 z"
+   id="path2"
+   style="stroke-width:0.0152207;fill:#ffffff" />
+</svg>

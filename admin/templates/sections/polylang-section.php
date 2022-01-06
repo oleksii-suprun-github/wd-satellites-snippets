@@ -7,8 +7,8 @@
   <div class="wdss-section-header">
     <h2 class="section-toggler">Polylang </h2>
     <div class="wdss-section-header-togglers">
-      <i title="Pin this section as open" class="fas fa-lock section-pin"></i>
-      <i class="fas fa-chevron-down section-toggler"></i>
+      <i title="Pin this section as open" class=" lock section-pin"></i>
+      <i class=" chevron-down section-toggler"></i>
     </div>
   </div>
   <div class="wdss-row hidden">
@@ -27,7 +27,7 @@
         <div id="wdss-polylang-homepage-title" class="wdss-setting-item wdss-polylang-accordion">
           <div class="wdss-setting-item-accordion">
             <h3>Homepage title</h3>
-            <i class="fas fa-chevron-down section-toggler"></i>
+            <i class=" chevron-down section-toggler"></i>
           </div>
 
           <?php $polylang_lang_list = pll_languages_list(['fields' => []]);  ?>
@@ -50,7 +50,7 @@
         <div id="wdss-polylang-homepage-description" class="wdss-setting-item wdss-polylang-accordion">
           <div class="wdss-setting-item-accordion">
             <h3>Homepage description</h3>
-            <i class="fas fa-chevron-down section-toggler"></i>
+            <i class=" chevron-down section-toggler"></i>
           </div>
 
           <?php $polylang_lang_list = pll_languages_list(['fields' => []]);  ?>
@@ -74,7 +74,7 @@
           <div id="wdss-polylang-author-title" class="wdss-setting-item wdss-polylang-accordion">
             <div class="wdss-setting-item-accordion">
               <h3>Author`s page title</h3>
-              <i class="fas fa-chevron-down section-toggler"></i>
+              <i class=" chevron-down section-toggler"></i>
             </div>
 
             <div class="wdss-setting-item-accordion-content">
@@ -83,7 +83,7 @@
                 foreach($authors as $author) : 
               ?>    
               <div class="wdss-polylang-author-block">
-                <h4><i class="fas fa-user"></i> <?= $author->display_name; ?></h4>
+                <h4><i class=" user"></i> <?= $author->display_name; ?></h4>
                 <div class="wdss-polylang-textarea-blocks">
                   <?php foreach($polylang_lang_list as $lang) : ?>
                   <div class="wdss-polylang-textarea-block">
@@ -105,7 +105,7 @@
           <div id="wdss-polylang-author-description" class="wdss-setting-item wdss-polylang-accordion">
             <div class="wdss-setting-item-accordion">
               <h3>Author`s page description</h3>
-              <i class="fas fa-chevron-down section-toggler"></i>
+              <i class=" chevron-down section-toggler"></i>
             </div>
 
             <div class="wdss-setting-item-accordion-content">
@@ -114,7 +114,7 @@
                 foreach($authors as $author) : 
               ?>    
               <div class="wdss-polylang-author-block">
-                <h4><i class="fas fa-user"></i> <?= $author->display_name; ?></h4>
+                <h4><i class=" user"></i> <?= $author->display_name; ?></h4>
                 <div class="wdss-polylang-textarea-blocks">
                   <?php foreach($polylang_lang_list as $lang) : ?>
                     <div class="wdss-polylang-textarea-block">

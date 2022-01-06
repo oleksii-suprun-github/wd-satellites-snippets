@@ -1,5 +1,3 @@
-@import '~@fortawesome/fontawesome-free/css/all.min.css';
-
 /*====================
   Admin Toolbar Icon 
 =====================*/
@@ -153,6 +151,34 @@ div.disabled:before {
 }
 
 
+/* Icons */
+i {
+  display: inline-block;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+i.trash {
+  width: 14px;
+  height: 16px;
+  background-image: url('icons/trash-icon.svg');
+}
+i.user {
+  width: 16px;
+  height: 16px;
+  background-image: url('icons/user-icon.svg');
+}
+i.times {
+  width: 25px;
+  height: 25px;
+  background-image: url('icons/close-icon.svg');
+}
+i.lock {
+  width: 12.5px;
+  height: 18px;
+  background-image: url('icons/lock-icon.svg');
+}
+
+
 /* Notifications */
 .modal.notification {
   left: 0;
@@ -279,24 +305,30 @@ div.disabled:before {
   justify-content: space-between;
   align-items: center;
 }
-.wdss-section-header-togglers i {
-  color: #fff;
+.wdss-section-header-togglers i.lock { 
+  position: relative;
 }
-.wdss-section-header-togglers i.fa-lock { 
-  font-size: 1rem;
-  color: #666;
+.wdss-section-header-togglers i.lock:before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0,0,0, .4);
 }
-.wdss-section-header-togglers i.fa-lock.active {
-  color: #fff;
+.wdss-section-header-togglers i.lock.active:before {
+  content: none;
 }
-.wdss-section-header-togglers i.fa-chevron-down {
+.wdss-section-header-togglers i.chevron-down {
   transition: transform 500ms;
-  font-size: 1.25rem;
+  width: 24px;
+  height: 14px;
+  background: url('icons/chevron-icon.svg');
 }
-.wdss-section-header-togglers i.fa-chevron-down.disabled {
+.wdss-section-header-togglers i.chevron-down.disabled {
   color: #666;
 }
-#wdss-settings-page .wdss-section-header.active i.fa-chevron-down {
+#wdss-settings-page .wdss-section-header.active i.chevron-down {
   transform: rotate(180deg);
   transition: transform 500ms;
 }
@@ -384,13 +416,10 @@ div.disabled:before {
   box-shadow: none !important;
 }
 #wdss-settings-page input[type=checkbox]:checked::before {
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  content: "\f00c";
-  font-size: .8rem;
+  content: url('icons/checked-icon.svg');
   position: absolute;
-  top: 8px;
-  left: 1px;
+  top: 1.5px;
+  left: 0px;
   margin: 0;
   height: unset;
   width: unset;
@@ -881,7 +910,7 @@ button#wdss-toggle-options {
 #wdss-settings-page .wdss-polylang-author-block h4 i {
   border-radius: 50%;
   color: #fff;
-  background: #1d2327;
+  background-color: #1d2327;
   width: 35px;
   height: 35px;
   display: flex;

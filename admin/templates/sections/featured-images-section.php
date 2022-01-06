@@ -25,8 +25,8 @@
   <div class="wdss-section-header">
     <h2 class="section-toggler">Featured Images </h2>
     <div class="wdss-section-header-togglers">
-      <i title="Pin this section as open" class="fas fa-lock section-pin"></i>
-      <i class="fas fa-chevron-down section-toggler"></i>
+      <i title="Pin this section as open" class=" lock section-pin"></i>
+      <i class=" chevron-down section-toggler"></i>
     </div>
   </div>
   <div class="wdss-row hidden">
@@ -66,7 +66,7 @@
                 text_handler_html(['field_name' => 'wdss_featured_images_list_default']);            
               ?>  
               <button type="button" class="wdss-button choose">Choose</button>
-              <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>
+              <button type="button" class="wdss-button reset"><i class="trash"></i></button>
           </div>
 
           <?php 
@@ -88,7 +88,7 @@
                   text_handler_html(['field_name' => 'wdss_featured_images_list_'. $category_tr_option . '']);            
                 ?>  
                 <button type="button" class="wdss-button choose">Choose</button>
-                <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>
+                <button type="button" class="wdss-button reset"><i class="trash"></i></button>
               </div>
   
               <?php 
@@ -106,7 +106,7 @@
                 text_handler_html(['field_name' => 'wdss_featured_images_list_'. $category_option . '']);            
               ?>  
               <button type="button" class="wdss-button choose">Choose</button>
-              <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>
+              <button type="button" class="wdss-button reset"><i class="trash"></i></button>
             </div>
 
           <?php }

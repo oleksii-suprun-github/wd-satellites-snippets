@@ -10,8 +10,8 @@
   <div class="wdss-section-header">
     <h2 class="section-toggler">JSON-LD Schema</h2>
     <div class="wdss-section-header-togglers">
-      <i title="Pin this section as open" class="fas fa-lock section-pin"></i>
-      <i class="fas fa-chevron-down section-toggler"></i>
+      <i title="Pin this section as open" class=" lock section-pin"></i>
+      <i class=" chevron-down section-toggler"></i>
     </div>
   </div>
   <div class="wdss-row hidden">
@@ -25,7 +25,7 @@
                   if( get_option('wdss_jsonld_schema_logo') == '' ) update_option( 'wdss_jsonld_schema_logo', '' );   
                 ?>  
                 <button type="button" id="wdss_jsonld_schema_logo__choose" class="wdss-button choose">Choose</button>
-                <button type="button" class="wdss-button reset"><i class="fas fa-trash"></i></button>   
+                <button type="button" class="wdss-button reset"><i class="trash"></i></button>   
             </label>
         </div>
 

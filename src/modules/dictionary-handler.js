@@ -76,7 +76,7 @@ export default function dictionaryHandler(dictionary) {
       table.insertAdjacentHTML('beforeend',`
       <tr id="${wdss_localize.wp_rand}">
         <td>${url_temp}</td>
-        <td class="wdss-table__remove-item"><i class="fas fa-trash"></i></td>
+        <td class="wdss-table__remove-item"><i class="trash"></i></td>
       </tr>
       `);
     }

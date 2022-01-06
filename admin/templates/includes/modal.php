@@ -3,7 +3,7 @@
   <div id="<?= $modal_id; ?>" class="wdss-modal">
 			<div class="wdss-modal-header">
 				<span class="wdss-modal-title"></span>
-				<i class="fas fa-times"></i>
+				<i class="times"></i>
 			</div>
 			<div class="wdss-modal-body">
 				<div class="wdss-table-wrapper">
