@@ -1,0 +1,9 @@
+# removes redundant dev folders for production build
+node_modules
+src
+# removes redundant dev files for production build
+.md
+LICENSE
+LICENSE.txt
+*.json
+*.js

@@ -717,8 +717,12 @@ function wdss_custom_post_descriptions($meta_description)
         $meta_description = mb_substr($stripped, 0, 150, 'UTF-8') . ' [...]';
         return $meta_description;
     }
-
-    $meta_description = mb_substr($meta_description, 0, 150, 'UTF-8') . ' [...]';
+	elseif(is_single()) {
+		$meta_description = mb_substr($meta_description, 0, 150, 'UTF-8') . ' [...]';
+	}
+	elseif(is_category()) {
+		$meta_description = mb_substr($meta_description, 0, 150, 'UTF-8');
+	}
     return $meta_description;
 
 }
