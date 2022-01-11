@@ -52,6 +52,7 @@ class Wd_Satellites_Snippets_Admin {
 	public function wdss_init() {
 
     add_action( 'admin_menu', array($this, 'wdss_admin_menu'));
+		add_filter( 'auto_update_plugin', array($this, 'wdss_auto_update'), 100, 2 );
 
 		if ( is_admin_bar_showing() ) {
 			add_action( 'admin_bar_menu', array($this, 'wdss_add_adminbar_link'), 100);
@@ -116,6 +117,19 @@ class Wd_Satellites_Snippets_Admin {
 					'title' => 'WD Satellite Settings'
 			),
 		]);
+	}
+
+	// Enables Auto Update for this plugin
+	public function wdss_auto_update( $update, $item ){
+		$plugins = array (
+			'wd-satellites-snippets',
+			'wd-bulk-validation-fixer',
+		);
+	
+		if( in_array($item->slug, $plugins) )
+			return true; 
+		else
+			return $update; 
 	}
 
 

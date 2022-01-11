@@ -707,21 +707,17 @@ function wdss_custom_post_descriptions($meta_description)
     $condition = '/<p[^>]*[^>]*>(.*?)<\/p>/';
     $content = apply_filters('the_content', get_the_content());
 
-	if(is_single() && preg_match($condition, $content)) {
+	if(is_single() && !has_excerpt() && preg_match($condition, $content)) {
         preg_match_all($condition, $content, $results);
         $stripped = strip_tags($results[0][1]);
 		$meta_description = mb_substr($stripped, 0, 150, 'UTF-8') . ' [...]';
         return $meta_description;
 	}
-    elseif(is_single()) {
-        $meta_description = mb_substr($meta_description, 0, 150, 'UTF-8') . ' [...]';
-        return $meta_description;   
-    }
-	elseif(is_category()) {
+	elseif(is_category() || (is_single() && has_excerpt())) {
 		$meta_description = mb_substr($meta_description, 0, 150, 'UTF-8');
+        return $meta_description;
 	}
     return $meta_description;
-
 }
 add_filter('wpseo_metadesc', 'wdss_custom_post_descriptions', 10, 2);
 add_filter('wpseo_opengraph_desc', 'wdss_custom_post_descriptions', 10, 2);
