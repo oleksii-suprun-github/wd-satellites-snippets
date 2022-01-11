@@ -714,7 +714,7 @@ function wdss_custom_post_descriptions($meta_description)
         return $meta_description;
 	}
 	elseif(is_category() || (is_single() && has_excerpt())) {
-		$meta_description = mb_substr($meta_description, 0, 150, 'UTF-8');
+		$meta_description = mb_substr($meta_description, 0, 150, 'UTF-8') . ' [...]';
         return $meta_description;
 	}
     return $meta_description;
