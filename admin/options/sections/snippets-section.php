@@ -704,7 +704,7 @@ function wdss_wp_security_captcha_fix($content)
 // Custom Descriptions for imported articles
 function wdss_custom_post_descriptions($meta_description)
 {
-    $condition = '/<p[^>]*[^>]*>(.*?)<\/p>/';
+    $condition = '/<p>(.*?)<\/p>/';
     $content = apply_filters('the_content', get_the_content());
 
 	if(is_single() && !has_excerpt() && preg_match($condition, $content)) {
