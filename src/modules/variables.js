@@ -23,14 +23,16 @@
     select: '.image-chooser.featured button.choose',
     target: '.image-chooser.featured input',
     is_multiple: true,
-    title: 'Select Featured Images'
+    title: 'Select Featured Images',
+    types: ['image']
   };
   
   export const organizationLogoChooser = {
     select: '.image-chooser.logo button.choose',
     target: '.image-chooser.logo input',
     is_multiple: false,
-    title: 'Select Organization Logo'
+    title: 'Select Organization Logo',
+    types: ['image']
   }
   
   export const getOgranizationName = {

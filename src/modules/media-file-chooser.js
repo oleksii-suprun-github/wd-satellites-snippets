@@ -8,11 +8,17 @@ export default function mediaFileChooser(obj) {
 
       let image_frame;
 
+      if(!obj.types) {
+        obj.types = ['image'];
+      }
+
       image_frame = wp.media({
         title: obj.title,
         multiple: obj.is_multiple,
         library: {
-          type: 'image',
+          orderby: "date", 
+          query: true, 
+          post_mime_type: obj.types
         },
         button: {
           text: 'Select'
