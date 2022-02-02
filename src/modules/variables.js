@@ -84,3 +84,13 @@
     post_nonce_name: 'fix-posts-validation-errors-nonce',
     post_nonce_value: wdss_localize.fix_posts_validation_errors_nonce    
   }
+
+
+  export const removeAllPostAttachments = {
+    target_btn: '#wdss-delete-posts-attachments__button',
+    confirm_msg: 'You are going to remove all attached images to all post! Continue?',
+    data: 'true',
+    post_action: 'remove_posts_attachments',
+    post_nonce_name: 'remove-posts-attachments-nonce',
+    post_nonce_value: wdss_localize.remove_posts_attachments_nonce
+  }

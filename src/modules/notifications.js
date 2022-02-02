@@ -39,7 +39,7 @@
 				notification_template = `
 				<div class="modal notification ${notification_class}">
 				<div class="notification-header">
-					<i class=" times"></i>
+					<i class="times dark"></i>
 				</div>
 				<div class="notification-content">
 				<span>${msg}</span>

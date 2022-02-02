@@ -5,35 +5,6 @@ class Wd_Satellites_Snippets_Admin_Options {
 	// Last-modifed Settings
 	public function wdss_last_modified() {
 				function last_modified_default() {
-					$LastModified_unix = getlastmod();
-					$LastModified = gmdate( "D, d M Y H:i:s \G\M\T", $LastModified_unix );
-					$IfModifiedSince = false;
-					if ( isset($_ENV['HTTP_IF_MODIFIED_SINCE']) ) {
-						$IfModifiedSince = strtotime( substr($_ENV['HTTP_IF_MODIFIED_SINCE'], 5) );
-					}
-					if ( isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ) {
-						$IfModifiedSince = strtotime(substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 5));
-					}
-					if ( $IfModifiedSince && $IfModifiedSince >= $LastModified_unix ) {
-						header( $_SERVER['SERVER_PROTOCOL'] . ' 304 Not Modified' );
-						exit;
-					}
-					header( 'Last-Modified: '. $LastModified );
-
-					add_action('wbcr/factory/option_if_modified_since_headers', function($option_value){
-						$server_headers = apache_response_headers();
-						if (isset($server_headers['Last-Modified'])
-							&& !empty($server_headers['Last-Modified'])
-							&& $option_value){
-							
-							header_remove('Set-Cookie');
-						}
-							
-						return $option_value;
-					}, 1);
-				}
-
-				function last_modified_polylang() {
 					if ( wp_doing_ajax() || ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST ) || ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || ( is_admin() ) ) {
 						return;
 					}
@@ -106,12 +77,7 @@ class Wd_Satellites_Snippets_Admin_Options {
 					}
 				}
 
-				if( function_exists('pll_the_languages') ) {
-					add_action( 'template_redirect', 'last_modified_polylang' );
-				}
-				else {
-					last_modified_default();
-				}
+				add_action( 'template_redirect', 'last_modified_default' );
 	}
 
 	// Basic Snippets List 
@@ -125,6 +91,5 @@ class Wd_Satellites_Snippets_Admin_Options {
 		include_once('sections/schema-section.php');
 		include_once('sections/custom-410s.php');
 		include_once('sections/other-section.php');
-		include_once('sections/post-content-section.php');
   }
 }

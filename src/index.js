@@ -1,5 +1,5 @@
 import {getSiteInfo, accordionToggler, checkboxToggler, sectionToggler, groupToggler, ajaxQuery, resetInputs, toggleAllOptions} from "./modules/helpers";
-import {featuredImageSection, polylangSection, featuredImagesListReset, organizationLogoReset, featuredImagesChooser, organizationLogoChooser, getOgranizationName, getSiteEmail, e410_Dictionary, excludedHostsDictionary, removeBrokenFeatured, fixEmptyPostsContent} from './modules/variables';
+import {featuredImageSection, polylangSection, featuredImagesListReset, organizationLogoReset, featuredImagesChooser, organizationLogoChooser, getOgranizationName, getSiteEmail, e410_Dictionary, excludedHostsDictionary, removeBrokenFeatured, fixEmptyPostsContent, removeAllPostAttachments} from './modules/variables';
 
 import schemaSectionSettings from "./modules/schema-settings";
 import mediaFileChooser from "./modules/media-file-chooser";
@@ -36,6 +36,8 @@ function Init() {
 
     dictionaryHandler(excludedHostsDictionary);
     dictionaryHandler(e410_Dictionary);
+
+    ajaxQuery(removeAllPostAttachments);
 
     mediaFileChooser(organizationLogoChooser);
     resetInputs(organizationLogoReset);

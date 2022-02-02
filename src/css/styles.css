@@ -172,6 +172,11 @@ i.times {
   height: 25px;
   background-image: url('icons/close-icon.svg');
 }
+i.times.dark {
+  width: 25px;
+  height: 25px;
+  background-image: url('icons/close-icon--dark.svg');
+}
 i.lock {
   width: 12.5px;
   height: 18px;
@@ -521,9 +526,6 @@ i.lock {
 .wdss-button.load-more {
   background: #2271b1;
 }
-.wdss-button.save-dictionary {
-  background: green;
-}
 .wdss-button.load-more.loading {
   pointer-events: none;
 }
@@ -549,14 +551,22 @@ i.lock {
   transition: all 300ms;
 }
 .wdss-button.submit,
-.wdss-button.get-posts {
+.wdss-button.get-posts,
+.wdss-button.save-dictionary {
   color: #fff;
   border-color: green;
   background: green;
 }
 .wdss-button.submit:hover,
-.wdss-button.get-posts {
+.wdss-button.get-posts:hover,
+.wdss-button.save-dictionary:hover {
   background: #1ea71e;
+}
+.wdss-button.warning {
+  background-color: #cc2020;
+}
+.wdss-button.warning:hover {
+  background-color: #d94c4c;
 }
 #wdss-settings-page form > .wdss-button.submit {
   margin-top: 35px;
@@ -566,6 +576,7 @@ i.lock {
   border: 0;
   font-size: 1.15rem;
 }
+
 
 
 /* Modals */

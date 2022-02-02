@@ -40,6 +40,8 @@
             include_once('sections/schema-section.php');
             include_once('sections/custom-410s-section.php'); 
             include_once('sections/other-section.php');
+            include_once('sections/development-section.php');
+            
           ?>
 
           <input type="submit" name="submit" id="wdss-submit" class="wdss-button submit" value="<?= __('Save changes', 'wdss_domain') ?>">

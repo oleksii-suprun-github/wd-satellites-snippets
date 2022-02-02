@@ -65,6 +65,9 @@ class Wd_Satellites_Snippets_Admin {
     }
 
 		if( wp_doing_ajax() ) {
+
+			add_action( 'wp_ajax_remove_posts_attachments',  array($this, 'wdss_remove_posts_attachments_handler') );
+
 			add_action( 'wp_ajax_fetch_broken_featured',  array($this, 'wdss_get_broken_featured') );
 			add_action( 'wp_ajax_remove_broken_featured',  array($this, 'wdss_remove_broken_featured') );
 
@@ -136,6 +139,30 @@ class Wd_Satellites_Snippets_Admin {
 	// Register the stylesheets for the admin area
 	public function wdss_admin_enqueue_styles() {
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . '../assets/css/main.css', array(), $this->version, 'all' );
+	}
+
+
+	// Remove all Posts Attached Images Handler
+	public function wdss_remove_posts_attachments_handler() {
+		check_ajax_referer( 'remove-posts-attachments-nonce', 'security', false );
+
+		$args = array(
+      'fields'          => 'ids', 
+      'posts_per_page'  => -1,
+      'post_status' => 'any'
+    );
+    $posts = get_posts($args);
+    
+    foreach($posts as $id) {
+      delete_post_thumbnail($id);
+    
+      $attachments = get_attached_media('image', $id);
+      foreach($attachments as $attachment) {
+        wp_delete_attachment($attachment->ID, true);
+        usleep(500);
+      }
+      usleep(500);
+    }
 	}
 
 
@@ -375,7 +402,9 @@ class Wd_Satellites_Snippets_Admin {
 				'remove_broken_featured_nonce' => wp_create_nonce( 'remove-broken-featured-nonce' ),
 
 				'e410_dictionary_nonce' => wp_create_nonce( 'e410-dictionary-nonce' ),
-				'excluded_hosts_dictionary_nonce' => wp_create_nonce( 'excluded-hosts-dictionary-nonce' ),				
+				'excluded_hosts_dictionary_nonce' => wp_create_nonce( 'excluded-hosts-dictionary-nonce' ),
+				
+				'remove_posts_attachments_nonce' => wp_create_nonce( 'remove-posts-attachments-nonce' ),
 			];
 			wp_localize_script( $this->plugin_name, 'wdss_localize', $wdss_localize_script );
 		}
