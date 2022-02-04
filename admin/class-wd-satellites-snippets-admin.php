@@ -155,7 +155,11 @@ class Wd_Satellites_Snippets_Admin {
     
     foreach($posts as $id) {
       delete_post_thumbnail($id);
-    
+			
+			if(get_post_meta($id, 'hasConvertedImages', true)) {
+				delete_post_meta($id, 'hasConvertedImages');
+			}
+
       $attachments = get_attached_media('image', $id);
       foreach($attachments as $attachment) {
         wp_delete_attachment($attachment->ID, true);
