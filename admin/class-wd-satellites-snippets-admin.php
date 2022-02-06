@@ -74,8 +74,7 @@ class Wd_Satellites_Snippets_Admin {
 			add_action( 'wp_ajax_fetch_all_posts',  array($this, 'wdss_get_all_empty_posts') );
 			add_action( 'wp_ajax_fix_posts_validation_errors', array($this, 'wdss_fix_validation_errors') );
 			
-			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );
-			add_action( 'wp_ajax_excluded_hosts_dictionary_update', array($this, 'wdss_excluded_hosts_dictionary_handler') );		
+			add_action( 'wp_ajax_e410_dictionary_update', array($this, 'wdss_e410_dictionary_handler') );	
 		}
 	}
 
@@ -176,15 +175,6 @@ class Wd_Satellites_Snippets_Admin {
 
     $e410_dictionary = $_POST["e410_dictionary"];
     update_option('wdss_410s_dictionary', $e410_dictionary);
-	}
-
-
-	// Excluded Images Hosts Dictionary Handler
-	public function wdss_excluded_hosts_dictionary_handler() {
-		check_ajax_referer( 'excluded-hosts-dictionary-nonce', 'security', false );
-
-    $excluded_hosts_dictionary = $_POST["excluded_hosts_dictionary"];
-    update_option('wdss_excluded_hosts_dictionary', $excluded_hosts_dictionary);
 	}
 
 

@@ -22,50 +22,6 @@
             <span>Find & fix empty content<br><small>Be sure to create DB backup first</small></span>
             <button id="wdss-fix-empty-content__choose" type="button" class="wdss-button">Open settings</button>
         </div>
-
-        <div class="wdss-setting-item wdss-table-handler">
-            <div class="wdss-table-description">
-              <strong>Provide URLs with images which will be EXCLUDED from post content</strong>
-            </div>
-            <div class="wdss-table-content">
-                  <div class="wdss-table-add-item-handler">
-                    <div class="wdss-table-input">
-                      <span>Host (e.g. google.com)</span>
-                      <?php text_handler_html(
-                        ['field_name' => 'wdss_excluded_hosts_dictionary_url', 
-                        'id' => 'wdss-excluded-host-url',
-                        ]
-                        ); ?>
-                    </div>
-                    <button type="button" title="Add a new rule" class="wdss-button wdss-table-add">Add</button>     
-                  </div>
-
-                  <div class="wdss-table-wrapper">
-                    <table class="wdss-table">
-                      <thead>
-                        <th>URL</th>
-                        <th>Action</th>
-                      </thead>
-                      <tbody>
-                          <?php 
-                            if( get_option('wdss_excluded_hosts_dictionary', '') ) {
-                              $dictionary = get_option('wdss_excluded_hosts_dictionary');
-                              foreach ($dictionary as $url) : ?>
-                                <tr id="<?= wp_rand();?>">
-                                  <td><?= $url; ?></td>
-                                  <td class="wdss-table__remove-item"><i class="trash"></i></td>
-                                </tr>
-                              <?php endforeach; 
-                            } 
-                          ?>
-                      </tbody>
-                    </table>
-                    <div class="wdss-table-actions">
-                      <button type="button" class="wdss-button save-dictionary">Save</button>
-                    </div>
-                  </div>
-            </div>
-        </div>
         </div>      
       </div>
   </section>

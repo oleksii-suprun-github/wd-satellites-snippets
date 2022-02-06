@@ -705,17 +705,18 @@ function wdss_wp_security_captcha_fix($content)
 // Custom Descriptions for imported articles
 function wdss_custom_post_descriptions($meta_description)
 {
-    $condition = '/<p>(.*?)<\/p>/';
+    $condition = '/<p.*?>.*?<\/p>/';
     $content = apply_filters('the_content', get_the_content());
 
-	if(is_single() && !has_excerpt() && preg_match($condition, $content)) {
+	if(is_single() && preg_match($condition, $content)) {
         preg_match_all($condition, $content, $results);
-        $stripped = strip_tags($results[0][1]);
+        if(strpos($results[0][0], 'toctitle') === false) {
+            $stripped = strip_tags($results[0][0]);
+        }
+        else {
+            $stripped = strip_tags($results[0][1]);
+        }
 		$meta_description = mb_substr($stripped, 0, 150, 'UTF-8') . ' [...]';
-        return $meta_description;
-	}
-	elseif(is_category() || (is_single() && has_excerpt())) {
-		$meta_description = mb_substr($meta_description, 0, 150, 'UTF-8') . ' [...]';
         return $meta_description;
 	}
     return $meta_description;
