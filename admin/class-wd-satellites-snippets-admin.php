@@ -396,8 +396,6 @@ class Wd_Satellites_Snippets_Admin {
 				'remove_broken_featured_nonce' => wp_create_nonce( 'remove-broken-featured-nonce' ),
 
 				'e410_dictionary_nonce' => wp_create_nonce( 'e410-dictionary-nonce' ),
-				'excluded_hosts_dictionary_nonce' => wp_create_nonce( 'excluded-hosts-dictionary-nonce' ),
-				
 				'remove_posts_attachments_nonce' => wp_create_nonce( 'remove-posts-attachments-nonce' ),
 			];
 			wp_localize_script( $this->plugin_name, 'wdss_localize', $wdss_localize_script );

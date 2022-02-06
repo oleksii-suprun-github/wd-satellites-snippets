@@ -51,13 +51,6 @@
     nonce: 'e410-dictionary-nonce',
     name: 'e410_dictionary'
   }
-  
-  export const excludedHostsDictionary = {
-    root_el: '#post-content-settings',
-    action: 'excluded_hosts_dictionary_update',
-    nonce: 'excluded-hosts-dictionary-nonce',
-    name: 'excluded_hosts_dictionary'
-  }
 
   export const removeBrokenFeatured = {
     query_type: 'rest',
