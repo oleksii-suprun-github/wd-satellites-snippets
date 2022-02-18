@@ -18,6 +18,16 @@
           </label>
       </div> 
       
+      <div id="recaptcha-code" class="wdss-setting-item">
+          <label>
+            <span>Google ReCaptcha Site Code</span>
+            <?php 
+              text_handler_html(['field_name' => 'wdss_recaptcha_id']); 
+              if( get_option('wdss_recaptcha_id') == '' ) update_option( 'wdss_recaptcha_id', '' );               
+            ?>    
+          </label>
+      </div> 
+
       <div id="wdss-yoast-posts-exclude" class="wdss-setting-item">
           <label>
             <span title="By category`s id, coma-separated">Exclude posts of categories from Yoast Sitemap <sup>?</sup></span>

@@ -92,6 +92,7 @@ function wdss_form_handler() {
       isset_option('wdss_advanced_jsonld_schema');
 
       isset_option('wdss_gtm_id');
+      isset_option('wdss_recaptcha_id');
       isset_option('wdss_yoast_posts_exclude');
 
       
