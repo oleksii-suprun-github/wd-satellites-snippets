@@ -14,8 +14,8 @@ if( get_option('wdss_gtm_id', '') !== '' ) {
 
 // Lazy Google Recaptcha
 if( get_option('wdss_recaptcha_id', '') !== '' ) {
-  add_action('wp_enqueue_scripts', 'wdss_gtm_enqueue');
-  function wdss_gtm_enqueue() {
+  add_action('wp_enqueue_scripts', 'wdss_recaptcha_enqueue');
+  function wdss_recaptcha_enqueue() {
     wp_enqueue_script('recaptcha-lazy', plugin_dir_url( __FILE__ ) . '../inc/recaptcha-lazy/index.js', array(), '1.0', true);
     $wdss_localize_recaptcha_script = [
       'id' => get_option('wdss_recaptcha_id'),
@@ -23,9 +23,6 @@ if( get_option('wdss_recaptcha_id', '') !== '' ) {
     wp_localize_script('recaptcha-lazy', 'wdss_recaptcha', $wdss_localize_recaptcha_script);
   }
 }
-
-
-
 
 // Remove posts from specific categories from Yoast Posts Sitemap
 if( get_option('wdss_yoast_posts_exclude', '') !== '' ) {
