@@ -4,7 +4,7 @@
 if( get_option('wdss_gtm_id', '') !== '' ) {
   add_action('wp_enqueue_scripts', 'wdss_gtm_enqueue');
   function wdss_gtm_enqueue() {
-    wp_enqueue_script('gtm-lazy', plugin_dir_url( __FILE__ ) . '../inc/gtm-lazy/index.js', array(), '1.0', true);
+    wp_enqueue_script('gtm-lazy', plugin_dir_url( __FILE__ ) . '../inc/gtm-lazy/index.js', array(), WD_SATELLITES_SNIPPETS_VERSION, true);
     $wdss_localize_gtm_script = [
       'id' => get_option('wdss_gtm_id'),
     ];
@@ -16,7 +16,7 @@ if( get_option('wdss_gtm_id', '') !== '' ) {
 if( get_option('wdss_recaptcha_id', '') !== '' ) {
   add_action('wp_enqueue_scripts', 'wdss_recaptcha_enqueue');
   function wdss_recaptcha_enqueue() {
-    wp_enqueue_script('recaptcha-lazy', plugin_dir_url( __FILE__ ) . '../inc/recaptcha-lazy/index.js', array(), '1.0', true);
+    wp_enqueue_script('recaptcha-lazy', plugin_dir_url( __FILE__ ) . '../inc/recaptcha-lazy/index.js', array(), WD_SATELLITES_SNIPPETS_VERSION, true);
     $wdss_localize_recaptcha_script = [
       'id' => get_option('wdss_recaptcha_id'),
     ];
