@@ -25,11 +25,16 @@ if( get_option('wdss_gtm_id', '') !== '' ) {
 if( get_option('wdss_recaptcha_id', '') !== '' ) {
   add_action('wp_enqueue_scripts', 'wdss_recaptcha_enqueue');
   function wdss_recaptcha_enqueue() {
-    wp_enqueue_script('recaptcha-lazy', plugin_dir_url( __FILE__ ) . '../inc/recaptcha-lazy/index.js', array(), WD_SATELLITES_SNIPPETS_VERSION, true);
-    $wdss_localize_recaptcha_script = [
-      'id' => get_option('wdss_recaptcha_id'),
-    ];
-    wp_localize_script('recaptcha-lazy', 'wdss_recaptcha', $wdss_localize_recaptcha_script);
+    if( is_single() ) {
+      wp_enqueue_script('recaptcha-lazy', plugin_dir_url( __FILE__ ) . '../inc/recaptcha-lazy/index.js', array(), WD_SATELLITES_SNIPPETS_VERSION, true);
+    }
+  }
+
+  add_filter( 'comment_form_default_fields', 'wdss_form_defaults', 99, 1 );
+  function wdss_form_defaults( $fields ) {
+    $key = get_option('wdss_recaptcha_id', '');
+    $fields['g-recaptcha'] = "<div class='g-recaptcha' data-sitekey='$key'></div>";
+    return $fields;
   }
 }
 

@@ -1,4 +1,3 @@
-let id = `${wdss_recaptcha.id}`;
 window.addEventListener("load", () => {
     let eventListeners = ["scroll", "mousemove", "click"],
         scriptsLoaded = false;
@@ -7,7 +6,7 @@ window.addEventListener("load", () => {
             if (scriptsLoaded === false) {
                 let script = document.createElement('script'),
                     body = document.querySelector('body');
-                script.src = `https://www.google.com/recaptcha/api.js?render=${id}`;
+                script.src = `https://www.google.com/recaptcha/api.js`;
                 body.append(script);
                 scriptsLoaded = true;
             }
