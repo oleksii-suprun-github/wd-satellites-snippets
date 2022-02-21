@@ -107,6 +107,17 @@
                       </label>
                     </div>
 
+                    <div id="wdss-lazy-load-dmca" class="wdss-setting-item">
+                        <label>
+                          <span title="Make sure to remove synchronous DMCA first">Lazy Load for DMCA Script <sup>?</sup></span>
+                          <?php 
+                            checkbox_handler_html(['field_name' => 'wdss_lazy_dmca']); 
+                            if( get_option('wdss_lazy_dmca') == '' ) update_option( 'wdss_lazy_dmca', '0' );               
+                          ?>    
+                      </label>
+                    </div>
+                    
+
                     <div id="wdss-remove-hentry" class="wdss-setting-item">
                         <label>
                           <span>Remove Hentry</span>

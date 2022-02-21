@@ -1,5 +1,14 @@
 <?php
 
+
+// Lazt DMCA Script
+if( get_option('wdss_lazy_dmca', '0') ) {
+  add_action('wp_enqueue_scripts', 'wdss_dmca_enqueue');
+  function wdss_dmca_enqueue() {
+    wp_enqueue_script('dmca-lazy', plugin_dir_url( __FILE__ ) . '../inc/dmca-lazy/index.js', array(), WD_SATELLITES_SNIPPETS_VERSION, true);
+  }
+}
+
 // Async Google Tag Manager
 if( get_option('wdss_gtm_id', '') !== '' ) {
   add_action('wp_enqueue_scripts', 'wdss_gtm_enqueue');
