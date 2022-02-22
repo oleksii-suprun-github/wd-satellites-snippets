@@ -93,9 +93,12 @@ function wdss_form_handler() {
 
       isset_option('wdss_gtm_id');
       isset_option('wdss_lazy_dmca');
-      isset_option('wdss_recaptcha_id');
+      isset_option('wdss_recaptcha_site_code');
+      isset_option('wdss_recaptcha_secret_key');
       isset_option('wdss_yoast_posts_exclude');
 
+      // temp
+      delete_option( 'wdss_recaptcha_id', '' );
       
       if( function_exists('pll_languages_list') ) {
         $polylang_lang_list = pll_languages_list(['fields' => []]); 

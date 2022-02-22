@@ -23,7 +23,7 @@ if (get_option('wdss_gtm_id', '') !== '')
 }
 
 // Lazy Google Recaptcha
-if (get_option('wdss_recaptcha_id', '') !== '')
+if (get_option('wdss_recaptcha_site_code', '') !== '')
 {
 
     add_action('wp_enqueue_scripts', 'wdss_recaptcha_enqueue');
@@ -38,8 +38,8 @@ if (get_option('wdss_recaptcha_id', '') !== '')
     /* Add Google recaptcha to WordPress comment box */
     function add_google_recaptcha($submit_field)
     {
-        $key = get_option('wdss_recaptcha_id', '');
-        $submit_field['submit_field'] = "<div style='display:block; margin-bottom: 25px;' class='g-recaptcha' data-sitekey='$key'></div><br>" . $submit_field['submit_field'];
+        $site_key = get_option('wdss_recaptcha_site_code', '');
+        $submit_field['submit_field'] = "<div style='display:block; margin-bottom: 25px;' class='g-recaptcha' data-sitekey='$site_key'></div><br>" . $submit_field['submit_field'];
         return $submit_field;
     }
     if (!is_user_logged_in())
@@ -50,9 +50,9 @@ if (get_option('wdss_recaptcha_id', '') !== '')
     /** Google recaptcha check, validate and catch the spammer */
     function is_valid_captcha($captcha)
     {
-        $key = get_option('wdss_recaptcha_id', '');
+        $secret = get_option('wdss_recaptcha_secret_key', '');
         $captcha_postdata = http_build_query(array(
-            'secret' => $key,
+            'secret' => $secret,
             'response' => $captcha,
             'remoteip' => $_SERVER['REMOTE_ADDR']
         ));
@@ -65,6 +65,7 @@ if (get_option('wdss_recaptcha_id', '') !== '')
         );
         $captcha_context = stream_context_create($captcha_opts);
         $captcha_response = json_decode(file_get_contents("https://www.google.com/recaptcha/api/siteverify", false, $captcha_context) , true);
+
         if ($captcha_response['success']) return true;
         else return false;
     }
@@ -73,7 +74,7 @@ if (get_option('wdss_recaptcha_id', '') !== '')
     {
         $recaptcha = $_POST['g-recaptcha-response'];
         if (empty($recaptcha)) wp_die(__("<b>ERROR:</b> please select <b>I'm not a robot!</b><p><a href='javascript:history.back()'>« Back</a></p>"));
-        else if (!is_valid_captcha($recaptcha)) wp_die(__("<b>Go away SPAMMER!</b>"));
+        else if (!is_valid_captcha($recaptcha)) wp_die(__("<b>Go away spammer!</b><p><a href='javascript:history.back()'>« Back</a></p>"));
     }
     if (!is_user_logged_in())
     {

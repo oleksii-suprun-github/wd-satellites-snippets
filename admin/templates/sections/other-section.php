@@ -18,12 +18,23 @@
           </label>
       </div> 
       
-      <div id="recaptcha-code" class="wdss-setting-item">
+      <div id="recaptcha-site-code" class="wdss-setting-item">
           <label>
-            <span>Google ReCaptcha Site Code</span>
+            <span>reCAPTCHA v2 V2 Site Code</span>
             <?php 
-              text_handler_html(['field_name' => 'wdss_recaptcha_id']); 
-              if( get_option('wdss_recaptcha_id') == '' ) update_option( 'wdss_recaptcha_id', '' );               
+              text_handler_html(['field_name' => 'wdss_recaptcha_site_code']); 
+              if( get_option('wdss_recaptcha_site_code') == '' ) update_option( 'wdss_recaptcha_site_code', '' );               
+            ?>    
+          </label>
+      </div> 
+
+      
+      <div id="recaptcha-secret-key" class="wdss-setting-item">
+          <label>
+            <span>reCAPTCHA v2 Secret Key</span>
+            <?php 
+              text_handler_html(['field_name' => 'wdss_recaptcha_secret_key']); 
+              if( get_option('wdss_recaptcha_secret_key') == '' ) update_option( 'wdss_recaptcha_secret_key', '' );               
             ?>    
           </label>
       </div> 
