@@ -25,7 +25,6 @@ if (get_option('wdss_gtm_id', '') !== '')
 // Lazy Google Recaptcha
 if (get_option('wdss_recaptcha_id', '') !== '')
 {
-    $key = get_option('wdss_recaptcha_id', '');
 
     add_action('wp_enqueue_scripts', 'wdss_recaptcha_enqueue');
     function wdss_recaptcha_enqueue()
@@ -39,7 +38,8 @@ if (get_option('wdss_recaptcha_id', '') !== '')
     /* Add Google recaptcha to WordPress comment box */
     function add_google_recaptcha($submit_field)
     {
-        $submit_field['submit_field'] = "<div class='g-recaptcha' data-sitekey='$key'></div><br>" . $submit_field['submit_field'];
+        $key = get_option('wdss_recaptcha_id', '');
+        $submit_field['submit_field'] = "<div style='display:block; margin-bottom: 25px;' class='g-recaptcha' data-sitekey='$key'></div><br>" . $submit_field['submit_field'];
         return $submit_field;
     }
     if (!is_user_logged_in())
@@ -50,6 +50,7 @@ if (get_option('wdss_recaptcha_id', '') !== '')
     /** Google recaptcha check, validate and catch the spammer */
     function is_valid_captcha($captcha)
     {
+        $key = get_option('wdss_recaptcha_id', '');
         $captcha_postdata = http_build_query(array(
             'secret' => $key,
             'response' => $captcha,
