@@ -110,3 +110,14 @@ if (get_option('wdss_yoast_posts_exclude', '') !== '')
     }
 }
 
+// Comment Min/Max Length
+add_filter( 'preprocess_comment', 'wdss_preprocess_comment' );
+function wdss_preprocess_comment($comment) {
+    if ( strlen( $comment['comment_content'] ) > 300 ) {
+        wp_die("Comment is too long. Please keep your comment under 300 characters.<p><a href='javascript:history.back()'>« Back</a></p>");
+    }
+    if ( strlen( $comment['comment_content'] ) < 50 ) {
+        wp_die("Comment is too short. Please use at least 50 characters.<p><a href='javascript:history.back()'>« Back</a></p>");
+    }
+    return $comment;
+}

@@ -20,7 +20,7 @@
       
       <div id="recaptcha-site-code" class="wdss-setting-item">
           <label>
-            <span>reCAPTCHA v2 V2 Site Code</span>
+            <span>reCAPTCHA v2 Site Code</span>
             <?php 
               text_handler_html(['field_name' => 'wdss_recaptcha_site_code']); 
               if( get_option('wdss_recaptcha_site_code') == '' ) update_option( 'wdss_recaptcha_site_code', '' );               
